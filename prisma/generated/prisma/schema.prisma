@@ -1,0 +1,284 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./generated/prisma"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model menu {
+  menu_id        Int        @id @default(autoincrement())
+  menu_name      String     @db.VarChar(200)
+  link           String     @default("#") @db.VarChar(200)
+  parent_menu_id Int        @default(1)
+  menu_group_id  Int
+  icon           String?    @db.VarChar(200)
+  sort_no        Int        @default(0)
+  created_at     DateTime?  @db.DateTime(0)
+  created_by     Int?
+  modified_at    DateTime?  @db.DateTime(0)
+  modified_by    Int?
+  company_id     Int        @default(0)
+  flag           Int        @default(0)
+  menu_group     menu_group @relation(fields: [menu_group_id], references: [menu_group_id], onUpdate: Restrict, map: "menu_group_id")
+
+  @@index([menu_group_id], map: "menu_group_id")
+}
+
+model menu_group {
+  menu_group_id   Int       @id @default(autoincrement())
+  menu_group_name String    @db.VarChar(200)
+  link            String?   @db.VarChar(200)
+  sort_no         Int       @default(0)
+  created_at      DateTime? @db.DateTime(0)
+  created_by      Int?
+  modified_at     DateTime? @db.DateTime(0)
+  modified_by     Int?
+  company_id      Int       @default(0)
+  flag            Int       @default(0)
+  menu            menu[]
+}
+
+model role {
+  role_id     Int       @id @default(autoincrement())
+  role_name   String    @unique(map: "role_name") @db.VarChar(200)
+  access_menu Json?
+  created_at  DateTime? @db.DateTime(0)
+  created_by  Int?
+  modified_at DateTime? @db.DateTime(0)
+  modified_by Int?
+  company_id  Int       @default(0)
+  flag        Int       @default(0)
+}
+
+model user {
+  user_id            Int                @id @default(autoincrement())
+  name               String             @db.VarChar(200)
+  role_id            Int
+  email              String             @unique(map: "email") @db.VarChar(200)
+  phone_no           String             @unique(map: "phone_no") @db.VarChar(200)
+  general_manager_id Int                @default(0)
+  reporting_to_id    Int                @default(0)
+  password           String             @db.VarChar(200)
+  created_at         DateTime?          @db.DateTime(0)
+  created_by         Int?
+  modified_at        DateTime?          @db.DateTime(0)
+  modified_by        Int?
+  company_id         Int                @default(0)
+  flag               Int                @default(0)
+  user_city          user_city[]
+  user_team_member   user_team_member[]
+}
+
+model state {
+  state_id    Int       @id @default(autoincrement())
+  state_name  String?   @unique(map: "state_name") @db.VarChar(200)
+  created_at  DateTime? @db.DateTime(0)
+  created_by  Int       @default(0)
+  modified_at DateTime? @db.DateTime(0)
+  modified_by Int       @default(0)
+  company_id  Int       @default(0)
+  flag        Int       @default(0)
+  city        city[]
+}
+
+model city {
+  city_id     Int         @id @default(autoincrement())
+  city_name   String      @unique(map: "city_name") @db.VarChar(200)
+  state_id    Int
+  created_at  DateTime?   @db.DateTime(0)
+  created_by  Int         @default(0)
+  modified_at DateTime?   @db.DateTime(0)
+  modified_by Int         @default(0)
+  company_id  Int         @default(0)
+  flag        Int         @default(0)
+  state       state       @relation(fields: [state_id], references: [state_id], onUpdate: Restrict, map: "city_ibfk_1")
+  project     project[]
+  user_city   user_city[]
+
+  @@index([state_id], map: "state_id")
+}
+
+model lead_status {
+  lead_status_id   Int       @id @default(autoincrement())
+  lead_status_name String?   @unique(map: "lead_status_name") @db.VarChar(200)
+  label_color      String    @default("success") @db.VarChar(200)
+  created_at       DateTime? @db.DateTime(0)
+  created_by       Int       @default(0)
+  modified_at      DateTime? @db.DateTime(0)
+  modified_by      Int       @default(0)
+  company_id       Int       @default(0)
+  flag             Int       @default(0)
+  lead             lead[]
+}
+
+model lead {
+  lead_id         Int         @id @default(autoincrement())
+  customer_name   String?     @db.VarChar(200)
+  mobile_no       String?     @db.VarChar(200)
+  email_id        String?     @db.VarChar(200)
+  alternate_no    String?     @db.VarChar(200)
+  whatsapp_no     String?     @db.VarChar(200)
+  alternate_email String?     @db.VarChar(200)
+  project_id      Int?
+  source_id       Int         @default(0)
+  sub_source_id   Int         @default(0)
+  rm_user_id      Int
+  schedule_date   DateTime?   @db.Date
+  lead_status_id  Int
+  lead_file_id    Int?        @default(1)
+  remarks         String?     @db.Text
+  created_at      DateTime?   @db.DateTime(0)
+  created_by      Int?
+  modified_at     DateTime?   @db.DateTime(0)
+  modified_by     Int?
+  company_id      Int         @default(0)
+  flag            Int         @default(0)
+  lead_status     lead_status @relation(fields: [lead_status_id], references: [lead_status_id], onUpdate: Restrict, map: "lead_ibfk_5")
+  lead_files      lead_file?  @relation(fields: [lead_file_id], references: [lead_file_id], onDelete: Restrict, onUpdate: Restrict, map: "lead_ibfk_6")
+
+  @@index([lead_file_id], map: "lead_file_id")
+  @@index([lead_status_id], map: "lead_status_id")
+}
+
+model lead_status_entry {
+  lead_entry_id  Int       @id @default(autoincrement())
+  lead_id        Int
+  from_status_id Int
+  to_status_id   Int
+  rm_user_id     Int
+  created_at     DateTime? @db.DateTime(0)
+  created_by     Int?
+  modified_at    DateTime? @db.DateTime(0)
+  modified_by    Int?
+  company_id     Int       @default(0)
+  flag           Int       @default(0)
+}
+
+model project {
+  project_id   Int       @id @default(autoincrement())
+  project_name String?   @unique(map: "project_name") @db.VarChar(200)
+  city_id      Int
+  created_at   DateTime? @db.DateTime(0)
+  created_by   Int       @default(0)
+  modified_at  DateTime? @db.DateTime(0)
+  modified_by  Int       @default(0)
+  company_id   Int       @default(0)
+  flag         Int       @default(0)
+  city         city      @relation(fields: [city_id], references: [city_id], onUpdate: Restrict, map: "project_ibfk_1")
+
+  @@index([city_id], map: "city_id")
+}
+
+model source {
+  source_id   Int          @id @default(autoincrement())
+  source_name String?      @unique(map: "source_name") @db.VarChar(200)
+  created_at  DateTime?    @db.DateTime(0)
+  created_by  Int          @default(0)
+  modified_at DateTime?    @db.DateTime(0)
+  modified_by Int          @default(0)
+  company_id  Int          @default(0)
+  flag        Int          @default(0)
+  sub_source  sub_source[]
+}
+
+model sub_source {
+  sub_source_id   Int       @id @default(autoincrement())
+  sub_source_name String?   @unique(map: "sub_source_name") @db.VarChar(200)
+  source_id       Int
+  created_at      DateTime? @db.DateTime(0)
+  created_by      Int       @default(0)
+  modified_at     DateTime? @db.DateTime(0)
+  modified_by     Int       @default(0)
+  company_id      Int       @default(0)
+  flag            Int       @default(0)
+  source          source    @relation(fields: [source_id], references: [source_id], onUpdate: Restrict, map: "sub_source_ibfk_1")
+
+  @@index([source_id], map: "source_id")
+}
+
+model user_city {
+  user_city_id Int       @id @default(autoincrement())
+  user_id      Int
+  city_id      Int
+  created_at   DateTime? @db.DateTime(0)
+  created_by   Int       @default(0)
+  modified_at  DateTime? @db.DateTime(0)
+  modified_by  Int       @default(0)
+  company_id   Int       @default(0)
+  flag         Int       @default(0)
+  city         city      @relation(fields: [city_id], references: [city_id], onUpdate: Restrict, map: "user_city_ibfk_1")
+  user         user      @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "user_city_ibfk_2")
+
+  @@index([city_id], map: "city_id")
+  @@index([user_id], map: "user_id")
+}
+
+model lead_file {
+  lead_file_id   Int       @id @default(autoincrement())
+  lead_file_name String    @db.VarChar(200)
+  file_path      String?   @db.VarChar(200)
+  created_at     DateTime? @db.DateTime(0)
+  created_by     Int?
+  modified_at    DateTime? @db.DateTime(0)
+  modified_by    Int?
+  company_id     Int       @default(0)
+  flag           Int       @default(0)
+  lead           lead[]
+}
+
+model user_team {
+  user_team_id   Int       @id @default(autoincrement())
+  team_name      String    @db.VarChar(200)
+  team_leader_id Int
+  created_at     DateTime? @db.DateTime(0)
+  created_by     Int?
+  modified_at    DateTime? @db.DateTime(0)
+  modified_by    Int?
+  company_id     Int       @default(0)
+  flag           Int       @default(0)
+}
+
+model user_team_member {
+  user_team_member_id Int       @id @default(autoincrement())
+  leader_id           Int
+  user_team_id        Int
+  member_id           Int
+  created_at          DateTime? @db.DateTime(0)
+  created_by          Int?
+  modified_at         DateTime? @db.DateTime(0)
+  modified_by         Int?
+  company_id          Int       @default(0)
+  flag                Int       @default(0)
+  user                user      @relation(fields: [member_id], references: [user_id], onUpdate: Restrict, map: "user_team_member_ibfk_1")
+
+  @@index([member_id], map: "member_id")
+}
+
+model website_leads {
+  website_lead_id Int       @id @default(autoincrement())
+  name            String?   @db.VarChar(200)
+  email           String?   @db.VarChar(200)
+  phone           String?   @db.VarChar(200)
+  form_type       String?   @db.VarChar(200)
+  message         String?   @db.Text
+  link            String    @db.VarChar(200)
+  ipaddress       String?   @db.VarChar(200)
+  created_at      DateTime? @db.DateTime(0)
+  created_by      Int?
+  modified_at     DateTime? @db.DateTime(0)
+  modified_by     Int?
+  company_id      Int       @default(0)
+  flag            Int       @default(0)
+}
+
+view lead_status_entry_view {
+  lead_id     Int
+  user_name   String  @db.VarChar(200)
+  from_status String? @db.VarChar(200)
+  to_status   String? @db.VarChar(200)
+  created_at  String? @db.VarChar(21)
+}

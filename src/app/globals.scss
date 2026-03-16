@@ -1,0 +1,75 @@
+.async_select__control {
+  border: 1px solid #6f7072 !important; // bootstrap border
+  border-radius: 0.375rem;
+  padding: 0px !important;
+  min-height: 38px;
+  box-shadow: none;
+  background-color: #112143 !important;
+  color: #fff !important;
+
+  .async_select__placeholder {
+    color: #a9b4cc !important;
+    font-size: small;
+  }
+
+  .async_select__input {
+    color: #a9b4cc !important;
+  }
+
+  .async_select__input-container {
+    color: #a9b4cc !important;
+    font-size: small;
+  }
+
+  .async_select__single-value {
+    color: #a9b4cc !important;
+    font-size: small;
+  }
+}
+
+// .async_select__control--is-focused {
+//   border-color: #86b7fe;
+//   box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+// }
+
+.async_select__menu {
+  background-color: #112143 !important;
+  border: 1px solid #0d6efd !important; // bootstrap border;
+}
+
+.async_select__option {
+  padding: 8px 12px;
+  background-color: #112143 !important;
+}
+
+.async_select__option--is-focused {
+  background-color: #0d6efd !important;
+  color: #fff !important
+}
+
+.async_select__option--is-selected {
+  background-color: #0d6efd;
+}
+.dropdown-menu {
+  background-color: #112143 !important;
+  border: 1px solid #0d6efd !important; // bootstrap border;
+  color: #a9b4cc !important;
+  a:hover{
+    background-color: #0d6efd !important;
+    color: #fff !important;
+  }
+}
+.table {
+  td {
+    font-size: 16px !important;
+  }
+
+  th {
+    font-size: 16px !important;
+  }
+
+  th,
+  td {
+    text-align: left !important;
+  }
+}

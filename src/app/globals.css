@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.menugroup-icon::after {
+    content: "\f061" !important;
+}
+
+.form-control,
+.form-select {
+    border: #5b5c5e 1px solid !important;
+}
+
+.custom-btn-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    flex-direction: row-reverse;
+    gap: 10px;
+}
+.main-content .table a {
+    color: #fff !important;
+}
+
+.text-new {
+    color: #53ff7b !important;
+}
+.text-inprogress {
+    color: #ffd453 !important;
+}
+.text-followup {
+    color: #dbff58 !important;
+}
+.text-site-visit-fixed {
+    color: #ff84e6 !important;
+}
+.text-site-visit-done {
+    color: #00ffee !important;
+}
+.text-dead {
+    color: #ff6e7c !important;
+}
+.text-closed {
+    color: #c0c0c0 !important;
+}
