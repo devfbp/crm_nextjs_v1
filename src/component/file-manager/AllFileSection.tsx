@@ -120,10 +120,7 @@ const AllFileSection = () => {
                   </div>
                   <div
                     className="dropdown"
-                    ref={(element) =>
-                      element && updateDropdownRef(index, element)
-                    }
-                  >
+                    >
                     <button
                       className="action"
                       onClick={() =>

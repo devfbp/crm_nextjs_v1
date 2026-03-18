@@ -124,7 +124,7 @@ const CustomerTable = () => {
                 <td>
                   <div
                     className="digi-dropdown dropdown d-inline-block"
-                    ref={(ref) => (dropdownRefs.current[index] = ref)}
+                    
                   >
                     <button
                       className={`btn btn-sm btn-outline-primary ${

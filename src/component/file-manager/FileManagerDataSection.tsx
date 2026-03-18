@@ -121,7 +121,7 @@ const FileManagerDataSection = ({ showStar }: Props) => {
             </div>
             <div
               className="dropdown action"
-              ref={(element) => element && updateDropdownRef(index, element)}
+              
             >
               {showStar && (
                 <button

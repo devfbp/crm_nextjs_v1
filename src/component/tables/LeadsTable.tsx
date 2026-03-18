@@ -117,7 +117,7 @@ const AdminLead = () => {
                 </td>
                 <td>
                   <div
-                    ref={(ref) => (dropdownRefs.current[index] = ref)}
+                    
                     className="digi-dropdown dropdown d-inline-block"
                   >
                     <button

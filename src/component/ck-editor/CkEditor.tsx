@@ -11,14 +11,7 @@ interface CkEditorProps {
 const CkEditor = ({ initialData, onDataChanged }: CkEditorProps) => {
   return (
     <div className="editor">
-      <CKEditor
-        editor={ClassicEditor}
-        data={initialData}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          onDataChanged(data);
-        }}
-      />
+      <></>
     </div>
   );
 };
