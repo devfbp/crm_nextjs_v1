@@ -103,6 +103,11 @@ export type website_leads = $Result.DefaultSelection<Prisma.$website_leadsPayloa
  * 
  */
 export type lead_status_entry_view = $Result.DefaultSelection<Prisma.$lead_status_entry_viewPayload>
+/**
+ * Model leads_view
+ * 
+ */
+export type leads_view = $Result.DefaultSelection<Prisma.$leads_viewPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -401,6 +406,16 @@ export class PrismaClient<
     * ```
     */
   get lead_status_entry_view(): Prisma.lead_status_entry_viewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.leads_view`: Exposes CRUD operations for the **leads_view** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Leads_views
+    * const leads_views = await prisma.leads_view.findMany()
+    * ```
+    */
+  get leads_view(): Prisma.leads_viewDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -859,7 +874,8 @@ export namespace Prisma {
     user_team: 'user_team',
     user_team_member: 'user_team_member',
     website_leads: 'website_leads',
-    lead_status_entry_view: 'lead_status_entry_view'
+    lead_status_entry_view: 'lead_status_entry_view',
+    leads_view: 'leads_view'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -878,7 +894,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "menu" | "menu_group" | "role" | "user" | "state" | "city" | "lead_status" | "lead" | "lead_status_entry" | "project" | "source" | "sub_source" | "user_city" | "lead_file" | "user_team" | "user_team_member" | "website_leads" | "lead_status_entry_view"
+      modelProps: "menu" | "menu_group" | "role" | "user" | "state" | "city" | "lead_status" | "lead" | "lead_status_entry" | "project" | "source" | "sub_source" | "user_city" | "lead_file" | "user_team" | "user_team_member" | "website_leads" | "lead_status_entry_view" | "leads_view"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2034,6 +2050,36 @@ export namespace Prisma {
           }
         }
       }
+      leads_view: {
+        payload: Prisma.$leads_viewPayload<ExtArgs>
+        fields: Prisma.leads_viewFieldRefs
+        operations: {
+          findFirst: {
+            args: Prisma.leads_viewFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$leads_viewPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.leads_viewFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$leads_viewPayload>
+          }
+          findMany: {
+            args: Prisma.leads_viewFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$leads_viewPayload>[]
+          }
+          aggregate: {
+            args: Prisma.Leads_viewAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeads_view>
+          }
+          groupBy: {
+            args: Prisma.leads_viewGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Leads_viewGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.leads_viewCountArgs<ExtArgs>
+            result: $Utils.Optional<Leads_viewCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2148,6 +2194,7 @@ export namespace Prisma {
     user_team_member?: user_team_memberOmit
     website_leads?: website_leadsOmit
     lead_status_entry_view?: lead_status_entry_viewOmit
+    leads_view?: leads_viewOmit
   }
 
   /* Types for Logging */
@@ -2478,6 +2525,7 @@ export namespace Prisma {
     menu_id: number | null
     parent_menu_id: number | null
     menu_group_id: number | null
+    full_width: number | null
     sort_no: number | null
     created_by: number | null
     modified_by: number | null
@@ -2489,6 +2537,7 @@ export namespace Prisma {
     menu_id: number | null
     parent_menu_id: number | null
     menu_group_id: number | null
+    full_width: number | null
     sort_no: number | null
     created_by: number | null
     modified_by: number | null
@@ -2503,6 +2552,7 @@ export namespace Prisma {
     parent_menu_id: number | null
     menu_group_id: number | null
     icon: string | null
+    full_width: number | null
     sort_no: number | null
     created_at: Date | null
     created_by: number | null
@@ -2519,6 +2569,7 @@ export namespace Prisma {
     parent_menu_id: number | null
     menu_group_id: number | null
     icon: string | null
+    full_width: number | null
     sort_no: number | null
     created_at: Date | null
     created_by: number | null
@@ -2535,6 +2586,7 @@ export namespace Prisma {
     parent_menu_id: number
     menu_group_id: number
     icon: number
+    full_width: number
     sort_no: number
     created_at: number
     created_by: number
@@ -2550,6 +2602,7 @@ export namespace Prisma {
     menu_id?: true
     parent_menu_id?: true
     menu_group_id?: true
+    full_width?: true
     sort_no?: true
     created_by?: true
     modified_by?: true
@@ -2561,6 +2614,7 @@ export namespace Prisma {
     menu_id?: true
     parent_menu_id?: true
     menu_group_id?: true
+    full_width?: true
     sort_no?: true
     created_by?: true
     modified_by?: true
@@ -2575,6 +2629,7 @@ export namespace Prisma {
     parent_menu_id?: true
     menu_group_id?: true
     icon?: true
+    full_width?: true
     sort_no?: true
     created_at?: true
     created_by?: true
@@ -2591,6 +2646,7 @@ export namespace Prisma {
     parent_menu_id?: true
     menu_group_id?: true
     icon?: true
+    full_width?: true
     sort_no?: true
     created_at?: true
     created_by?: true
@@ -2607,6 +2663,7 @@ export namespace Prisma {
     parent_menu_id?: true
     menu_group_id?: true
     icon?: true
+    full_width?: true
     sort_no?: true
     created_at?: true
     created_by?: true
@@ -2710,6 +2767,7 @@ export namespace Prisma {
     parent_menu_id: number
     menu_group_id: number
     icon: string | null
+    full_width: number
     sort_no: number
     created_at: Date | null
     created_by: number | null
@@ -2745,6 +2803,7 @@ export namespace Prisma {
     parent_menu_id?: boolean
     menu_group_id?: boolean
     icon?: boolean
+    full_width?: boolean
     sort_no?: boolean
     created_at?: boolean
     created_by?: boolean
@@ -2764,6 +2823,7 @@ export namespace Prisma {
     parent_menu_id?: boolean
     menu_group_id?: boolean
     icon?: boolean
+    full_width?: boolean
     sort_no?: boolean
     created_at?: boolean
     created_by?: boolean
@@ -2773,7 +2833,7 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type menuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"menu_id" | "menu_name" | "link" | "parent_menu_id" | "menu_group_id" | "icon" | "sort_no" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["menu"]>
+  export type menuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"menu_id" | "menu_name" | "link" | "parent_menu_id" | "menu_group_id" | "icon" | "full_width" | "sort_no" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["menu"]>
   export type menuInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     menu_group?: boolean | menu_groupDefaultArgs<ExtArgs>
   }
@@ -2790,6 +2850,7 @@ export namespace Prisma {
       parent_menu_id: number
       menu_group_id: number
       icon: string | null
+      full_width: number
       sort_no: number
       created_at: Date | null
       created_by: number | null
@@ -3173,6 +3234,7 @@ export namespace Prisma {
     readonly parent_menu_id: FieldRef<"menu", 'Int'>
     readonly menu_group_id: FieldRef<"menu", 'Int'>
     readonly icon: FieldRef<"menu", 'String'>
+    readonly full_width: FieldRef<"menu", 'Int'>
     readonly sort_no: FieldRef<"menu", 'Int'>
     readonly created_at: FieldRef<"menu", 'DateTime'>
     readonly created_by: FieldRef<"menu", 'Int'>
@@ -11137,6 +11199,7 @@ export namespace Prisma {
     from_status_id: number | null
     to_status_id: number | null
     rm_user_id: number | null
+    remarks: string | null
     created_at: Date | null
     created_by: number | null
     modified_at: Date | null
@@ -11151,6 +11214,7 @@ export namespace Prisma {
     from_status_id: number | null
     to_status_id: number | null
     rm_user_id: number | null
+    remarks: string | null
     created_at: Date | null
     created_by: number | null
     modified_at: Date | null
@@ -11165,6 +11229,7 @@ export namespace Prisma {
     from_status_id: number
     to_status_id: number
     rm_user_id: number
+    remarks: number
     created_at: number
     created_by: number
     modified_at: number
@@ -11205,6 +11270,7 @@ export namespace Prisma {
     from_status_id?: true
     to_status_id?: true
     rm_user_id?: true
+    remarks?: true
     created_at?: true
     created_by?: true
     modified_at?: true
@@ -11219,6 +11285,7 @@ export namespace Prisma {
     from_status_id?: true
     to_status_id?: true
     rm_user_id?: true
+    remarks?: true
     created_at?: true
     created_by?: true
     modified_at?: true
@@ -11233,6 +11300,7 @@ export namespace Prisma {
     from_status_id?: true
     to_status_id?: true
     rm_user_id?: true
+    remarks?: true
     created_at?: true
     created_by?: true
     modified_at?: true
@@ -11334,6 +11402,7 @@ export namespace Prisma {
     from_status_id: number
     to_status_id: number
     rm_user_id: number
+    remarks: string | null
     created_at: Date | null
     created_by: number | null
     modified_at: Date | null
@@ -11367,6 +11436,7 @@ export namespace Prisma {
     from_status_id?: boolean
     to_status_id?: boolean
     rm_user_id?: boolean
+    remarks?: boolean
     created_at?: boolean
     created_by?: boolean
     modified_at?: boolean
@@ -11383,6 +11453,7 @@ export namespace Prisma {
     from_status_id?: boolean
     to_status_id?: boolean
     rm_user_id?: boolean
+    remarks?: boolean
     created_at?: boolean
     created_by?: boolean
     modified_at?: boolean
@@ -11391,7 +11462,7 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type lead_status_entryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_entry_id" | "lead_id" | "from_status_id" | "to_status_id" | "rm_user_id" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead_status_entry"]>
+  export type lead_status_entryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_entry_id" | "lead_id" | "from_status_id" | "to_status_id" | "rm_user_id" | "remarks" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead_status_entry"]>
 
   export type $lead_status_entryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "lead_status_entry"
@@ -11402,6 +11473,7 @@ export namespace Prisma {
       from_status_id: number
       to_status_id: number
       rm_user_id: number
+      remarks: string | null
       created_at: Date | null
       created_by: number | null
       modified_at: Date | null
@@ -11782,6 +11854,7 @@ export namespace Prisma {
     readonly from_status_id: FieldRef<"lead_status_entry", 'Int'>
     readonly to_status_id: FieldRef<"lead_status_entry", 'Int'>
     readonly rm_user_id: FieldRef<"lead_status_entry", 'Int'>
+    readonly remarks: FieldRef<"lead_status_entry", 'String'>
     readonly created_at: FieldRef<"lead_status_entry", 'DateTime'>
     readonly created_by: FieldRef<"lead_status_entry", 'Int'>
     readonly modified_at: FieldRef<"lead_status_entry", 'DateTime'>
@@ -20355,69 +20428,91 @@ export namespace Prisma {
   }
 
   export type Lead_status_entry_viewAvgAggregateOutputType = {
+    lead_entry_id: number | null
     lead_id: number | null
   }
 
   export type Lead_status_entry_viewSumAggregateOutputType = {
+    lead_entry_id: number | null
     lead_id: number | null
   }
 
   export type Lead_status_entry_viewMinAggregateOutputType = {
+    lead_entry_id: number | null
     lead_id: number | null
     user_name: string | null
     from_status: string | null
     to_status: string | null
-    created_at: string | null
+    created_at: Date | null
+    remarks: string | null
+    display_created_at: string | null
   }
 
   export type Lead_status_entry_viewMaxAggregateOutputType = {
+    lead_entry_id: number | null
     lead_id: number | null
     user_name: string | null
     from_status: string | null
     to_status: string | null
-    created_at: string | null
+    created_at: Date | null
+    remarks: string | null
+    display_created_at: string | null
   }
 
   export type Lead_status_entry_viewCountAggregateOutputType = {
+    lead_entry_id: number
     lead_id: number
     user_name: number
     from_status: number
     to_status: number
     created_at: number
+    remarks: number
+    display_created_at: number
     _all: number
   }
 
 
   export type Lead_status_entry_viewAvgAggregateInputType = {
+    lead_entry_id?: true
     lead_id?: true
   }
 
   export type Lead_status_entry_viewSumAggregateInputType = {
+    lead_entry_id?: true
     lead_id?: true
   }
 
   export type Lead_status_entry_viewMinAggregateInputType = {
+    lead_entry_id?: true
     lead_id?: true
     user_name?: true
     from_status?: true
     to_status?: true
     created_at?: true
+    remarks?: true
+    display_created_at?: true
   }
 
   export type Lead_status_entry_viewMaxAggregateInputType = {
+    lead_entry_id?: true
     lead_id?: true
     user_name?: true
     from_status?: true
     to_status?: true
     created_at?: true
+    remarks?: true
+    display_created_at?: true
   }
 
   export type Lead_status_entry_viewCountAggregateInputType = {
+    lead_entry_id?: true
     lead_id?: true
     user_name?: true
     from_status?: true
     to_status?: true
     created_at?: true
+    remarks?: true
+    display_created_at?: true
     _all?: true
   }
 
@@ -20502,11 +20597,14 @@ export namespace Prisma {
   }
 
   export type Lead_status_entry_viewGroupByOutputType = {
+    lead_entry_id: number
     lead_id: number
     user_name: string
     from_status: string | null
     to_status: string | null
-    created_at: string | null
+    created_at: Date | null
+    remarks: string | null
+    display_created_at: string | null
     _count: Lead_status_entry_viewCountAggregateOutputType | null
     _avg: Lead_status_entry_viewAvgAggregateOutputType | null
     _sum: Lead_status_entry_viewSumAggregateOutputType | null
@@ -20529,34 +20627,43 @@ export namespace Prisma {
 
 
   export type lead_status_entry_viewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    lead_entry_id?: boolean
     lead_id?: boolean
     user_name?: boolean
     from_status?: boolean
     to_status?: boolean
     created_at?: boolean
+    remarks?: boolean
+    display_created_at?: boolean
   }, ExtArgs["result"]["lead_status_entry_view"]>
 
 
 
   export type lead_status_entry_viewSelectScalar = {
+    lead_entry_id?: boolean
     lead_id?: boolean
     user_name?: boolean
     from_status?: boolean
     to_status?: boolean
     created_at?: boolean
+    remarks?: boolean
+    display_created_at?: boolean
   }
 
-  export type lead_status_entry_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "user_name" | "from_status" | "to_status" | "created_at", ExtArgs["result"]["lead_status_entry_view"]>
+  export type lead_status_entry_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_entry_id" | "lead_id" | "user_name" | "from_status" | "to_status" | "created_at" | "remarks" | "display_created_at", ExtArgs["result"]["lead_status_entry_view"]>
 
   export type $lead_status_entry_viewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "lead_status_entry_view"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
+      lead_entry_id: number
       lead_id: number
       user_name: string
       from_status: string | null
       to_status: string | null
-      created_at: string | null
+      created_at: Date | null
+      remarks: string | null
+      display_created_at: string | null
     }, ExtArgs["result"]["lead_status_entry_view"]>
     composites: {}
   }
@@ -20621,8 +20728,8 @@ export namespace Prisma {
      * // Get first 10 Lead_status_entry_views
      * const lead_status_entry_views = await prisma.lead_status_entry_view.findMany({ take: 10 })
      * 
-     * // Only select the `lead_id`
-     * const lead_status_entry_viewWithLead_idOnly = await prisma.lead_status_entry_view.findMany({ select: { lead_id: true } })
+     * // Only select the `lead_entry_id`
+     * const lead_status_entry_viewWithLead_entry_idOnly = await prisma.lead_status_entry_view.findMany({ select: { lead_entry_id: true } })
      * 
      */
     findMany<T extends lead_status_entry_viewFindManyArgs, TakeDependenciesValidator extends "take" extends Prisma.Keys<T> ? {
@@ -20800,11 +20907,14 @@ export namespace Prisma {
    * Fields of the lead_status_entry_view model
    */
   interface lead_status_entry_viewFieldRefs {
+    readonly lead_entry_id: FieldRef<"lead_status_entry_view", 'Int'>
     readonly lead_id: FieldRef<"lead_status_entry_view", 'Int'>
     readonly user_name: FieldRef<"lead_status_entry_view", 'String'>
     readonly from_status: FieldRef<"lead_status_entry_view", 'String'>
     readonly to_status: FieldRef<"lead_status_entry_view", 'String'>
-    readonly created_at: FieldRef<"lead_status_entry_view", 'String'>
+    readonly created_at: FieldRef<"lead_status_entry_view", 'DateTime'>
+    readonly remarks: FieldRef<"lead_status_entry_view", 'String'>
+    readonly display_created_at: FieldRef<"lead_status_entry_view", 'String'>
   }
     
 
@@ -20946,6 +21056,672 @@ export namespace Prisma {
 
 
   /**
+   * Model leads_view
+   */
+
+  export type AggregateLeads_view = {
+    _count: Leads_viewCountAggregateOutputType | null
+    _avg: Leads_viewAvgAggregateOutputType | null
+    _sum: Leads_viewSumAggregateOutputType | null
+    _min: Leads_viewMinAggregateOutputType | null
+    _max: Leads_viewMaxAggregateOutputType | null
+  }
+
+  export type Leads_viewAvgAggregateOutputType = {
+    lead_id: number | null
+    status_id: number | null
+    flag: number | null
+  }
+
+  export type Leads_viewSumAggregateOutputType = {
+    lead_id: number | null
+    status_id: number | null
+    flag: number | null
+  }
+
+  export type Leads_viewMinAggregateOutputType = {
+    lead_id: number | null
+    customer_name: string | null
+    assigned_to: string | null
+    sub_source_name: string | null
+    contact_project: string | null
+    status: string | null
+    status_id: number | null
+    created_at: Date | null
+    status_color: string | null
+    flag: number | null
+  }
+
+  export type Leads_viewMaxAggregateOutputType = {
+    lead_id: number | null
+    customer_name: string | null
+    assigned_to: string | null
+    sub_source_name: string | null
+    contact_project: string | null
+    status: string | null
+    status_id: number | null
+    created_at: Date | null
+    status_color: string | null
+    flag: number | null
+  }
+
+  export type Leads_viewCountAggregateOutputType = {
+    lead_id: number
+    customer_name: number
+    assigned_to: number
+    sub_source_name: number
+    contact_project: number
+    status: number
+    status_id: number
+    created_at: number
+    status_color: number
+    flag: number
+    _all: number
+  }
+
+
+  export type Leads_viewAvgAggregateInputType = {
+    lead_id?: true
+    status_id?: true
+    flag?: true
+  }
+
+  export type Leads_viewSumAggregateInputType = {
+    lead_id?: true
+    status_id?: true
+    flag?: true
+  }
+
+  export type Leads_viewMinAggregateInputType = {
+    lead_id?: true
+    customer_name?: true
+    assigned_to?: true
+    sub_source_name?: true
+    contact_project?: true
+    status?: true
+    status_id?: true
+    created_at?: true
+    status_color?: true
+    flag?: true
+  }
+
+  export type Leads_viewMaxAggregateInputType = {
+    lead_id?: true
+    customer_name?: true
+    assigned_to?: true
+    sub_source_name?: true
+    contact_project?: true
+    status?: true
+    status_id?: true
+    created_at?: true
+    status_color?: true
+    flag?: true
+  }
+
+  export type Leads_viewCountAggregateInputType = {
+    lead_id?: true
+    customer_name?: true
+    assigned_to?: true
+    sub_source_name?: true
+    contact_project?: true
+    status?: true
+    status_id?: true
+    created_at?: true
+    status_color?: true
+    flag?: true
+    _all?: true
+  }
+
+  export type Leads_viewAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which leads_view to aggregate.
+     */
+    where?: leads_viewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of leads_views to fetch.
+     */
+    orderBy?: leads_viewOrderByWithRelationInput | leads_viewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` leads_views from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` leads_views.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned leads_views
+    **/
+    _count?: true | Leads_viewCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Leads_viewAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Leads_viewSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Leads_viewMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Leads_viewMaxAggregateInputType
+  }
+
+  export type GetLeads_viewAggregateType<T extends Leads_viewAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeads_view]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLeads_view[P]>
+      : GetScalarType<T[P], AggregateLeads_view[P]>
+  }
+
+
+
+
+  export type leads_viewGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: leads_viewWhereInput
+    orderBy?: leads_viewOrderByWithAggregationInput | leads_viewOrderByWithAggregationInput[]
+    by: Leads_viewScalarFieldEnum[] | Leads_viewScalarFieldEnum
+    having?: leads_viewScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Leads_viewCountAggregateInputType | true
+    _avg?: Leads_viewAvgAggregateInputType
+    _sum?: Leads_viewSumAggregateInputType
+    _min?: Leads_viewMinAggregateInputType
+    _max?: Leads_viewMaxAggregateInputType
+  }
+
+  export type Leads_viewGroupByOutputType = {
+    lead_id: number
+    customer_name: string | null
+    assigned_to: string
+    sub_source_name: string | null
+    contact_project: string | null
+    status: string | null
+    status_id: number
+    created_at: Date | null
+    status_color: string
+    flag: number
+    _count: Leads_viewCountAggregateOutputType | null
+    _avg: Leads_viewAvgAggregateOutputType | null
+    _sum: Leads_viewSumAggregateOutputType | null
+    _min: Leads_viewMinAggregateOutputType | null
+    _max: Leads_viewMaxAggregateOutputType | null
+  }
+
+  type GetLeads_viewGroupByPayload<T extends leads_viewGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Leads_viewGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Leads_viewGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Leads_viewGroupByOutputType[P]>
+            : GetScalarType<T[P], Leads_viewGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type leads_viewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    lead_id?: boolean
+    customer_name?: boolean
+    assigned_to?: boolean
+    sub_source_name?: boolean
+    contact_project?: boolean
+    status?: boolean
+    status_id?: boolean
+    created_at?: boolean
+    status_color?: boolean
+    flag?: boolean
+  }, ExtArgs["result"]["leads_view"]>
+
+
+
+  export type leads_viewSelectScalar = {
+    lead_id?: boolean
+    customer_name?: boolean
+    assigned_to?: boolean
+    sub_source_name?: boolean
+    contact_project?: boolean
+    status?: boolean
+    status_id?: boolean
+    created_at?: boolean
+    status_color?: boolean
+    flag?: boolean
+  }
+
+  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "assigned_to" | "sub_source_name" | "contact_project" | "status" | "status_id" | "created_at" | "status_color" | "flag", ExtArgs["result"]["leads_view"]>
+
+  export type $leads_viewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "leads_view"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      lead_id: number
+      customer_name: string | null
+      assigned_to: string
+      sub_source_name: string | null
+      contact_project: string | null
+      status: string | null
+      status_id: number
+      created_at: Date | null
+      status_color: string
+      flag: number
+    }, ExtArgs["result"]["leads_view"]>
+    composites: {}
+  }
+
+  type leads_viewGetPayload<S extends boolean | null | undefined | leads_viewDefaultArgs> = $Result.GetResult<Prisma.$leads_viewPayload, S>
+
+  type leads_viewCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<leads_viewFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Leads_viewCountAggregateInputType | true
+    }
+
+  export interface leads_viewDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['leads_view'], meta: { name: 'leads_view' } }
+    /**
+     * Find the first Leads_view that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {leads_viewFindFirstArgs} args - Arguments to find a Leads_view
+     * @example
+     * // Get one Leads_view
+     * const leads_view = await prisma.leads_view.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends leads_viewFindFirstArgs, TakeDependenciesValidator extends "take" extends Prisma.Keys<T> ? {
+      orderBy: {}
+    } : {}, SkipDependenciesValidator extends "skip" extends Prisma.Keys<T> ? {
+      orderBy: {}
+    } : {}>(args?: SelectSubset<T, leads_viewFindFirstArgs<ExtArgs>> & TakeDependenciesValidator & SkipDependenciesValidator): Prisma__leads_viewClient<$Result.GetResult<Prisma.$leads_viewPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Leads_view that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {leads_viewFindFirstOrThrowArgs} args - Arguments to find a Leads_view
+     * @example
+     * // Get one Leads_view
+     * const leads_view = await prisma.leads_view.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends leads_viewFindFirstOrThrowArgs, TakeDependenciesValidator extends "take" extends Prisma.Keys<T> ? {
+      orderBy: {}
+    } : {}, SkipDependenciesValidator extends "skip" extends Prisma.Keys<T> ? {
+      orderBy: {}
+    } : {}>(args?: SelectSubset<T, leads_viewFindFirstOrThrowArgs<ExtArgs>> & TakeDependenciesValidator & SkipDependenciesValidator): Prisma__leads_viewClient<$Result.GetResult<Prisma.$leads_viewPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Leads_views that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {leads_viewFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Leads_views
+     * const leads_views = await prisma.leads_view.findMany()
+     * 
+     * // Get first 10 Leads_views
+     * const leads_views = await prisma.leads_view.findMany({ take: 10 })
+     * 
+     * // Only select the `lead_id`
+     * const leads_viewWithLead_idOnly = await prisma.leads_view.findMany({ select: { lead_id: true } })
+     * 
+     */
+    findMany<T extends leads_viewFindManyArgs, TakeDependenciesValidator extends "take" extends Prisma.Keys<T> ? {
+      orderBy: {}
+    } : {}, SkipDependenciesValidator extends "skip" extends Prisma.Keys<T> ? {
+      orderBy: {}
+    } : {}>(args?: SelectSubset<T, leads_viewFindManyArgs<ExtArgs>> & TakeDependenciesValidator & SkipDependenciesValidator): Prisma.PrismaPromise<$Result.GetResult<Prisma.$leads_viewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+
+    /**
+     * Count the number of Leads_views.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {leads_viewCountArgs} args - Arguments to filter Leads_views to count.
+     * @example
+     * // Count the number of Leads_views
+     * const count = await prisma.leads_view.count({
+     *   where: {
+     *     // ... the filter for the Leads_views we want to count
+     *   }
+     * })
+    **/
+    count<T extends leads_viewCountArgs>(
+      args?: Subset<T, leads_viewCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Leads_viewCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Leads_view.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Leads_viewAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Leads_viewAggregateArgs>(args: Subset<T, Leads_viewAggregateArgs>): Prisma.PrismaPromise<GetLeads_viewAggregateType<T>>
+
+    /**
+     * Group by Leads_view.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {leads_viewGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends leads_viewGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: leads_viewGroupByArgs['orderBy'] }
+        : { orderBy?: leads_viewGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, leads_viewGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeads_viewGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the leads_view model
+   */
+  readonly fields: leads_viewFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for leads_view.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__leads_viewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the leads_view model
+   */
+  interface leads_viewFieldRefs {
+    readonly lead_id: FieldRef<"leads_view", 'Int'>
+    readonly customer_name: FieldRef<"leads_view", 'String'>
+    readonly assigned_to: FieldRef<"leads_view", 'String'>
+    readonly sub_source_name: FieldRef<"leads_view", 'String'>
+    readonly contact_project: FieldRef<"leads_view", 'String'>
+    readonly status: FieldRef<"leads_view", 'String'>
+    readonly status_id: FieldRef<"leads_view", 'Int'>
+    readonly created_at: FieldRef<"leads_view", 'DateTime'>
+    readonly status_color: FieldRef<"leads_view", 'String'>
+    readonly flag: FieldRef<"leads_view", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * leads_view findFirst
+   */
+  export type leads_viewFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the leads_view
+     */
+    select?: leads_viewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the leads_view
+     */
+    omit?: leads_viewOmit<ExtArgs> | null
+    /**
+     * Filter, which leads_view to fetch.
+     */
+    where?: leads_viewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of leads_views to fetch.
+     */
+    orderBy?: leads_viewOrderByWithRelationInput | leads_viewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` leads_views from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` leads_views.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of leads_views.
+     */
+    distinct?: Leads_viewScalarFieldEnum | Leads_viewScalarFieldEnum[]
+  }
+
+  /**
+   * leads_view findFirstOrThrow
+   */
+  export type leads_viewFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the leads_view
+     */
+    select?: leads_viewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the leads_view
+     */
+    omit?: leads_viewOmit<ExtArgs> | null
+    /**
+     * Filter, which leads_view to fetch.
+     */
+    where?: leads_viewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of leads_views to fetch.
+     */
+    orderBy?: leads_viewOrderByWithRelationInput | leads_viewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` leads_views from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` leads_views.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of leads_views.
+     */
+    distinct?: Leads_viewScalarFieldEnum | Leads_viewScalarFieldEnum[]
+  }
+
+  /**
+   * leads_view findMany
+   */
+  export type leads_viewFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the leads_view
+     */
+    select?: leads_viewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the leads_view
+     */
+    omit?: leads_viewOmit<ExtArgs> | null
+    /**
+     * Filter, which leads_views to fetch.
+     */
+    where?: leads_viewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of leads_views to fetch.
+     */
+    orderBy?: leads_viewOrderByWithRelationInput | leads_viewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` leads_views from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` leads_views.
+     */
+    skip?: number
+    distinct?: Leads_viewScalarFieldEnum | Leads_viewScalarFieldEnum[]
+  }
+
+  /**
+   * leads_view without action
+   */
+  export type leads_viewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the leads_view
+     */
+    select?: leads_viewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the leads_view
+     */
+    omit?: leads_viewOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -20966,6 +21742,7 @@ export namespace Prisma {
     parent_menu_id: 'parent_menu_id',
     menu_group_id: 'menu_group_id',
     icon: 'icon',
+    full_width: 'full_width',
     sort_no: 'sort_no',
     created_at: 'created_at',
     created_by: 'created_by',
@@ -21106,6 +21883,7 @@ export namespace Prisma {
     from_status_id: 'from_status_id',
     to_status_id: 'to_status_id',
     rm_user_id: 'rm_user_id',
+    remarks: 'remarks',
     created_at: 'created_at',
     created_by: 'created_by',
     modified_at: 'modified_at',
@@ -21243,14 +22021,33 @@ export namespace Prisma {
 
 
   export const Lead_status_entry_viewScalarFieldEnum: {
+    lead_entry_id: 'lead_entry_id',
     lead_id: 'lead_id',
     user_name: 'user_name',
     from_status: 'from_status',
     to_status: 'to_status',
-    created_at: 'created_at'
+    created_at: 'created_at',
+    remarks: 'remarks',
+    display_created_at: 'display_created_at'
   };
 
   export type Lead_status_entry_viewScalarFieldEnum = (typeof Lead_status_entry_viewScalarFieldEnum)[keyof typeof Lead_status_entry_viewScalarFieldEnum]
+
+
+  export const Leads_viewScalarFieldEnum: {
+    lead_id: 'lead_id',
+    customer_name: 'customer_name',
+    assigned_to: 'assigned_to',
+    sub_source_name: 'sub_source_name',
+    contact_project: 'contact_project',
+    status: 'status',
+    status_id: 'status_id',
+    created_at: 'created_at',
+    status_color: 'status_color',
+    flag: 'flag'
+  };
+
+  export type Leads_viewScalarFieldEnum = (typeof Leads_viewScalarFieldEnum)[keyof typeof Leads_viewScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -21363,6 +22160,13 @@ export namespace Prisma {
   export type leadOrderByRelevanceFieldEnum = (typeof leadOrderByRelevanceFieldEnum)[keyof typeof leadOrderByRelevanceFieldEnum]
 
 
+  export const lead_status_entryOrderByRelevanceFieldEnum: {
+    remarks: 'remarks'
+  };
+
+  export type lead_status_entryOrderByRelevanceFieldEnum = (typeof lead_status_entryOrderByRelevanceFieldEnum)[keyof typeof lead_status_entryOrderByRelevanceFieldEnum]
+
+
   export const projectOrderByRelevanceFieldEnum: {
     project_name: 'project_name'
   };
@@ -21416,10 +22220,23 @@ export namespace Prisma {
     user_name: 'user_name',
     from_status: 'from_status',
     to_status: 'to_status',
-    created_at: 'created_at'
+    remarks: 'remarks',
+    display_created_at: 'display_created_at'
   };
 
   export type lead_status_entry_viewOrderByRelevanceFieldEnum = (typeof lead_status_entry_viewOrderByRelevanceFieldEnum)[keyof typeof lead_status_entry_viewOrderByRelevanceFieldEnum]
+
+
+  export const leads_viewOrderByRelevanceFieldEnum: {
+    customer_name: 'customer_name',
+    assigned_to: 'assigned_to',
+    sub_source_name: 'sub_source_name',
+    contact_project: 'contact_project',
+    status: 'status',
+    status_color: 'status_color'
+  };
+
+  export type leads_viewOrderByRelevanceFieldEnum = (typeof leads_viewOrderByRelevanceFieldEnum)[keyof typeof leads_viewOrderByRelevanceFieldEnum]
 
 
   /**
@@ -21482,6 +22299,7 @@ export namespace Prisma {
     parent_menu_id?: IntFilter<"menu"> | number
     menu_group_id?: IntFilter<"menu"> | number
     icon?: StringNullableFilter<"menu"> | string | null
+    full_width?: IntFilter<"menu"> | number
     sort_no?: IntFilter<"menu"> | number
     created_at?: DateTimeNullableFilter<"menu"> | Date | string | null
     created_by?: IntNullableFilter<"menu"> | number | null
@@ -21499,6 +22317,7 @@ export namespace Prisma {
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
     icon?: SortOrderInput | SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_at?: SortOrderInput | SortOrder
     created_by?: SortOrderInput | SortOrder
@@ -21520,6 +22339,7 @@ export namespace Prisma {
     parent_menu_id?: IntFilter<"menu"> | number
     menu_group_id?: IntFilter<"menu"> | number
     icon?: StringNullableFilter<"menu"> | string | null
+    full_width?: IntFilter<"menu"> | number
     sort_no?: IntFilter<"menu"> | number
     created_at?: DateTimeNullableFilter<"menu"> | Date | string | null
     created_by?: IntNullableFilter<"menu"> | number | null
@@ -21537,6 +22357,7 @@ export namespace Prisma {
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
     icon?: SortOrderInput | SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_at?: SortOrderInput | SortOrder
     created_by?: SortOrderInput | SortOrder
@@ -21561,6 +22382,7 @@ export namespace Prisma {
     parent_menu_id?: IntWithAggregatesFilter<"menu"> | number
     menu_group_id?: IntWithAggregatesFilter<"menu"> | number
     icon?: StringNullableWithAggregatesFilter<"menu"> | string | null
+    full_width?: IntWithAggregatesFilter<"menu"> | number
     sort_no?: IntWithAggregatesFilter<"menu"> | number
     created_at?: DateTimeNullableWithAggregatesFilter<"menu"> | Date | string | null
     created_by?: IntNullableWithAggregatesFilter<"menu"> | number | null
@@ -22219,6 +23041,7 @@ export namespace Prisma {
     from_status_id?: IntFilter<"lead_status_entry"> | number
     to_status_id?: IntFilter<"lead_status_entry"> | number
     rm_user_id?: IntFilter<"lead_status_entry"> | number
+    remarks?: StringNullableFilter<"lead_status_entry"> | string | null
     created_at?: DateTimeNullableFilter<"lead_status_entry"> | Date | string | null
     created_by?: IntNullableFilter<"lead_status_entry"> | number | null
     modified_at?: DateTimeNullableFilter<"lead_status_entry"> | Date | string | null
@@ -22233,12 +23056,14 @@ export namespace Prisma {
     from_status_id?: SortOrder
     to_status_id?: SortOrder
     rm_user_id?: SortOrder
+    remarks?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     created_by?: SortOrderInput | SortOrder
     modified_at?: SortOrderInput | SortOrder
     modified_by?: SortOrderInput | SortOrder
     company_id?: SortOrder
     flag?: SortOrder
+    _relevance?: lead_status_entryOrderByRelevanceInput
   }
 
   export type lead_status_entryWhereUniqueInput = Prisma.AtLeast<{
@@ -22250,6 +23075,7 @@ export namespace Prisma {
     from_status_id?: IntFilter<"lead_status_entry"> | number
     to_status_id?: IntFilter<"lead_status_entry"> | number
     rm_user_id?: IntFilter<"lead_status_entry"> | number
+    remarks?: StringNullableFilter<"lead_status_entry"> | string | null
     created_at?: DateTimeNullableFilter<"lead_status_entry"> | Date | string | null
     created_by?: IntNullableFilter<"lead_status_entry"> | number | null
     modified_at?: DateTimeNullableFilter<"lead_status_entry"> | Date | string | null
@@ -22264,6 +23090,7 @@ export namespace Prisma {
     from_status_id?: SortOrder
     to_status_id?: SortOrder
     rm_user_id?: SortOrder
+    remarks?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     created_by?: SortOrderInput | SortOrder
     modified_at?: SortOrderInput | SortOrder
@@ -22286,6 +23113,7 @@ export namespace Prisma {
     from_status_id?: IntWithAggregatesFilter<"lead_status_entry"> | number
     to_status_id?: IntWithAggregatesFilter<"lead_status_entry"> | number
     rm_user_id?: IntWithAggregatesFilter<"lead_status_entry"> | number
+    remarks?: StringNullableWithAggregatesFilter<"lead_status_entry"> | string | null
     created_at?: DateTimeNullableWithAggregatesFilter<"lead_status_entry"> | Date | string | null
     created_by?: IntNullableWithAggregatesFilter<"lead_status_entry"> | number | null
     modified_at?: DateTimeNullableWithAggregatesFilter<"lead_status_entry"> | Date | string | null
@@ -22942,28 +23770,37 @@ export namespace Prisma {
     AND?: lead_status_entry_viewWhereInput | lead_status_entry_viewWhereInput[]
     OR?: lead_status_entry_viewWhereInput[]
     NOT?: lead_status_entry_viewWhereInput | lead_status_entry_viewWhereInput[]
+    lead_entry_id?: IntFilter<"lead_status_entry_view"> | number
     lead_id?: IntFilter<"lead_status_entry_view"> | number
     user_name?: StringFilter<"lead_status_entry_view"> | string
     from_status?: StringNullableFilter<"lead_status_entry_view"> | string | null
     to_status?: StringNullableFilter<"lead_status_entry_view"> | string | null
-    created_at?: StringNullableFilter<"lead_status_entry_view"> | string | null
+    created_at?: DateTimeNullableFilter<"lead_status_entry_view"> | Date | string | null
+    remarks?: StringNullableFilter<"lead_status_entry_view"> | string | null
+    display_created_at?: StringNullableFilter<"lead_status_entry_view"> | string | null
   }
 
   export type lead_status_entry_viewOrderByWithRelationInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
     user_name?: SortOrder
     from_status?: SortOrderInput | SortOrder
     to_status?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
+    remarks?: SortOrderInput | SortOrder
+    display_created_at?: SortOrderInput | SortOrder
     _relevance?: lead_status_entry_viewOrderByRelevanceInput
   }
 
   export type lead_status_entry_viewOrderByWithAggregationInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
     user_name?: SortOrder
     from_status?: SortOrderInput | SortOrder
     to_status?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
+    remarks?: SortOrderInput | SortOrder
+    display_created_at?: SortOrderInput | SortOrder
     _count?: lead_status_entry_viewCountOrderByAggregateInput
     _avg?: lead_status_entry_viewAvgOrderByAggregateInput
     _max?: lead_status_entry_viewMaxOrderByAggregateInput
@@ -22975,11 +23812,78 @@ export namespace Prisma {
     AND?: lead_status_entry_viewScalarWhereWithAggregatesInput | lead_status_entry_viewScalarWhereWithAggregatesInput[]
     OR?: lead_status_entry_viewScalarWhereWithAggregatesInput[]
     NOT?: lead_status_entry_viewScalarWhereWithAggregatesInput | lead_status_entry_viewScalarWhereWithAggregatesInput[]
+    lead_entry_id?: IntWithAggregatesFilter<"lead_status_entry_view"> | number
     lead_id?: IntWithAggregatesFilter<"lead_status_entry_view"> | number
     user_name?: StringWithAggregatesFilter<"lead_status_entry_view"> | string
     from_status?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
     to_status?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
-    created_at?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"lead_status_entry_view"> | Date | string | null
+    remarks?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
+    display_created_at?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
+  }
+
+  export type leads_viewWhereInput = {
+    AND?: leads_viewWhereInput | leads_viewWhereInput[]
+    OR?: leads_viewWhereInput[]
+    NOT?: leads_viewWhereInput | leads_viewWhereInput[]
+    lead_id?: IntFilter<"leads_view"> | number
+    customer_name?: StringNullableFilter<"leads_view"> | string | null
+    assigned_to?: StringFilter<"leads_view"> | string
+    sub_source_name?: StringNullableFilter<"leads_view"> | string | null
+    contact_project?: StringNullableFilter<"leads_view"> | string | null
+    status?: StringNullableFilter<"leads_view"> | string | null
+    status_id?: IntFilter<"leads_view"> | number
+    created_at?: DateTimeNullableFilter<"leads_view"> | Date | string | null
+    status_color?: StringFilter<"leads_view"> | string
+    flag?: IntFilter<"leads_view"> | number
+  }
+
+  export type leads_viewOrderByWithRelationInput = {
+    lead_id?: SortOrder
+    customer_name?: SortOrderInput | SortOrder
+    assigned_to?: SortOrder
+    sub_source_name?: SortOrderInput | SortOrder
+    contact_project?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
+    status_id?: SortOrder
+    created_at?: SortOrderInput | SortOrder
+    status_color?: SortOrder
+    flag?: SortOrder
+    _relevance?: leads_viewOrderByRelevanceInput
+  }
+
+  export type leads_viewOrderByWithAggregationInput = {
+    lead_id?: SortOrder
+    customer_name?: SortOrderInput | SortOrder
+    assigned_to?: SortOrder
+    sub_source_name?: SortOrderInput | SortOrder
+    contact_project?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
+    status_id?: SortOrder
+    created_at?: SortOrderInput | SortOrder
+    status_color?: SortOrder
+    flag?: SortOrder
+    _count?: leads_viewCountOrderByAggregateInput
+    _avg?: leads_viewAvgOrderByAggregateInput
+    _max?: leads_viewMaxOrderByAggregateInput
+    _min?: leads_viewMinOrderByAggregateInput
+    _sum?: leads_viewSumOrderByAggregateInput
+  }
+
+  export type leads_viewScalarWhereWithAggregatesInput = {
+    AND?: leads_viewScalarWhereWithAggregatesInput | leads_viewScalarWhereWithAggregatesInput[]
+    OR?: leads_viewScalarWhereWithAggregatesInput[]
+    NOT?: leads_viewScalarWhereWithAggregatesInput | leads_viewScalarWhereWithAggregatesInput[]
+    lead_id?: IntWithAggregatesFilter<"leads_view"> | number
+    customer_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    assigned_to?: StringWithAggregatesFilter<"leads_view"> | string
+    sub_source_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    contact_project?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    status?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    status_id?: IntWithAggregatesFilter<"leads_view"> | number
+    created_at?: DateTimeNullableWithAggregatesFilter<"leads_view"> | Date | string | null
+    status_color?: StringWithAggregatesFilter<"leads_view"> | string
+    flag?: IntWithAggregatesFilter<"leads_view"> | number
   }
 
   export type menuCreateInput = {
@@ -22987,6 +23891,7 @@ export namespace Prisma {
     link?: string
     parent_menu_id?: number
     icon?: string | null
+    full_width?: number
     sort_no?: number
     created_at?: Date | string | null
     created_by?: number | null
@@ -23004,6 +23909,7 @@ export namespace Prisma {
     parent_menu_id?: number
     menu_group_id: number
     icon?: string | null
+    full_width?: number
     sort_no?: number
     created_at?: Date | string | null
     created_by?: number | null
@@ -23018,6 +23924,7 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23035,6 +23942,7 @@ export namespace Prisma {
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     menu_group_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23051,6 +23959,7 @@ export namespace Prisma {
     parent_menu_id?: number
     menu_group_id: number
     icon?: string | null
+    full_width?: number
     sort_no?: number
     created_at?: Date | string | null
     created_by?: number | null
@@ -23065,6 +23974,7 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23081,6 +23991,7 @@ export namespace Prisma {
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     menu_group_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
@@ -23806,6 +24717,7 @@ export namespace Prisma {
     from_status_id: number
     to_status_id: number
     rm_user_id: number
+    remarks?: string | null
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -23820,6 +24732,7 @@ export namespace Prisma {
     from_status_id: number
     to_status_id: number
     rm_user_id: number
+    remarks?: string | null
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -23833,6 +24746,7 @@ export namespace Prisma {
     from_status_id?: IntFieldUpdateOperationsInput | number
     to_status_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23847,6 +24761,7 @@ export namespace Prisma {
     from_status_id?: IntFieldUpdateOperationsInput | number
     to_status_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23861,6 +24776,7 @@ export namespace Prisma {
     from_status_id: number
     to_status_id: number
     rm_user_id: number
+    remarks?: string | null
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -23874,6 +24790,7 @@ export namespace Prisma {
     from_status_id?: IntFieldUpdateOperationsInput | number
     to_status_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -23888,6 +24805,7 @@ export namespace Prisma {
     from_status_id?: IntFieldUpdateOperationsInput | number
     to_status_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24668,6 +25586,7 @@ export namespace Prisma {
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
     icon?: SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
@@ -24681,6 +25600,7 @@ export namespace Prisma {
     menu_id?: SortOrder
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_by?: SortOrder
     modified_by?: SortOrder
@@ -24695,6 +25615,7 @@ export namespace Prisma {
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
     icon?: SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
@@ -24711,6 +25632,7 @@ export namespace Prisma {
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
     icon?: SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
@@ -24724,6 +25646,7 @@ export namespace Prisma {
     menu_id?: SortOrder
     parent_menu_id?: SortOrder
     menu_group_id?: SortOrder
+    full_width?: SortOrder
     sort_no?: SortOrder
     created_by?: SortOrder
     modified_by?: SortOrder
@@ -25414,12 +26337,19 @@ export namespace Prisma {
     flag?: SortOrder
   }
 
+  export type lead_status_entryOrderByRelevanceInput = {
+    fields: lead_status_entryOrderByRelevanceFieldEnum | lead_status_entryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
   export type lead_status_entryCountOrderByAggregateInput = {
     lead_entry_id?: SortOrder
     lead_id?: SortOrder
     from_status_id?: SortOrder
     to_status_id?: SortOrder
     rm_user_id?: SortOrder
+    remarks?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
     modified_at?: SortOrder
@@ -25446,6 +26376,7 @@ export namespace Prisma {
     from_status_id?: SortOrder
     to_status_id?: SortOrder
     rm_user_id?: SortOrder
+    remarks?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
     modified_at?: SortOrder
@@ -25460,6 +26391,7 @@ export namespace Prisma {
     from_status_id?: SortOrder
     to_status_id?: SortOrder
     rm_user_id?: SortOrder
+    remarks?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
     modified_at?: SortOrder
@@ -25995,35 +26927,103 @@ export namespace Prisma {
   }
 
   export type lead_status_entry_viewCountOrderByAggregateInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
     user_name?: SortOrder
     from_status?: SortOrder
     to_status?: SortOrder
     created_at?: SortOrder
+    remarks?: SortOrder
+    display_created_at?: SortOrder
   }
 
   export type lead_status_entry_viewAvgOrderByAggregateInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
   }
 
   export type lead_status_entry_viewMaxOrderByAggregateInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
     user_name?: SortOrder
     from_status?: SortOrder
     to_status?: SortOrder
     created_at?: SortOrder
+    remarks?: SortOrder
+    display_created_at?: SortOrder
   }
 
   export type lead_status_entry_viewMinOrderByAggregateInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
     user_name?: SortOrder
     from_status?: SortOrder
     to_status?: SortOrder
     created_at?: SortOrder
+    remarks?: SortOrder
+    display_created_at?: SortOrder
   }
 
   export type lead_status_entry_viewSumOrderByAggregateInput = {
+    lead_entry_id?: SortOrder
     lead_id?: SortOrder
+  }
+
+  export type leads_viewOrderByRelevanceInput = {
+    fields: leads_viewOrderByRelevanceFieldEnum | leads_viewOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type leads_viewCountOrderByAggregateInput = {
+    lead_id?: SortOrder
+    customer_name?: SortOrder
+    assigned_to?: SortOrder
+    sub_source_name?: SortOrder
+    contact_project?: SortOrder
+    status?: SortOrder
+    status_id?: SortOrder
+    created_at?: SortOrder
+    status_color?: SortOrder
+    flag?: SortOrder
+  }
+
+  export type leads_viewAvgOrderByAggregateInput = {
+    lead_id?: SortOrder
+    status_id?: SortOrder
+    flag?: SortOrder
+  }
+
+  export type leads_viewMaxOrderByAggregateInput = {
+    lead_id?: SortOrder
+    customer_name?: SortOrder
+    assigned_to?: SortOrder
+    sub_source_name?: SortOrder
+    contact_project?: SortOrder
+    status?: SortOrder
+    status_id?: SortOrder
+    created_at?: SortOrder
+    status_color?: SortOrder
+    flag?: SortOrder
+  }
+
+  export type leads_viewMinOrderByAggregateInput = {
+    lead_id?: SortOrder
+    customer_name?: SortOrder
+    assigned_to?: SortOrder
+    sub_source_name?: SortOrder
+    contact_project?: SortOrder
+    status?: SortOrder
+    status_id?: SortOrder
+    created_at?: SortOrder
+    status_color?: SortOrder
+    flag?: SortOrder
+  }
+
+  export type leads_viewSumOrderByAggregateInput = {
+    lead_id?: SortOrder
+    status_id?: SortOrder
+    flag?: SortOrder
   }
 
   export type menu_groupCreateNestedOneWithoutMenuInput = {
@@ -26821,6 +27821,7 @@ export namespace Prisma {
     link?: string
     parent_menu_id?: number
     icon?: string | null
+    full_width?: number
     sort_no?: number
     created_at?: Date | string | null
     created_by?: number | null
@@ -26836,6 +27837,7 @@ export namespace Prisma {
     link?: string
     parent_menu_id?: number
     icon?: string | null
+    full_width?: number
     sort_no?: number
     created_at?: Date | string | null
     created_by?: number | null
@@ -26881,6 +27883,7 @@ export namespace Prisma {
     parent_menu_id?: IntFilter<"menu"> | number
     menu_group_id?: IntFilter<"menu"> | number
     icon?: StringNullableFilter<"menu"> | string | null
+    full_width?: IntFilter<"menu"> | number
     sort_no?: IntFilter<"menu"> | number
     created_at?: DateTimeNullableFilter<"menu"> | Date | string | null
     created_by?: IntNullableFilter<"menu"> | number | null
@@ -27973,6 +28976,7 @@ export namespace Prisma {
     link?: string
     parent_menu_id?: number
     icon?: string | null
+    full_width?: number
     sort_no?: number
     created_at?: Date | string | null
     created_by?: number | null
@@ -27987,6 +28991,7 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28002,6 +29007,7 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
@@ -28017,6 +29023,7 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     parent_menu_id?: IntFieldUpdateOperationsInput | number
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    full_width?: IntFieldUpdateOperationsInput | number
     sort_no?: IntFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null

@@ -128,6 +128,7 @@ exports.Prisma.MenuScalarFieldEnum = {
   parent_menu_id: 'parent_menu_id',
   menu_group_id: 'menu_group_id',
   icon: 'icon',
+  full_width: 'full_width',
   sort_no: 'sort_no',
   created_at: 'created_at',
   created_by: 'created_by',
@@ -244,6 +245,7 @@ exports.Prisma.Lead_status_entryScalarFieldEnum = {
   from_status_id: 'from_status_id',
   to_status_id: 'to_status_id',
   rm_user_id: 'rm_user_id',
+  remarks: 'remarks',
   created_at: 'created_at',
   created_by: 'created_by',
   modified_at: 'modified_at',
@@ -354,11 +356,27 @@ exports.Prisma.Website_leadsScalarFieldEnum = {
 };
 
 exports.Prisma.Lead_status_entry_viewScalarFieldEnum = {
+  lead_entry_id: 'lead_entry_id',
   lead_id: 'lead_id',
   user_name: 'user_name',
   from_status: 'from_status',
   to_status: 'to_status',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  remarks: 'remarks',
+  display_created_at: 'display_created_at'
+};
+
+exports.Prisma.Leads_viewScalarFieldEnum = {
+  lead_id: 'lead_id',
+  customer_name: 'customer_name',
+  assigned_to: 'assigned_to',
+  sub_source_name: 'sub_source_name',
+  contact_project: 'contact_project',
+  status: 'status',
+  status_id: 'status_id',
+  created_at: 'created_at',
+  status_color: 'status_color',
+  flag: 'flag'
 };
 
 exports.Prisma.SortOrder = {
@@ -432,6 +450,10 @@ exports.Prisma.leadOrderByRelevanceFieldEnum = {
   remarks: 'remarks'
 };
 
+exports.Prisma.lead_status_entryOrderByRelevanceFieldEnum = {
+  remarks: 'remarks'
+};
+
 exports.Prisma.projectOrderByRelevanceFieldEnum = {
   project_name: 'project_name'
 };
@@ -467,7 +489,17 @@ exports.Prisma.lead_status_entry_viewOrderByRelevanceFieldEnum = {
   user_name: 'user_name',
   from_status: 'from_status',
   to_status: 'to_status',
-  created_at: 'created_at'
+  remarks: 'remarks',
+  display_created_at: 'display_created_at'
+};
+
+exports.Prisma.leads_viewOrderByRelevanceFieldEnum = {
+  customer_name: 'customer_name',
+  assigned_to: 'assigned_to',
+  sub_source_name: 'sub_source_name',
+  contact_project: 'contact_project',
+  status: 'status',
+  status_color: 'status_color'
 };
 
 
@@ -489,7 +521,8 @@ exports.Prisma.ModelName = {
   user_team: 'user_team',
   user_team_member: 'user_team_member',
   website_leads: 'website_leads',
-  lead_status_entry_view: 'lead_status_entry_view'
+  lead_status_entry_view: 'lead_status_entry_view',
+  leads_view: 'leads_view'
 };
 
 /**

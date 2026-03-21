@@ -16,6 +16,7 @@ model menu {
   parent_menu_id Int        @default(1)
   menu_group_id  Int
   icon           String?    @db.VarChar(200)
+  full_width     Int        @default(0)
   sort_no        Int        @default(0)
   created_at     DateTime?  @db.DateTime(0)
   created_by     Int?
@@ -150,6 +151,7 @@ model lead_status_entry {
   from_status_id Int
   to_status_id   Int
   rm_user_id     Int
+  remarks        String?   @db.Text
   created_at     DateTime? @db.DateTime(0)
   created_by     Int?
   modified_at    DateTime? @db.DateTime(0)
@@ -276,9 +278,25 @@ model website_leads {
 }
 
 view lead_status_entry_view {
-  lead_id     Int
-  user_name   String  @db.VarChar(200)
-  from_status String? @db.VarChar(200)
-  to_status   String? @db.VarChar(200)
-  created_at  String? @db.VarChar(21)
+  lead_entry_id      Int       @default(0)
+  lead_id            Int       @default(0)
+  user_name          String    @db.VarChar(200)
+  from_status        String?   @db.VarChar(200)
+  to_status          String?   @db.VarChar(200)
+  created_at         DateTime? @db.DateTime(0)
+  remarks            String?   @db.Text
+  display_created_at String?   @db.VarChar(86)
+}
+
+view leads_view {
+  lead_id         Int       @default(0)
+  customer_name   String?   @db.VarChar(200)
+  assigned_to     String    @db.VarChar(200)
+  sub_source_name String?   @db.VarChar(200)
+  contact_project String?   @db.VarChar(401)
+  status          String?   @db.VarChar(200)
+  status_id       Int
+  created_at      DateTime? @db.DateTime(0)
+  status_color    String    @default("success") @db.VarChar(200)
+  flag            Int       @default(0)
 }

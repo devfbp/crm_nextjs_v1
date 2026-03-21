@@ -19,6 +19,7 @@ const AppsPart = (props) => {
     openSubMenu,
     toggleSubMenu,
     mainRef,
+    navQuickToggle
   } = useDigiContext();
 
   return (

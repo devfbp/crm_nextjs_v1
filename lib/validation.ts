@@ -79,10 +79,10 @@ export const projectSchema = z.object({
 
 export const leadSchema = z.object({
   customer_name: nameString("Name"),
-  email_id: z.string().email("Invalid email address"),
-  alternate_email: z.string().email("Invalid email address"),
+  // email_id: z.string().email("Invalid email address"),
+  // alternate_email: z.string().email("Invalid email address"),
   mobile_no: phoneString("Phone number"),
-  alternate_no: phoneString("Phone number"),
+  // alternate_no: phoneString("Phone number"),
   // whatsapp_no: phoneString("Phone number"),
   project_id: numericId("project"),
   source_id: numericId("source"),

@@ -14,12 +14,12 @@ export default function Home() {
       <div className="row">
         <div className="col-12">
           <div className="panel">
-            <LeadsHeader action={2} type={1} />
+            <LeadsHeader action={1} type={1} />
             <div className="panel-body p-0">
               {/* <div className="table-filter-option">
                 <TableFilter />
               </div> */}
-              <AdminLead />
+              <AdminLead fullwidth={true}/>
             </div>
           </div>
         </div>

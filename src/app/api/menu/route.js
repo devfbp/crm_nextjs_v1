@@ -28,9 +28,6 @@ export async function GET() {
           gt: -1
         }
       },
-      select: {
-        ['menu_id']: true, ['menu_name']: true, ['icon']: true, ['sort_no']: true, ['link']: true
-      },
       orderBy: {
         sort_no: 'asc'
       }

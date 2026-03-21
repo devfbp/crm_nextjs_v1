@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 15, 2026 at 07:02 PM
+-- Generation Time: Mar 21, 2026 at 07:30 PM
 -- Server version: 8.0.45-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -190,7 +190,27 @@ INSERT INTO `lead` (`lead_id`, `customer_name`, `mobile_no`, `email_id`, `altern
 (106, 'Hiran-lead-106', '9944893484', 'test@gmail.com', '9944893484', '9944893484', 'test@gmail.com', 5, 10, 10, 2, '2026-03-21', 1, 1, 'test', '2026-03-12 09:20:48', 1, '2026-03-13 14:42:26', 1, 0, 1),
 (107, 'Nithy-lead-107', '9944893483', 'mytest@gmail.com', '9944893483', '9944893484', 'mytest@gmail.com', 8, 9, 9, 3, '2026-03-27', 6, 1, 'test', '2026-03-12 09:20:48', 1, '2026-03-13 14:38:33', 1, 0, 1),
 (108, 'Hiran-lead-108', '9944893484', 'test@gmail.com', '9944893484', '9944893484', 'test@gmail.com', 5, 10, 10, 2, '2026-03-21', 7, 1, 'test', '2026-03-12 09:20:48', 1, '2026-03-13 14:37:14', 1, 0, 1),
-(109, 'Test', '1234567890', 'testtest1@gmail.com', '1234567890', '1234567890', 'testtest1@gmail.com', 7, 9, 9, 2, '1970-01-01', 3, 1, 'Test', '2026-03-12 19:26:01', 1, '2026-03-15 16:34:27', 1, 0, 0);
+(109, 'Test', '1234567890', 'testtest1@gmail.com', '1234567890', '1234567890', 'testtest1@gmail.com', 7, 9, 9, 2, '1970-01-01', 3, 1, 'Test', '2026-03-12 19:26:01', 1, '2026-03-15 16:34:27', 1, 0, 0),
+(110, 'test', '9944893484', '', '', '9944893484', '', 5, 10, 10, 3, '2026-03-27', 2, 1, 'test', '2026-03-21 18:23:20', 1, '2026-03-21 19:20:05', 1, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `leads_view`
+-- (See below for the actual view)
+--
+CREATE TABLE `leads_view` (
+`lead_id` int
+,`customer_name` varchar(200)
+,`assigned_to` varchar(200)
+,`sub_source_name` varchar(200)
+,`contact_project` varchar(401)
+,`status` varchar(200)
+,`status_id` int
+,`created_at` datetime
+,`status_color` varchar(200)
+,`flag` int
+);
 
 -- --------------------------------------------------------
 
@@ -260,6 +280,7 @@ CREATE TABLE `lead_status_entry` (
   `from_status_id` int NOT NULL,
   `to_status_id` int NOT NULL,
   `rm_user_id` int NOT NULL,
+  `remarks` text,
   `created_at` datetime DEFAULT NULL,
   `created_by` int DEFAULT NULL,
   `modified_at` datetime DEFAULT NULL,
@@ -272,32 +293,36 @@ CREATE TABLE `lead_status_entry` (
 -- Dumping data for table `lead_status_entry`
 --
 
-INSERT INTO `lead_status_entry` (`lead_entry_id`, `lead_id`, `from_status_id`, `to_status_id`, `rm_user_id`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES
-(1, 104, 0, 1, 0, '2026-03-15 20:19:22', 1, NULL, NULL, 0, 0),
-(2, 104, 0, 1, 0, '2026-02-22 20:19:23', 1, NULL, NULL, 0, 0),
-(3, 104, 1, 2, 1, '2026-03-12 19:17:30', 1, NULL, NULL, 0, 0),
-(4, 104, 2, 3, 1, '2026-03-12 19:20:41', 1, NULL, NULL, 0, 0),
-(5, 104, 3, 5, 1, '2026-03-12 19:24:16', 1, NULL, NULL, 0, 0),
-(6, 104, 0, 1, 1, '2026-03-12 19:26:01', 1, NULL, NULL, 0, 0),
-(7, 104, 1, 7, 1, '2026-03-12 20:18:24', 1, NULL, NULL, 0, 0),
-(8, 104, 2, 6, 1, '2026-03-12 20:21:33', 1, NULL, NULL, 0, 0),
-(9, 104, 2, 7, 1, '2026-03-12 20:26:36', 1, NULL, NULL, 0, 0),
-(10, 104, 2, 5, 1, '2026-03-12 20:26:48', 1, NULL, NULL, 0, 0),
-(11, 104, 2, 7, 1, '2026-03-12 20:26:56', 1, NULL, NULL, 0, 0),
-(12, 104, 1, 6, 1, '2026-03-12 20:16:04', 1, NULL, NULL, 0, 0),
-(13, 104, 1, 7, 1, '2026-03-12 20:16:13', 1, NULL, NULL, 0, 0),
-(14, 104, 2, 4, 1, '2026-03-12 20:16:22', 1, NULL, NULL, 0, 0),
-(15, 104, 2, 6, 1, '2026-03-12 20:16:31', 1, NULL, NULL, 0, 0),
-(16, 104, 2, 3, 1, '2026-03-12 20:28:10', 1, NULL, NULL, 0, 0),
-(17, 104, 2, 3, 1, '2026-03-12 20:28:22', 1, NULL, NULL, 0, 0),
-(18, 104, 2, 3, 1, '2026-03-12 20:28:33', 1, NULL, NULL, 0, 0),
-(19, 104, 2, 3, 1, '2026-03-12 20:28:42', 1, NULL, NULL, 0, 0),
-(20, 104, 1, 2, 1, '2026-03-13 14:46:51', 1, NULL, NULL, 0, 0),
-(21, 104, 1, 2, 1, '2026-03-13 15:44:51', 1, NULL, NULL, 0, 0),
-(22, 109, 2, 6, 1, '2026-03-15 15:23:26', 1, NULL, NULL, 0, 0),
-(23, 109, 6, 1, 1, '2026-03-15 15:41:53', 1, NULL, NULL, 0, 0),
-(24, 109, 1, 2, 1, '2026-03-15 15:50:06', 1, NULL, NULL, 0, 0),
-(25, 109, 2, 3, 1, '2026-03-15 15:50:35', 1, NULL, NULL, 0, 0);
+INSERT INTO `lead_status_entry` (`lead_entry_id`, `lead_id`, `from_status_id`, `to_status_id`, `rm_user_id`, `remarks`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES
+(1, 104, 0, 1, 0, NULL, '2026-03-15 20:19:22', 1, NULL, NULL, 0, 0),
+(2, 104, 0, 1, 0, NULL, '2026-02-22 20:19:23', 1, NULL, NULL, 0, 0),
+(3, 104, 1, 2, 1, NULL, '2026-03-12 19:17:30', 1, NULL, NULL, 0, 0),
+(4, 104, 2, 3, 1, NULL, '2026-03-12 19:20:41', 1, NULL, NULL, 0, 0),
+(5, 104, 3, 5, 1, NULL, '2026-03-12 19:24:16', 1, NULL, NULL, 0, 0),
+(6, 104, 0, 1, 1, NULL, '2026-03-12 19:26:01', 1, NULL, NULL, 0, 0),
+(7, 104, 1, 7, 1, NULL, '2026-03-12 20:18:24', 1, NULL, NULL, 0, 0),
+(8, 104, 2, 6, 1, NULL, '2026-03-12 20:21:33', 1, NULL, NULL, 0, 0),
+(9, 104, 2, 7, 1, NULL, '2026-03-12 20:26:36', 1, NULL, NULL, 0, 0),
+(10, 104, 2, 5, 1, NULL, '2026-03-12 20:26:48', 1, NULL, NULL, 0, 0),
+(11, 104, 2, 7, 1, NULL, '2026-03-12 20:26:56', 1, NULL, NULL, 0, 0),
+(12, 104, 1, 6, 1, NULL, '2026-03-12 20:16:04', 1, NULL, NULL, 0, 0),
+(13, 104, 1, 7, 1, NULL, '2026-03-12 20:16:13', 1, NULL, NULL, 0, 0),
+(14, 104, 2, 4, 1, NULL, '2026-03-12 20:16:22', 1, NULL, NULL, 0, 0),
+(15, 104, 2, 6, 1, NULL, '2026-03-12 20:16:31', 1, NULL, NULL, 0, 0),
+(16, 104, 2, 3, 1, NULL, '2026-03-12 20:28:10', 1, NULL, NULL, 0, 0),
+(17, 104, 2, 3, 1, NULL, '2026-03-12 20:28:22', 1, NULL, NULL, 0, 0),
+(18, 104, 2, 3, 1, NULL, '2026-03-12 20:28:33', 1, NULL, NULL, 0, 0),
+(19, 104, 2, 3, 1, NULL, '2026-03-12 20:28:42', 1, NULL, NULL, 0, 0),
+(20, 104, 1, 2, 1, NULL, '2026-03-13 14:46:51', 1, NULL, NULL, 0, 0),
+(21, 104, 1, 2, 1, NULL, '2026-03-13 15:44:51', 1, NULL, NULL, 0, 0),
+(22, 109, 2, 6, 1, NULL, '2026-03-15 15:23:26', 1, NULL, NULL, 0, 0),
+(23, 109, 6, 1, 1, NULL, '2026-03-15 15:41:53', 1, NULL, NULL, 0, 0),
+(24, 109, 1, 2, 1, NULL, '2026-03-15 15:50:06', 1, NULL, NULL, 0, 0),
+(25, 109, 2, 3, 1, NULL, '2026-03-15 15:50:35', 1, NULL, NULL, 0, 0),
+(26, 110, 0, 1, 1, NULL, '2026-03-21 18:23:20', 1, NULL, NULL, 0, 0),
+(27, 110, 1, 3, 1, 'fdfasd', '2026-03-21 18:43:31', 1, NULL, NULL, 0, 0),
+(28, 110, 3, 4, 1, 'fdfasd fdsafas', '2026-03-21 18:43:43', 1, NULL, NULL, 0, 0),
+(29, 110, 4, 2, 1, 'testttttt', '2026-03-21 19:20:05', 1, NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -306,11 +331,14 @@ INSERT INTO `lead_status_entry` (`lead_entry_id`, `lead_id`, `from_status_id`, `
 -- (See below for the actual view)
 --
 CREATE TABLE `lead_status_entry_view` (
-`created_at` varchar(21)
-,`from_status` varchar(200)
+`lead_entry_id` int
 ,`lead_id` int
-,`to_status` varchar(200)
 ,`user_name` varchar(200)
+,`from_status` varchar(200)
+,`to_status` varchar(200)
+,`created_at` datetime
+,`remarks` text
+,`display_created_at` varchar(86)
 );
 
 -- --------------------------------------------------------
@@ -326,6 +354,7 @@ CREATE TABLE `menu` (
   `parent_menu_id` int NOT NULL DEFAULT '1',
   `menu_group_id` int NOT NULL,
   `icon` varchar(200) DEFAULT NULL,
+  `full_width` int NOT NULL DEFAULT '0',
   `sort_no` int NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `created_by` int DEFAULT NULL,
@@ -339,20 +368,20 @@ CREATE TABLE `menu` (
 -- Dumping data for table `menu`
 --
 
-INSERT INTO `menu` (`menu_id`, `menu_name`, `link`, `parent_menu_id`, `menu_group_id`, `icon`, `sort_no`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES
-(1, 'Root', '#', -1, 1, NULL, 0, NULL, NULL, NULL, NULL, 0, 0),
-(2, 'Projects', '/project', 1, 7, 'fa-layer-group', 2, NULL, NULL, NULL, NULL, 0, 0),
-(4, 'Manage Users', '/user', 1, 4, 'fa-light fa-user-tie', 0, NULL, NULL, NULL, NULL, 0, 0),
-(6, 'Role (Designation)', '/role', 1, 4, 'fa-light fa-user-cog', 0, NULL, NULL, NULL, NULL, 0, 0),
-(7, 'Manage Leads', '/leads', 1, 7, 'fa-light fa-folder-open', 1, NULL, NULL, NULL, NULL, 0, 0),
-(9, 'Activity Report', '/activity-report', 1, 9, 'fa-layer-group', 0, NULL, NULL, NULL, NULL, 0, 0),
-(10, 'State', '/state', 1, 1, 'fa-light fa-memo-pad', 0, NULL, NULL, NULL, NULL, 0, 0),
-(11, 'City', '/city', 1, 1, 'fa-light fa-table', 0, NULL, NULL, NULL, NULL, 0, 0),
-(12, 'Lead Status', '/lead-status', 1, 1, 'fa-light fa-folder-open', 3, NULL, NULL, NULL, NULL, 0, 0),
-(13, 'Source', '/source', 1, 1, 'fa-light fa-chart-simple', 3, NULL, NULL, NULL, NULL, 0, 0),
-(14, 'Sub Source', '/sub-soruce', 1, 1, 'fa-light fa-chart-simple', 3, NULL, NULL, NULL, NULL, 0, 0),
-(15, 'Manage Team', '/user-team', 1, 4, 'fa-light fa-users', 0, NULL, NULL, NULL, NULL, 0, 0),
-(16, 'Website Leads', '/website-lead', 1, 7, 'fa-light fa-folder-open', 1, NULL, NULL, NULL, NULL, 0, 0);
+INSERT INTO `menu` (`menu_id`, `menu_name`, `link`, `parent_menu_id`, `menu_group_id`, `icon`, `full_width`, `sort_no`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES
+(1, 'Root', '#', -1, 1, NULL, 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(2, 'Projects', '/project', 1, 7, 'fa-layer-group', 0, 2, NULL, NULL, NULL, NULL, 0, 0),
+(4, 'Manage Users', '/user', 1, 4, 'fa-light fa-user-tie', 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(6, 'Role (Designation)', '/role', 1, 4, 'fa-light fa-user-cog', 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(7, 'Manage Leads', '/leads', 1, 7, 'fa-light fa-folder-open', 1, 1, NULL, NULL, NULL, NULL, 0, 0),
+(9, 'Activity Report', '/activity-report', 1, 9, 'fa-layer-group', 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(10, 'State', '/state', 1, 1, 'fa-light fa-memo-pad', 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(11, 'City', '/city', 1, 1, 'fa-light fa-table', 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(12, 'Lead Status', '/lead-status', 1, 1, 'fa-light fa-folder-open', 0, 3, NULL, NULL, NULL, NULL, 0, 0),
+(13, 'Source', '/source', 1, 1, 'fa-light fa-chart-simple', 0, 3, NULL, NULL, NULL, NULL, 0, 0),
+(14, 'Sub Source', '/sub-soruce', 1, 1, 'fa-light fa-chart-simple', 0, 3, NULL, NULL, NULL, NULL, 0, 0),
+(15, 'Manage Team', '/user-team', 1, 4, 'fa-light fa-users', 0, 0, NULL, NULL, NULL, NULL, 0, 0),
+(16, 'Website Leads', '/website-lead', 1, 7, 'fa-light fa-folder-open', 1, 1, NULL, NULL, NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -566,7 +595,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `name`, `role_id`, `email`, `phone_no`, `general_manager_id`, `reporting_to_id`, `password`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES
-(1, 'Nithyanandham Nagarajan', 1, 'nithy.snt@gmail.com', '9944893484', 0, 0, '$2b$12$NQrC3qpFAQslta5rYzaeGuaOMhiQ001wKLt/fnX0Bo9T9iB8wrVxS', '2026-02-14 08:04:54', NULL, NULL, NULL, 0, 0),
+(1, 'Nithyanandham Nagarajan', 1, 'nithy.snt@gmail.com', '9944893484', 0, 0, '$2b$12$.0hfMRqqWuENkmumkPyDYevvpB9/LLYVJ2yUXWDkk4PBP3evznDoy', '2026-02-14 08:04:54', NULL, NULL, NULL, 0, 0),
 (2, 'Sunisha', 2, 'crm@fullbasketproperty.com', '9740062744', 1, 1, '$2b$12$.0hfMRqqWuENkmumkPyDYevvpB9/LLYVJ2yUXWDkk4PBP3evznDoy', '2026-02-15 08:42:45', NULL, '2026-02-16 08:11:41', NULL, 0, 0),
 (3, 'test', 1004, 'test@gmail.com', '1212121212', 2, 1, '$2b$12$Ymre9vryJznwmTAlIPWDQ.Mn0eGdVoqIFR27KjTno.36ToRb3EKS6', '2026-02-16 17:08:35', NULL, NULL, NULL, 0, 0);
 
@@ -677,11 +706,20 @@ INSERT INTO `website_leads` (`website_lead_id`, `name`, `email`, `phone`, `form_
 -- --------------------------------------------------------
 
 --
+-- Structure for view `leads_view`
+--
+DROP TABLE IF EXISTS `leads_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `leads_view`  AS SELECT `l`.`lead_id` AS `lead_id`, `l`.`customer_name` AS `customer_name`, `u`.`name` AS `assigned_to`, `ss`.`sub_source_name` AS `sub_source_name`, concat(`l`.`mobile_no`,'-',`p`.`project_name`) AS `contact_project`, `ls`.`lead_status_name` AS `status`, `l`.`lead_status_id` AS `status_id`, `l`.`created_at` AS `created_at`, `ls`.`label_color` AS `status_color`, `l`.`flag` AS `flag` FROM ((((`lead` `l` join `lead_status` `ls` on((`l`.`lead_status_id` = `ls`.`lead_status_id`))) join `project` `p` on((`l`.`project_id` = `p`.`project_id`))) join `user` `u` on((`l`.`rm_user_id` = `u`.`user_id`))) join `sub_source` `ss` on((`l`.`sub_source_id` = `ss`.`sub_source_id`))) ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `lead_status_entry_view`
 --
 DROP TABLE IF EXISTS `lead_status_entry_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lead_status_entry_view`  AS SELECT `e`.`lead_id` AS `lead_id`, `u`.`name` AS `user_name`, `s`.`lead_status_name` AS `from_status`, `s2`.`lead_status_name` AS `to_status`, date_format(`e`.`created_at`,'%d/%m/%Y %H:%i') AS `created_at` FROM (((`lead_status_entry` `e` join `user` `u` on((`e`.`created_by` = `u`.`user_id`))) join `lead_status` `s` on((`s`.`lead_status_id` = `e`.`from_status_id`))) join `lead_status` `s2` on((`s2`.`lead_status_id` = `e`.`to_status_id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lead_status_entry_view`  AS SELECT `le`.`lead_entry_id` AS `lead_entry_id`, `l`.`lead_id` AS `lead_id`, `u`.`name` AS `user_name`, `ls1`.`lead_status_name` AS `from_status`, `ls2`.`lead_status_name` AS `to_status`, `le`.`created_at` AS `created_at`, `le`.`remarks` AS `remarks`, date_format(`le`.`created_at`,'%d-%M-%Y %H:%i:%s') AS `display_created_at` FROM ((((`lead_status_entry` `le` join `lead` `l` on((`le`.`lead_id` = `l`.`lead_id`))) join `lead_status` `ls1` on((`le`.`from_status_id` = `ls1`.`lead_status_id`))) join `lead_status` `ls2` on((`le`.`to_status_id` = `ls2`.`lead_status_id`))) join `user` `u` on((`l`.`rm_user_id` = `u`.`user_id`))) ;
 
 --
 -- Indexes for dumped tables
@@ -821,7 +859,7 @@ ALTER TABLE `city`
 -- AUTO_INCREMENT for table `lead`
 --
 ALTER TABLE `lead`
-  MODIFY `lead_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `lead_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `lead_file`
@@ -839,7 +877,7 @@ ALTER TABLE `lead_status`
 -- AUTO_INCREMENT for table `lead_status_entry`
 --
 ALTER TABLE `lead_status_entry`
-  MODIFY `lead_entry_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `lead_entry_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `menu`

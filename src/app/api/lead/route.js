@@ -9,8 +9,9 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
-    var limit = parseInt(searchParams.get('limit')) || 10000;
-    var orderBy = searchParams.get('orderBy') || 'lead_id';
+    let limit = parseInt(searchParams.get('limit')) || 10000;
+    let orderBy = searchParams.get('orderBy') || 'lead_id';
+    let view = searchParams.get('view');
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
@@ -18,6 +19,16 @@ export async function GET(request) {
       });
       return Response.json(dataItem);
     }
+    if(view) {
+      let vwhere = {flag:0 }
+      const dataItems = await prisma.leads_view.findMany({
+        where: vwhere,
+        take: limit,
+        orderBy: { lead_id: 'desc' }
+      });
+      return Response.json(dataItems);
+    }
+
     const dataItems = await prisma.lead.findMany({
       where: {
         flag: 0
@@ -45,10 +56,10 @@ export async function POST(request) {
         created_by: token?.user_id || null,
         customer_name: req.customer_name,
         mobile_no: req.mobile_no,
-        email_id: req.email_id,
-        alternate_no: req.alternate_no,
-        whatsapp_no: req.mobile_no,
-        alternate_email: req.alternate_email,
+        email_id: req.email_id ? req.email_id : null,
+        alternate_no: req.alternate_no ? req.alternate_no : null,
+        whatsapp_no: req.whatsapp_no ? req.whatsapp_no : null,
+        alternate_email: req.alternate_email ? req.alternate_email : null,
         project_id: parseInt(req.project_id),
         source_id: parseInt(req.source_id),
         sub_source_id: parseInt(req.sub_source_id),
@@ -67,6 +78,7 @@ export async function POST(request) {
           from_status_id: 0,
           to_status_id: 1,
           rm_user_id: token?.user_id ?? null,
+          remarks: "New Lead Created"
         },
       });
     }
@@ -115,10 +127,11 @@ export async function PUT(request) {
           from_status_id: beforeLeadData?.lead_status_id ?? 0,
           to_status_id: updatedlead.lead_status_id,
           rm_user_id: token?.user_id ?? null,
+          remarks: req.status_remarks ? req.status_remarks : "Status Updated"
         },
       });
     }
-    if (updatedlead) {
+    if (updatedlead && req.send_email) {
       // console.log("Sending email notification for lead update...");
       let html_body = `<h1>Lead Assigned</h1>
       <p>The Following Lead Assigned to you, Please check and follow up.</p>
