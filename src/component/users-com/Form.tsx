@@ -100,7 +100,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "user" });
       if (typeof window !== "undefined") {
-        //window.location.reload();
+        window.location.reload();
       }
 
     } catch (err: any) {
