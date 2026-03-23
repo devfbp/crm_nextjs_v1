@@ -4,13 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useDigiContext } from "@/context/DigiContext";
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  PieChart,
+  Pie,
   Tooltip,
   Legend,
+  Cell,
 } from "recharts";
 
 // Type for a single lead status with count
@@ -20,6 +18,13 @@ interface LeadStatusData {
 }
 
 const SalesAnalytics: React.FC = () => {
+  const COLORS = ["#a9b4cc", "#5188ff"]; // Due = Green, Overdue = Red
+  const data = [
+    { name: "Due", value: 18 },
+    { name: "Overdue", value: 5 },
+  ];
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+
   const { currentTheme, isRechartHeight } = useDigiContext();
   const [leadData, setLeadData] = useState<LeadStatusData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,11 +66,11 @@ const SalesAnalytics: React.FC = () => {
     <div className="col-lg-6 col-md-12" style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "16px" }}>
       <div className="panel chart-panel-1">
         <div className="panel-header">
-          <h5>Status Wise Leads</h5>
+          <h5>Due and Overdue Leads</h5>
           <div className="btn-box">
-            <button className="btn btn-sm btn-outline-primary">Week</button>
+            {/* <button className="btn btn-sm btn-outline-primary">Week</button>
             <button className="btn btn-sm btn-outline-primary">Month</button>
-            <button className="btn btn-sm btn-outline-primary">Year</button>
+            <button className="btn btn-sm btn-outline-primary">Year</button> */}
           </div>
         </div>
 
@@ -75,35 +80,24 @@ const SalesAnalytics: React.FC = () => {
               width="100%"
               height={250}
             >
-              <BarChart
-                data={leadData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={
-                    currentTheme === "light"
-                      ? "hsl(0deg 0% 0% / 20%)"
-                      : "rgba(255, 255, 255, 0.2)"
-                  }
-                />
-                <XAxis
-                  dataKey="name"
-                  angle={-30}
-                  textAnchor="end"
-                  fontSize={10}
-                  height={60}
-                  stroke={
-                    currentTheme === "light"
-                      ? "hsl(0deg 0% 27.45% / 70%)"
-                      : "hsl(0deg 0% 89.41% / 70%)"
-                  }
-                />
-                <YAxis />
+              <PieChart>
+                <Pie
+                  data={data}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  label={(entry) => `${entry.name}: ${((entry.value / total) * 100).toFixed(1)}%`}
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
                 <Tooltip />
-                <Legend className="Status" />
-                <Bar dataKey="count" fill="#a9b4cc" />
-              </BarChart>
+                <Legend />
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>

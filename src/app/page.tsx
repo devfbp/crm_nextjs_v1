@@ -3,6 +3,7 @@ import DashboardCards from "@/component/cards/DashboardCards";
 import CrmDashboardCards from "@/component/cards/CrmDashboardCards";
 import SalesAnalytics from "@/component/charts/SalesAnalytics";
 import Board1 from "@/component/cards/Board_1";
+import Pie1 from "@/component/cards/Pie_1";
 import NewCustomer from "@/component/customer/NewCustomer";
 import Footer from "@/component/footer/Footer";
 import RecentOrder from "@/component/order/RecentOrder";
@@ -23,9 +24,11 @@ export default function Home() {
       <Board1 />
       {/* <CrmDashboardCards /> */}
       {/* <DashboardCards/> */}
-      <Chart_1 />      
+      
       {/* <ViewProfileCards /> */}
       <div className="row">
+        <Chart_1 />
+      <Pie1 />
         {/* <SalesAnalytics />
         <SocialVisitors />
         <NewCustomer />
