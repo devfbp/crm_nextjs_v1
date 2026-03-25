@@ -142,15 +142,8 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       // console.log("Form submitted successfully", payload);
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "lead" });
-      if (typeof window !== "undefined") {
-        // if (submitConfig.action === 2) {
-        //   // toast.success("Lead added successfully!");
-        //   window.location.href = "/leads";
-        // } else {
-        //   // toast.success("Lead updated successfully!");
-        //   window.location.reload();
-        // }
-        window.location.href = "/leads";
+      if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+          window.location.href = "/leads";
       }
 
     } catch (err: any) {

@@ -99,10 +99,9 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
 
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "user" });
-      if (typeof window !== "undefined") {
-        window.location.reload();
+      if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+          window.location.href = "/leads";
       }
-
     } catch (err: any) {
       console.error("Submit error:", err);
       toast.error(err?.message || "Failed to submit");
