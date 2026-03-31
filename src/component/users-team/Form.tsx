@@ -83,7 +83,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "user" });
       if (typeof window !== "undefined") {
-        //window.location.reload();
+        window.location.href = "/user-team";
       }
 
     } catch (err: any) {
@@ -170,7 +170,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                     Team Members
                   </label>
                   <UserList form={form} setForm={setForm} />
-                  <input type="text"
+                  <input type="hidden"
                     id="members"
                     name="members"
                     value={form.members}

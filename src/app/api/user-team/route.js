@@ -84,6 +84,47 @@ export async function POST(request) {
   }
 }
 
+export async function PUT(request) {
+  const token = getSessionFromToken();
+  try {
+    const req = await request.json();
+    const newUser = await prisma.user_team.update({
+      where: { user_team_id: req.user_team_id },
+      data: {
+        team_name: req.team_name,
+        team_leader_id: parseInt(req.team_leader_id),
+        created_at: new Date(),
+        created_by: token ? token.userId : null
+      },
+    });
+
+    if (newUser) {
+      const member_id = req.members;
+      if (member_id) {
+        await prisma.user_team_member.deleteMany({
+          where: { user_team_id: newUser.user_team_id },
+        });
+        for (const id of member_id) {
+          await prisma.user_team_member.create({
+            data: {
+              user_team_id: newUser.user_team_id,
+              leader_id: parseInt(newUser.team_leader_id),
+              member_id: parseInt(id),
+              created_at: new Date(),
+              created_by: token ? token.userId : null
+            },
+          });
+        }
+      }
+    }
+
+    return Response.json(newUser);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return Response.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
+
 /*export async function PUT(request) {
   const token = getSessionFromToken();
   try {

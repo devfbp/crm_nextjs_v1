@@ -6,6 +6,7 @@ import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import PaginationSection from "../PaginationSection";
 import UserName from "./UserName";
 import DeleteAction from "../action/Delete";
+import EditAction from "../action/Edit";
 
 interface Team {
   id?: number;
@@ -101,12 +102,22 @@ const ScrollDataTableSection: React.FC = () => {
                             <td><UserName type="single" user_id={team?.team_leader_id} /></td>
                             <td><UserName type="multiple" user_id={team?.user_team_id} /></td>
                             <td>
+                              <div className="btn-box">
+                              <EditAction
+                                  id={team?.user_team_id}
+                                  page="user-team"
+                                  type="link"
+                                  link={`/user-team/${team?.user_team_id}/edit`}
+                                  setRefresh={""}
+                                  menu_id={15}
+                              />
                               <DeleteAction
                                 id={team?.user_team_id}
                                 page="user-team"
                                 reload={true}
                                 menu_id={15}
                               />
+                              </div>
                             </td>
                           </tr>
                         ))

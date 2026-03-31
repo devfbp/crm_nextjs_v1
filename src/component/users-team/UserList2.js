@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import AsyncSelect from "react-select/async";
 
 export default function List({ form, setForm }) {
-  const [selectedrm_user, setSelectedrm_user] = useState(null);
+  const [selectedrm_user, setSelectedrm_user] = useState([]); // ✅ array
 
   const loadOptions = async (inputValue) => {
     try {
@@ -13,57 +12,70 @@ export default function List({ form, setForm }) {
 
       const data = await res.json();
 
-      const options = data?.map((item) => ({
-        value: item.user_id,
-        label: item.name,
-      })) || [];
-
-      return [{ value: "", label: "--Select--" }, ...options];
+      return (
+        data?.map((item) => ({
+          value: item.user_id,
+          label: item.name,
+        })) || []
+      );
     } catch (error) {
       console.error("Error loading rm_users:", error);
       return [];
     }
   };
 
-  const handleChange = (option) => {
-    setSelectedrm_user(option);
-    // console.log("Selected User:", option);
+  const handleChange = (options) => {
+    setSelectedrm_user(options || []);
+
     setForm((prev) => ({
       ...prev,
-      members: option ? option.map((o) => o.value) : [],
+      members: options ? options.map((o) => o.value) : [],
     }));
-
-    // console.log("Selected rm_user ID:", option?.value);
   };
 
   useEffect(() => {
-    if (!form.rm_user_id) return;
+    if (form.slug) {
+      const fetchrm_user = async () => {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/user-team?user_team_id=${form.slug}`
+          );
 
-    const fetchrm_user = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/user?id=${form.rm_user_id}`
-        );
+          const data = await res.json();
+          if (data) {
+            const memberIds = data.map((user) => user.member_id).join(',');
+            const formatted = Array.isArray(data)
+              ? data.map((user) => ({
+                  value: user.member_id,
+                  label: user?.user?.name,
+                }))
+              : [
+                  {
+                    value: data.user_id,
+                    label: data.name,
+                  },
+                ];
 
-        const data = await res.json();
+            setSelectedrm_user(formatted);
 
-        if (data) {
-          const rm_user = data;
-          setSelectedrm_user({
-            value: rm_user.user_id,
-            label: rm_user.name,
-          });
+            console.log("memberIds:", memberIds);
+            setForm((prev) => ({
+              ...prev,
+              members: memberIds,
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching rm_user:", error);
         }
-      } catch (error) {
-        console.error("Error fetching rm_user:", error);
-      }
-    };
+      };
 
-    fetchrm_user();
-  }, [form.rm_user_id]);
+      fetchrm_user();
+    }
+  }, [form.slug]); 
 
   return (
     <AsyncSelect
+      isMulti
       cacheOptions
       defaultOptions
       loadOptions={loadOptions}
@@ -71,7 +83,6 @@ export default function List({ form, setForm }) {
       onChange={handleChange}
       placeholder="Select User"
       classNamePrefix="async_select"
-      isMulti
     />
   );
 }

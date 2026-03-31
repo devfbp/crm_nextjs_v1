@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { getSessionFromToken } from "../session";
 
 const GM_ROLE_IDS = [2, 3, 4, 5, 6, 7, 8, 1];
-const RM_ROLE_IDS = [5, 6, 7, 8, 1];
+const RM_ROLE_IDS = [1, 2, 3, 4];
 
 export async function GET(request) {
   try {

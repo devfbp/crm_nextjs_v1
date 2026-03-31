@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/component/footer/Footer";
-import UserHeader from "@/component/users-com/Header";
-import Form from "@/component/users-com/Form";
+import UserHeader from "@/component/users-team/Header";
+import Form from "@/component/users-team/Form";
 import { USER_MENU_ID } from "@/data/constants";
 import { accessMenuCheck } from "@/component/utils/common";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ export default function Home(props: Props) {
     const [records, setRecords] = useState<any>();
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user?id=' + props.params.slug);
+            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user-team?id=' + props.params.slug);
             const result = await response.json();
             // console.log("Fetched Records:", result);
             setRecords(result);
