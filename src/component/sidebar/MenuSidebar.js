@@ -30,7 +30,7 @@ const AppsPart = (props) => {
           <React.Fragment key={groupitem?.menu_group_id}>
             {accessMenuCheck(groupitem?.menu_group_id, 0) === true &&
               groupitem?.link != null ?
-              <li className="sidebar-item">
+              <li className="sidebar-item" key={groupitem?.menu_group_id} title={groupitem?.menu_group_name}>
                 <a
                   href={groupitem?.link}
                   role="button"
@@ -40,7 +40,7 @@ const AppsPart = (props) => {
               :
               <>
                 {accessMenuCheck(groupitem?.menu_group_id, 0) === true &&
-                  <li className="sidebar-item">
+                  <li className="sidebar-item" key={groupitem?.menu_group_id} title={groupitem?.menu_group_name}>
                     <a
                       role="button"
                       className={`sidebar-link-group-title has-sub  ${mainSidebarDropdown.includes(groupitem?.menu_group_id) ? "" : "show"
@@ -54,7 +54,7 @@ const AppsPart = (props) => {
                       {
                         groupitem?.menuItems?.map((item, index) => (
                           accessMenuCheck(item?.menu_id, 1) === true &&
-                          <li className="sidebar-dropdown-item">
+                          <li className="sidebar-dropdown-item" key={item?.menu_id} title={item?.menu_name}>
                             <Link href={item?.link} className="sidebar-link">
                               <span className="nav-icon">
                                 <i className={`fa-light ${item?.icon}`}></i>

@@ -371,7 +371,8 @@ exports.Prisma.Leads_viewScalarFieldEnum = {
   customer_name: 'customer_name',
   assigned_to: 'assigned_to',
   sub_source_name: 'sub_source_name',
-  contact_project: 'contact_project',
+  mobile_no: 'mobile_no',
+  project_name: 'project_name',
   status: 'status',
   status_id: 'status_id',
   created_at: 'created_at',
@@ -497,7 +498,8 @@ exports.Prisma.leads_viewOrderByRelevanceFieldEnum = {
   customer_name: 'customer_name',
   assigned_to: 'assigned_to',
   sub_source_name: 'sub_source_name',
-  contact_project: 'contact_project',
+  mobile_no: 'mobile_no',
+  project_name: 'project_name',
   status: 'status',
   status_color: 'status_color'
 };

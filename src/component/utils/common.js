@@ -1,6 +1,8 @@
 import { useRouter } from 'next/navigation';
 import Cryptr from "cryptr";
 import Cookies from 'js-cookie';
+import { se } from 'date-fns/locale';
+import { use } from 'react';
 
 export function navigatePage(path) {
     //   const router = useRouter();
@@ -15,6 +17,25 @@ export function getUserSessionData() {
         return JSON.parse(cookieValue);
     }
     return null;
+}
+
+export function accessMenuRole(userType) {
+    let sessionData = getUserSessionData();
+    let userRole = [];
+    if(userType === 1){
+        // ADMIN
+        userRole = [2];
+    }
+    if(userType === 2){
+        // ADMIN_RM
+        userRole = [2, 3, 4, 5];
+    }
+    userRole.push(1); // Super Admin
+    // console.log("accessMenuRole sessionData:", sessionData);
+    if(sessionData && sessionData.role_id && userRole.includes(sessionData.role_id)){
+        return true;
+    }
+    return false;
 }
 
 export function accessMenuCheck(menu_id, access = 1) {

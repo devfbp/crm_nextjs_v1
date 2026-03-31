@@ -293,7 +293,8 @@ view leads_view {
   customer_name   String?   @db.VarChar(200)
   assigned_to     String    @db.VarChar(200)
   sub_source_name String?   @db.VarChar(200)
-  contact_project String?   @db.VarChar(401)
+  mobile_no       String?   @db.VarChar(200)
+  project_name    String?   @db.VarChar(200)
   status          String?   @db.VarChar(200)
   status_id       Int
   created_at      DateTime? @db.DateTime(0)

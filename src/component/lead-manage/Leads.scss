@@ -24,7 +24,7 @@
     background-color: rgb(7, 38, 151);
     color: #fff;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px !important;
     padding: 10px;
     z-index: 10;
     text-align: left;
@@ -33,9 +33,9 @@
 
   tbody td {
     border-bottom: 1px solid rgb(139, 159, 237);
-    font-size: 14px;
+    font-size: 14px !important;
     color: #f0f0f0;
-    padding: 8px;
+    padding: 5px;
   }
 
   tbody tr:nth-child(even) {

@@ -32,7 +32,7 @@ export default function List({ form, setForm }) {
       rm_user_id: option?.value || "",
     }));
 
-    // console.log("Selected rm_user ID:", option?.value);
+  console.log("Selected rm_user ID:", option?.value);
   };
 
   useEffect(() => {

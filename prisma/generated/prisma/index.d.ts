@@ -21084,7 +21084,8 @@ export namespace Prisma {
     customer_name: string | null
     assigned_to: string | null
     sub_source_name: string | null
-    contact_project: string | null
+    mobile_no: string | null
+    project_name: string | null
     status: string | null
     status_id: number | null
     created_at: Date | null
@@ -21097,7 +21098,8 @@ export namespace Prisma {
     customer_name: string | null
     assigned_to: string | null
     sub_source_name: string | null
-    contact_project: string | null
+    mobile_no: string | null
+    project_name: string | null
     status: string | null
     status_id: number | null
     created_at: Date | null
@@ -21110,7 +21112,8 @@ export namespace Prisma {
     customer_name: number
     assigned_to: number
     sub_source_name: number
-    contact_project: number
+    mobile_no: number
+    project_name: number
     status: number
     status_id: number
     created_at: number
@@ -21137,7 +21140,8 @@ export namespace Prisma {
     customer_name?: true
     assigned_to?: true
     sub_source_name?: true
-    contact_project?: true
+    mobile_no?: true
+    project_name?: true
     status?: true
     status_id?: true
     created_at?: true
@@ -21150,7 +21154,8 @@ export namespace Prisma {
     customer_name?: true
     assigned_to?: true
     sub_source_name?: true
-    contact_project?: true
+    mobile_no?: true
+    project_name?: true
     status?: true
     status_id?: true
     created_at?: true
@@ -21163,7 +21168,8 @@ export namespace Prisma {
     customer_name?: true
     assigned_to?: true
     sub_source_name?: true
-    contact_project?: true
+    mobile_no?: true
+    project_name?: true
     status?: true
     status_id?: true
     created_at?: true
@@ -21257,7 +21263,8 @@ export namespace Prisma {
     customer_name: string | null
     assigned_to: string
     sub_source_name: string | null
-    contact_project: string | null
+    mobile_no: string | null
+    project_name: string | null
     status: string | null
     status_id: number
     created_at: Date | null
@@ -21289,7 +21296,8 @@ export namespace Prisma {
     customer_name?: boolean
     assigned_to?: boolean
     sub_source_name?: boolean
-    contact_project?: boolean
+    mobile_no?: boolean
+    project_name?: boolean
     status?: boolean
     status_id?: boolean
     created_at?: boolean
@@ -21304,7 +21312,8 @@ export namespace Prisma {
     customer_name?: boolean
     assigned_to?: boolean
     sub_source_name?: boolean
-    contact_project?: boolean
+    mobile_no?: boolean
+    project_name?: boolean
     status?: boolean
     status_id?: boolean
     created_at?: boolean
@@ -21312,7 +21321,7 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "assigned_to" | "sub_source_name" | "contact_project" | "status" | "status_id" | "created_at" | "status_color" | "flag", ExtArgs["result"]["leads_view"]>
+  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "assigned_to" | "sub_source_name" | "mobile_no" | "project_name" | "status" | "status_id" | "created_at" | "status_color" | "flag", ExtArgs["result"]["leads_view"]>
 
   export type $leads_viewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "leads_view"
@@ -21322,7 +21331,8 @@ export namespace Prisma {
       customer_name: string | null
       assigned_to: string
       sub_source_name: string | null
-      contact_project: string | null
+      mobile_no: string | null
+      project_name: string | null
       status: string | null
       status_id: number
       created_at: Date | null
@@ -21575,7 +21585,8 @@ export namespace Prisma {
     readonly customer_name: FieldRef<"leads_view", 'String'>
     readonly assigned_to: FieldRef<"leads_view", 'String'>
     readonly sub_source_name: FieldRef<"leads_view", 'String'>
-    readonly contact_project: FieldRef<"leads_view", 'String'>
+    readonly mobile_no: FieldRef<"leads_view", 'String'>
+    readonly project_name: FieldRef<"leads_view", 'String'>
     readonly status: FieldRef<"leads_view", 'String'>
     readonly status_id: FieldRef<"leads_view", 'Int'>
     readonly created_at: FieldRef<"leads_view", 'DateTime'>
@@ -22039,7 +22050,8 @@ export namespace Prisma {
     customer_name: 'customer_name',
     assigned_to: 'assigned_to',
     sub_source_name: 'sub_source_name',
-    contact_project: 'contact_project',
+    mobile_no: 'mobile_no',
+    project_name: 'project_name',
     status: 'status',
     status_id: 'status_id',
     created_at: 'created_at',
@@ -22231,7 +22243,8 @@ export namespace Prisma {
     customer_name: 'customer_name',
     assigned_to: 'assigned_to',
     sub_source_name: 'sub_source_name',
-    contact_project: 'contact_project',
+    mobile_no: 'mobile_no',
+    project_name: 'project_name',
     status: 'status',
     status_color: 'status_color'
   };
@@ -23830,7 +23843,8 @@ export namespace Prisma {
     customer_name?: StringNullableFilter<"leads_view"> | string | null
     assigned_to?: StringFilter<"leads_view"> | string
     sub_source_name?: StringNullableFilter<"leads_view"> | string | null
-    contact_project?: StringNullableFilter<"leads_view"> | string | null
+    mobile_no?: StringNullableFilter<"leads_view"> | string | null
+    project_name?: StringNullableFilter<"leads_view"> | string | null
     status?: StringNullableFilter<"leads_view"> | string | null
     status_id?: IntFilter<"leads_view"> | number
     created_at?: DateTimeNullableFilter<"leads_view"> | Date | string | null
@@ -23843,7 +23857,8 @@ export namespace Prisma {
     customer_name?: SortOrderInput | SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrderInput | SortOrder
-    contact_project?: SortOrderInput | SortOrder
+    mobile_no?: SortOrderInput | SortOrder
+    project_name?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     status_id?: SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -23857,7 +23872,8 @@ export namespace Prisma {
     customer_name?: SortOrderInput | SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrderInput | SortOrder
-    contact_project?: SortOrderInput | SortOrder
+    mobile_no?: SortOrderInput | SortOrder
+    project_name?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     status_id?: SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -23878,7 +23894,8 @@ export namespace Prisma {
     customer_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
     assigned_to?: StringWithAggregatesFilter<"leads_view"> | string
     sub_source_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
-    contact_project?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    mobile_no?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    project_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
     status?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
     status_id?: IntWithAggregatesFilter<"leads_view"> | number
     created_at?: DateTimeNullableWithAggregatesFilter<"leads_view"> | Date | string | null
@@ -26980,7 +26997,8 @@ export namespace Prisma {
     customer_name?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrder
-    contact_project?: SortOrder
+    mobile_no?: SortOrder
+    project_name?: SortOrder
     status?: SortOrder
     status_id?: SortOrder
     created_at?: SortOrder
@@ -26999,7 +27017,8 @@ export namespace Prisma {
     customer_name?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrder
-    contact_project?: SortOrder
+    mobile_no?: SortOrder
+    project_name?: SortOrder
     status?: SortOrder
     status_id?: SortOrder
     created_at?: SortOrder
@@ -27012,7 +27031,8 @@ export namespace Prisma {
     customer_name?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrder
-    contact_project?: SortOrder
+    mobile_no?: SortOrder
+    project_name?: SortOrder
     status?: SortOrder
     status_id?: SortOrder
     created_at?: SortOrder

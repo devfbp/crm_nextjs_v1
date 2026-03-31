@@ -8,8 +8,9 @@ import "./Leads.scss";
 import Link from "next/link";
 import { Spinner, Alert } from "react-bootstrap";
 import { useDigiContext } from "@/context/DigiContext";
-import { getUserSessionData } from "../utils/common";
+import { accessMenuRole } from "../utils/common";
 import BulkUpdateModal from "./BulkUpdate";
+import LeadHistory from "./LeadHistory";
 
 const LeadsTable = (props: any) => {
   const [dataList, setDataList] = useState<Array<any>>([]);
@@ -18,9 +19,11 @@ const LeadsTable = (props: any) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
+  const [showLeadHistory, setShowLeadHistory] = useState(false);
   const [bulkStatus, setBulkStatus] = useState([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
   const [navQuickToggleValue, setNavQuickToggleValue] = useState(props?.fullwidth);
 
+  const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [userFilter, setUserFilter] = useState("");
@@ -29,22 +32,18 @@ const LeadsTable = (props: any) => {
 
   const { navQuickToggle } = useDigiContext();
 
-  const [sessionDataString, setSessionDataString] = useState<any>(null);
-
   useEffect(() => {
-    if (navQuickToggleValue) {
-      navQuickToggle();
-      setNavQuickToggleValue(false);
-    }
-    const data = getUserSessionData();
-    setSessionDataString(data);
+    // if (navQuickToggleValue) {
+    //   navQuickToggle();
+    //   setNavQuickToggleValue(false);
+    // }
   }, [navQuickToggle, navQuickToggleValue]);
 
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/lead?view=1");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lead?view=1`);
       const result = await response.json();
       setDataList(result.map((r: any) => ({ ...r, selected: false })));
     } catch (error) {
@@ -129,6 +128,11 @@ const LeadsTable = (props: any) => {
 
     setShowBulkModal(true);
   };
+
+  const handleLeadHistory = (data: any) => {
+    setHistoryLead(data);
+    setShowLeadHistory(true);
+  };
   const handleBulkSubmit = async () => {
     const selectedLeads = dataList.filter((d) => d.selected);
 
@@ -157,8 +161,6 @@ const LeadsTable = (props: any) => {
 
       setShowBulkModal(false);
       setBulkStatus([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
-
-      fetchData(); // refresh
     } catch (err) {
       console.error(err);
       toast.error("Bulk update failed");
@@ -228,9 +230,10 @@ const LeadsTable = (props: any) => {
                       <input type="checkbox" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
                     </th>
                     <th onClick={() => sortColumn("customer_name")}>Lead Name</th>
-                    <th onClick={() => sortColumn("assigned_to")}>Assigned To</th>
-                    <th onClick={() => sortColumn("contact_project")}>Contact-Project</th>
-                    {sessionDataString?.role_id < 3 &&
+                    <th onClick={() => sortColumn("mobile_no")}>Contact</th>                                       
+                    <th onClick={() => sortColumn("project_name")}>Project</th>
+                    <th onClick={() => sortColumn("assigned_to")}>Assigned To</th> 
+                    {accessMenuRole(1) &&
                       <th onClick={() => sortColumn("sub_source_name")}>Source</th>
                     }
                     <th onClick={() => sortColumn("status")}>Status</th>
@@ -245,17 +248,26 @@ const LeadsTable = (props: any) => {
                     <tr key={data.lead_id}>
                       <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
                       <td>{data.customer_name}</td>
+                      <td>{data.mobile_no}</td>                                            
+                      <td>{data.project_name}</td>
                       <td>{data.assigned_to}</td>
-                      <td>{data.contact_project}</td>
-                      {sessionDataString?.role_id < 3 &&
+                      {accessMenuRole(1) &&
                         <td>{data.sub_source_name}</td>
                       }
                       <td>{data.status}</td>
                       <td>
                         <div className="btn-box">
                           <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />
-                          {sessionDataString?.role_id < 3 &&
-                            <Link title="History" className="btn btn-sm btn-icon btn-warning" href={`/leads/${data.lead_id}/history`}>
+                          {accessMenuRole(2) &&
+                           <Link
+                              title="History"
+                              className="btn btn-sm btn-icon btn-warning"
+                              href="javascript:void(0)"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleLeadHistory(data); // pass the specific data item here
+                              }}
+                            >
                               <i className="fa-light fa-history text-white"></i>
                             </Link>
                           }
@@ -287,6 +299,14 @@ const LeadsTable = (props: any) => {
         bulkStatus={bulkStatus}
         setBulkStatus={setBulkStatus}
         uniqueStatuses={uniqueStatuses}
+      />
+      <LeadHistory
+        show={showLeadHistory}
+        handleClose={() => setShowLeadHistory(false)}
+        bulkStatus={bulkStatus}
+        setBulkStatus={setBulkStatus}
+        uniqueStatuses={uniqueStatuses}
+        slug={historyLead}
       />
     </React.Fragment>
   );

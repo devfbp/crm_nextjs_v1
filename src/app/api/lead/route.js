@@ -9,7 +9,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
-    let limit = parseInt(searchParams.get('limit')) || 10000;
+    let limit = parseInt(searchParams.get('limit')) || 100;
     let orderBy = searchParams.get('orderBy') || 'lead_id';
     let view = searchParams.get('view');
     if (id) {
@@ -17,10 +17,18 @@ export async function GET(request) {
         where: { lead_id: id },
         orderBy: { lead_id: 'desc' }
       });
-      return Response.json(dataItem);
+      const dataItems2 = await prisma.leads_view.findMany({
+        where: { lead_id: id },
+        orderBy: { lead_id: 'desc' }
+      });
+      let finalData = dataItem;
+      if (dataItems2 && dataItems2.length > 0) {
+        finalData[0].view_data = dataItems2[0];
+      }
+      return Response.json(finalData);
     }
-    if(view) {
-      let vwhere = {flag:0 }
+    if (view==1) {
+      let vwhere = { flag: 0 }
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,
         take: limit,
@@ -50,6 +58,16 @@ export async function POST(request) {
   const token = getSessionFromToken();
   try {
     const req = await request.json();
+    const duplicateLead = await prisma.lead.findFirst({
+      where: {
+        mobile_no: req.mobile_no,
+        project_id: parseInt(req.project_id),
+        flag: 0
+      }
+    });
+    if (duplicateLead) {
+      return Response.json({ success: false, message: "Lead with this mobile number already exists for the selected project." }, { status: 400 });
+    }
     const newlead = await prisma.lead.create({
       data: {
         created_at: new Date(),
@@ -95,6 +113,17 @@ export async function PUT(request) {
   try {
     const req = await request.json();
     const id = req.slug;
+    const duplicateLead = await prisma.lead.findFirst({
+      where: {
+        mobile_no: req.mobile_no,
+        project_id: parseInt(req.project_id),
+        lead_id: { not: id },
+        flag: 0
+      }
+    });
+    if (duplicateLead) {
+      return Response.json({ success: false, message: "Lead with this mobile number already exists for the selected project." }, { status: 400 });
+    }
     const beforeLeadData = await prisma.lead.findUnique({
       where: { lead_id: id }
     });
@@ -158,7 +187,7 @@ export async function PUT(request) {
           },
           body: JSON.stringify({
             email: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
-            message:html_body,
+            message: html_body,
             subject: "New Lead Assigned - LID " + updatedlead.lead_id
           })
         });

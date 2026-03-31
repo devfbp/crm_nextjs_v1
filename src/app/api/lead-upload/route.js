@@ -80,6 +80,8 @@ export async function POST(request) {
       );
 
     // Insert each lead row
+    let duplicateCount = []
+    let rowIndex = 1; // Start from 1 to account for header row
     for (const row of rows) {
       const projectId = await getOrCreate(
         "project",
@@ -105,43 +107,55 @@ export async function POST(request) {
         token
       );
 
-      const lead_data = await prisma.lead.create({
-        data: {
-          created_at: new Date(),
-          customer_name: row.customer_name,
-          mobile_no: String(row.mobile_no ?? ""),
-          email_id: row.email_id ?? null,
-          alternate_no: String(row.alternate_no ?? ""),
-          whatsapp_no: String(row.whatsapp_no ?? ""),
-          alternate_email: row.alternate_email ?? null,
-          project_id: projectId ?? 0,
-          source_id: Number(sourceId) ?? 0,
-          sub_source_id: Number(subSourceId) ?? 0,
-          rm_user_id: 0,
-          lead_status_id: 1,
-          lead_file_id: leadFile.lead_file_id,
-          remarks: row.remarks ?? "",
-          created_by: token?.user_id ?? null,
-        },
+      const duplicateLead = await prisma.lead.findFirst({
+        where: {
+          mobile_no: String(row.mobile_no),
+          project_id: parseInt(projectId),
+          flag: 0
+        }
       });
-
-      if (lead_data) {
-        await prisma.lead_status_entry.create({
+      if (duplicateLead) {
+        duplicateCount.push({ row: rowIndex, customer_name: row.customer_name, mobile_no: row.mobile_no, project: String(row.project) });
+      } else {
+        const lead_data = await prisma.lead.create({
           data: {
-            lead_id: lead_data?.lead_id,
-            created_by: token?.user_id ?? null,
             created_at: new Date(),
-            from_status_id: 0,
-            to_status_id: 1,
-            rm_user_id: 0,
+            customer_name: row.customer_name,
+            mobile_no: String(row.mobile_no ?? ""),
+            email_id: row.email_id ?? null,
+            alternate_no: String(row.alternate_no ?? ""),
+            whatsapp_no: String(row.mobile_no ?? ""),
+            alternate_email: row.email_id ?? null,
+            project_id: projectId ?? 0,
+            source_id: Number(sourceId) ?? 0,
+            sub_source_id: Number(subSourceId) ?? 0,
+            rm_user_id: token?.user_id ?? null,
+            lead_status_id: 1,
+            lead_file_id: leadFile.lead_file_id,
+            remarks: row.remarks ?? "",
+            created_by: token?.user_id ?? null,
           },
         });
+        if (lead_data) {
+          await prisma.lead_status_entry.create({
+            data: {
+              lead_id: lead_data?.lead_id,
+              created_by: token?.user_id ?? null,
+              created_at: new Date(),
+              from_status_id: 0,
+              to_status_id: 1,
+              rm_user_id: 0,
+            },
+          });
+        }
       }
+      rowIndex++;
     }
-
+    console.log("Duplicate Leads:", duplicateCount);
     return Response.json({
       message: "Excel uploaded successfully",
       file: fileName,
+      duplicate_leads: duplicateCount
     });
   } catch (error) {
     console.error("UPLOAD ERROR:", error);

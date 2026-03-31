@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import { form_submit_call, displayDate, parseDate } from "../utils/common-client";
 import "react-datepicker/dist/react-datepicker.css";
 import LastLeadEntry from "./LastLeadEntry";
+import { accessMenuRole } from "../utils/common";
 
 interface InputFormProps {
   records?: {
@@ -33,6 +34,7 @@ interface InputFormProps {
     schedule_date: any,
     status_remarks: string,
     send_email: boolean,
+    view_data: any
   },
   setRecords?: (records: any) => void;
   editid: any;
@@ -58,6 +60,7 @@ const initialFormState = {
   schedule_date: "",
   status_remarks: "",
   send_email: false,
+  view_data: null,
 };
 
 const InputForm: React.FC<InputFormProps> = ({ records }) => {
@@ -93,6 +96,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       schedule_date: records.schedule_date,
       status_remarks: records.status_remarks,
       send_email: false,
+      view_data: records.view_data || null,
     });
 
     setSubmitConfig((prev) => ({ ...prev, action: 2 }));
@@ -143,7 +147,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "lead" });
       if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
-          window.location.href = "/leads";
+        window.location.href = "/leads";
       }
 
     } catch (err: any) {
@@ -330,69 +334,86 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
               <div className="card-header">
                 Project and Source Information
               </div>
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-12 pb-3">
-                    <label htmlFor="project_id" className="form-label">
-                      Project
-                    </label>
-                    <ProjectList form={form} setForm={setForm} />
-                    <input type="hidden"
-                      id="project_id"
-                      name="project_id"
-                      value={form.project_id}
-                    />
+              {accessMenuRole(1) ?
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-md-12 pb-3">
+                      <label htmlFor="project_id" className="form-label">
+                        Project
+                      </label>
+                      <ProjectList form={form} setForm={setForm} />
+                      <input type="hidden"
+                        id="project_id"
+                        name="project_id"
+                        value={form.project_id}
+                      />
 
-                    {errors.project_id && (
-                      <p className="text-danger">{errors.project_id[0]}</p>
-                    )}
-                  </div>
-                  <div className="col-md-12 pb-3">
-                    <label htmlFor="source_id" className="form-label">
-                      Source
-                    </label>
-                    <SourceList form={form} setForm={setForm} setSelectedSourceId={setSelectedSourceId} />
-                    <input type="hidden"
-                      id="source_id"
-                      name="source_id"
-                      value={form.source_id}
-                    />
-                    {errors.source_id && (
-                      <p className="text-danger">{errors.source_id[0]}</p>
-                    )}
-                  </div>
+                      {errors.project_id && (
+                        <p className="text-danger">{errors.project_id[0]}</p>
+                      )}
+                    </div>
+                    <div className="col-md-12 pb-3">
+                      <label htmlFor="source_id" className="form-label">
+                        Source
+                      </label>
+                      <SourceList form={form} setForm={setForm} setSelectedSourceId={setSelectedSourceId} />
+                      <input type="hidden"
+                        id="source_id"
+                        name="source_id"
+                        value={form.source_id}
+                      />
+                      {errors.source_id && (
+                        <p className="text-danger">{errors.source_id[0]}</p>
+                      )}
+                    </div>
 
-                  <div className="col-md-12 pb-3">
-                    <label htmlFor="sub_source_id" className="form-label">
-                      Sub Source
-                    </label>
-                    <SubSourceList
-                      key={form.source_id}
-                      form={form}
-                      setForm={setForm}
-                      source_id={form.source_id}
-                    />
-                    <input type="hidden"
-                      id="sub_source_id"
-                      name="sub_source_id"
-                      value={form.sub_source_id}
-                    />
-                    {errors.sub_source_id && (
-                      <p className="text-danger">{errors.sub_source_id[0]}</p>
-                    )}
-                  </div>
-                  <div className="col-sm-12 ol-6">
-                    <label htmlFor="remarks" className="form-label">Remarks</label>
-                    <textarea
-                      className="form-control"
-                      id="remarks"
-                      name="remarks"
-                      value={form.remarks}
-                      onChange={(e) => setForm({ ...form, remarks: e.target.value })}>
-                    </textarea>
+                    <div className="col-md-12 pb-3">
+                      <label htmlFor="sub_source_id" className="form-label">
+                        Sub Source
+                      </label>
+                      <SubSourceList
+                        key={form.source_id}
+                        form={form}
+                        setForm={setForm}
+                        source_id={form.source_id}
+                      />
+                      <input type="hidden"
+                        id="sub_source_id"
+                        name="sub_source_id"
+                        value={form.sub_source_id}
+                      />
+                      {errors.sub_source_id && (
+                        <p className="text-danger">{errors.sub_source_id[0]}</p>
+                      )}
+                    </div>
+                    <div className="col-sm-12 ol-6">
+                      <label htmlFor="remarks" className="form-label">Remarks</label>
+                      <textarea
+                        className="form-control"
+                        id="remarks"
+                        name="remarks"
+                        value={form.remarks}
+                        onChange={(e) => setForm({ ...form, remarks: e.target.value })}>
+                      </textarea>
+                    </div>
                   </div>
                 </div>
-              </div>
+                :
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-md-12 pb-3">
+                      <label htmlFor="project_id" className="form-label">
+                        Project
+                      </label>
+                      <input type="text"
+                        id="project_name"
+                        name="project_name"
+                        value={records?.view_data?.project_name || ""}
+                      />
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
           </div>
           <div className="col-lg-8">
@@ -402,11 +423,11 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
               </div>
               <div className="card-body">
                 <div className="row">
-                  <div className="col-md-12 pb-3">
+                  {/* <div className="col-md-12 pb-3">
                     {submitConfig.action === 2 &&
-                    <LastLeadEntry leadId={form.lead_id} />
+                      <LastLeadEntry leadId={form.lead_id} />
                     }
-                  </div>
+                  </div> */}
                   <div className="col-md-6 pb-3">
                     <label htmlFor="rm_user_id" className="form-label">
                       RM
