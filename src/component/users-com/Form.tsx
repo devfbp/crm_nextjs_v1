@@ -102,7 +102,6 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
       if (typeof window !== "undefined") {
         window.location.href = "/user";
       }
-
     } catch (err: any) {
       console.error("Submit error:", err);
       toast.error(err?.message || "Failed to submit");

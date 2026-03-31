@@ -12,12 +12,12 @@ FROM
     (
       (
         (
-          `crm`.`lead_status_entry` `le`
-          JOIN `crm`.`lead` `l` ON((`le`.`lead_id` = `l`.`lead_id`))
+          `dev_crm`.`lead_status_entry` `le`
+          JOIN `dev_crm`.`lead` `l` ON((`le`.`lead_id` = `l`.`lead_id`))
         )
-        JOIN `crm`.`lead_status` `ls1` ON((`le`.`from_status_id` = `ls1`.`lead_status_id`))
+        JOIN `dev_crm`.`lead_status` `ls1` ON((`le`.`from_status_id` = `ls1`.`lead_status_id`))
       )
-      JOIN `crm`.`lead_status` `ls2` ON((`le`.`to_status_id` = `ls2`.`lead_status_id`))
+      JOIN `dev_crm`.`lead_status` `ls2` ON((`le`.`to_status_id` = `ls2`.`lead_status_id`))
     )
-    JOIN `crm`.`user` `u` ON((`l`.`rm_user_id` = `u`.`user_id`))
+    JOIN `dev_crm`.`user` `u` ON((`l`.`rm_user_id` = `u`.`user_id`))
   )
