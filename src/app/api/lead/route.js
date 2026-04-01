@@ -27,7 +27,7 @@ export async function GET(request) {
       }
       return Response.json(finalData);
     }
-    if (view==1) {
+    if (view=="1") {
       let vwhere = { flag: 0 }
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,

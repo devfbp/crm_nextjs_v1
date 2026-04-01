@@ -279,7 +279,7 @@ model website_leads {
 
 view lead_status_entry_view {
   lead_entry_id      Int       @default(0)
-  lead_id            Int       @default(0)
+  lead_id            Int
   user_name          String    @db.VarChar(200)
   from_status        String?   @db.VarChar(200)
   to_status          String?   @db.VarChar(200)
