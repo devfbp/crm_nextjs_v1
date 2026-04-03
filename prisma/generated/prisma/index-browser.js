@@ -167,6 +167,7 @@ exports.Prisma.UserScalarFieldEnum = {
   user_id: 'user_id',
   name: 'name',
   role_id: 'role_id',
+  active: 'active',
   email: 'email',
   phone_no: 'phone_no',
   general_manager_id: 'general_manager_id',
@@ -369,6 +370,7 @@ exports.Prisma.Lead_status_entry_viewScalarFieldEnum = {
 exports.Prisma.Leads_viewScalarFieldEnum = {
   lead_id: 'lead_id',
   customer_name: 'customer_name',
+  rm_user_id: 'rm_user_id',
   assigned_to: 'assigned_to',
   sub_source_name: 'sub_source_name',
   mobile_no: 'mobile_no',

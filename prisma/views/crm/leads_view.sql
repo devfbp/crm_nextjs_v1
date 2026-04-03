@@ -1,6 +1,7 @@
 SELECT
   `l`.`lead_id` AS `lead_id`,
   `l`.`customer_name` AS `customer_name`,
+  `l`.`rm_user_id` AS `rm_user_id`,
   `u`.`name` AS `assigned_to`,
   `ss`.`sub_source_name` AS `sub_source_name`,
   `l`.`mobile_no` AS `mobile_no`,

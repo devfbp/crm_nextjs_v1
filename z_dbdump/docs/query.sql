@@ -42,6 +42,7 @@ CREATE VIEW `leads_view` AS
 SELECT 
     l.`lead_id` as `lead_id`,
     l.`customer_name`,
+    l.`rm_user_id`,
     u.`name` AS `assigned_to`,
     ss.`sub_source_name`,
     l.`mobile_no` as `mobile_no`,

@@ -6,6 +6,7 @@ const GM_ROLE_IDS = [2, 3, 4, 5, 6, 7, 8, 1];
 const RM_ROLE_IDS = [2, 3, 4, 5];
 
 export async function GET(request) {
+  const token = getSessionFromToken();
   try {
     const token = getSessionFromToken();
     const { searchParams } = new URL(request.url);
@@ -14,6 +15,7 @@ export async function GET(request) {
     const rmid = parseInt(searchParams.get('rmid'));
     const cid = parseInt(searchParams.get('cid'));
     const search = searchParams.get('search');
+    const lead_rm = parseInt(searchParams.get('lead_rm'));
     var limit = parseInt(searchParams.get('limit')) || 10000;
     var orderBy = searchParams.get('orderBy') || 'name';
     if (id) {
@@ -25,7 +27,7 @@ export async function GET(request) {
 
     // Build dynamic where clause
     let where = { flag: 0 };
-    if (cid ) {
+    if (cid) {
       where.user_id = { not: 2 };
     }
     if (gmid === 1) {
@@ -39,15 +41,32 @@ export async function GET(request) {
       where.name = {
         contains: search.toString(),
       };
+
+    }
+    if (lead_rm === 1 && token?.user_id && token?.role_id > 2) {
+      where.user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        where.user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
 
-    const dataItems = await prisma.user.findMany({ 
+    const dataItems = await prisma.user.findMany({
       where: where,
       take: limit,
       orderBy: {
         [orderBy]: 'asc'
       }
-     });
+    });
     return Response.json(dataItems);
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -71,7 +90,8 @@ export async function POST(request) {
         created_at: new Date(),
         reporting_to_id: parseInt(req.reporting_to_id),
         general_manager_id: parseInt(req.general_manager_id),
-        created_by: token ? token.userId : null
+        created_by: token ? token.userId : null,
+        active: Number(req.active),
       },
     });
 
@@ -100,6 +120,7 @@ export async function PUT(request) {
         reporting_to_id: parseInt(req.reporting_to_id),
         general_manager_id: parseInt(req.general_manager_id),
         modified_by: token ? token.userId : null,
+        active: Number(req.active),
       },
     });
 

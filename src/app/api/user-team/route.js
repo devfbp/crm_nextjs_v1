@@ -124,35 +124,6 @@ export async function PUT(request) {
     return Response.json({ success: false, message: error.message }, { status: 500 });
   }
 }
-
-/*export async function PUT(request) {
-  const token = getSessionFromToken();
-  try {
-    const req = await request.json();
-    const id = parseInt(req.slug); // Ensure ID is a number
-    const hashedPassword = await bcrypt.hash(req.password, 12);
-
-    const updatedUser = await prisma.user_team.update({
-      where: { user_id: id },
-      data: {
-        name: req.name,
-        role_id: parseInt(req.role_id),
-        email: req.email,
-        phone_no: req.phone_no,
-        modified_at: new Date(),
-        reporting_to_id: parseInt(req.reporting_to_id),
-        general_manager_id: parseInt(req.general_manager_id),
-        modified_by: token ? token.userId : null,
-      },
-    });
-
-    return Response.json(updatedUser);
-  } catch (error) {
-    console.error('Error updating user:', error);
-    return Response.json({ success: false, message: error.message }, { status: 500 });
-  }
-}
-*/
 export async function DELETE(request) {
   const token = getSessionFromToken();
   try {
@@ -163,6 +134,11 @@ export async function DELETE(request) {
       where: { user_team_id: id },
       data: { flag: 1, modified_at: new Date(), modified_by: token ? token.userId : null },
     });
+    if(deletedUser) {
+      await prisma.user_team_member.deleteMany({
+        where: { user_team_id: id },
+      });
+    }
 
     return Response.json(deletedUser);
   } catch (error) {

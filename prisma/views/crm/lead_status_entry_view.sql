@@ -1,6 +1,6 @@
 SELECT
   `le`.`lead_entry_id` AS `lead_entry_id`,
-  `le`.`lead_id` AS `lead_id`,
+  `l`.`lead_id` AS `lead_id`,
   `u`.`name` AS `user_name`,
   `ls1`.`lead_status_name` AS `from_status`,
   `ls2`.`lead_status_name` AS `to_status`,

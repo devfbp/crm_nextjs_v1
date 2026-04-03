@@ -8,7 +8,7 @@ export default function List({ form, setForm }) {
   const loadOptions = async (inputValue) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user?limit=5&search=${encodeURIComponent(inputValue)}`
+        `${process.env.NEXT_PUBLIC_API_URL}/user?lead_rm=1&limit=5&search=${encodeURIComponent(inputValue)}`
       );
 
       const data = await res.json();

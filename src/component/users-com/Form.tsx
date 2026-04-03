@@ -17,6 +17,7 @@ interface InputFormProps {
     password: string,
     reporting_to_id: any,
     general_manager_id: any,
+    active: boolean | string
   },
   setRecords?: (records: any) => void;
   editid: any;
@@ -32,6 +33,7 @@ const initialFormState = {
   confirm_password: "",
   reporting_to_id: "",
   general_manager_id: "",
+  active: "0"
 };
 
 const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
@@ -58,6 +60,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
       general_manager_id: records.general_manager_id || 0,
       password: "",
       confirm_password: "",
+      active: records.active ? "1" : "0",
     });
 
     setSubmitConfig((prev) => ({ ...prev, action: 2 }));
@@ -99,8 +102,8 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
 
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "user" });
-      if (typeof window !== "undefined") {
-        window.location.href = "/user";
+      if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+        // window.location.href = "/user";
       }
     } catch (err: any) {
       console.error("Submit error:", err);
@@ -270,6 +273,10 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                   {errors.reporting_to_id && (
                     <p className="text-danger">{errors.reporting_to_id[0]}</p>
                   )}
+                </div>
+                <div className="col-md-12 pt-3">                  
+                  <input type="radio" name="active" value="0" checked={form.active === "0"} onChange={(e) => setForm({ ...form, active: e.target.value })} /> Active
+                  <input type="radio" name="active" value="1" checked={form.active === "1"} onChange={(e) => setForm({ ...form, active: e.target.value })} className="ms-3" /> Deactive
                 </div>
               </div>
             </div>

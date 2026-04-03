@@ -165,6 +165,7 @@ const ScrollDataTableSection = (props: any) => {
                       Phone
                     </th>
                     <th>Role</th>
+                    <th>Active</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -178,6 +179,9 @@ const ScrollDataTableSection = (props: any) => {
                         <td>{item.phone_no}</td>
                         <td>
                           <RoleName role_id={item.role_id} />
+                        </td>
+                        <td style={{ textTransform: "capitalize", color: item.active === 0 ? "white" : "red" }}>
+                          {item.active === 0 ? "Active" : "Deactive"}
                         </td>
                         <td>
                           <div className="btn-box">

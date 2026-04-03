@@ -11,6 +11,7 @@ import { useDigiContext } from "@/context/DigiContext";
 import { accessMenuRole } from "../utils/common";
 import BulkUpdateModal from "./BulkUpdate";
 import LeadHistory from "./LeadHistory";
+import { accessMenuCheck } from "@/component/utils/common";
 
 const LeadsTable = (props: any) => {
   const [dataList, setDataList] = useState<Array<any>>([]);
@@ -23,6 +24,7 @@ const LeadsTable = (props: any) => {
   const [bulkStatus, setBulkStatus] = useState([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
   const [navQuickToggleValue, setNavQuickToggleValue] = useState(props?.fullwidth);
 
+  const [editAccess, setEditAccess] = useState(false);
   const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -37,6 +39,7 @@ const LeadsTable = (props: any) => {
     //   navQuickToggle();
     //   setNavQuickToggleValue(false);
     // }
+    setEditAccess(accessMenuCheck(7, 3));
   }, [navQuickToggle, navQuickToggleValue]);
 
   const fetchData = async () => {
@@ -206,9 +209,11 @@ const LeadsTable = (props: any) => {
                 <input type="radio" name="quick_status" value="0" className="ms-1" id="quick_status2" />
                 <label htmlFor="quick_status2" className="ms-1">Over Due</label>
               </div>
+              {editAccess &&
               <div className="col-md-2">
                 <button className="btn btn-sm btn-primary" onClick={handleBulkUpdate}>Bulk Update</button>
               </div>
+              }
               <div className="col-md-1 ms-auto">
                 <select className="form-select" value={dataPerPage} onChange={(e) => setDataPerPage(Number(e.target.value))}>
                   {[10, 25, 50, 100].map((count) => (
@@ -249,7 +254,9 @@ const LeadsTable = (props: any) => {
                       <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
                       <td>{data.customer_name}</td>
                       <td>{data.mobile_no}</td>                                            
-                      <td>{data.project_name}</td>
+                      <td title={data.project_name}>
+                        {data.project_name.length > 25 ? data.project_name.substr(0, 20) + '...' : data.project_name}
+                      </td>
                       <td>{data.assigned_to}</td>
                       {accessMenuRole(1) &&
                         <td>{data.sub_source_name}</td>

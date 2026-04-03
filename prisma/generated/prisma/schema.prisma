@@ -59,6 +59,7 @@ model user {
   user_id            Int                @id @default(autoincrement())
   name               String             @db.VarChar(200)
   role_id            Int
+  active             Int                @default(0)
   email              String             @unique(map: "email") @db.VarChar(200)
   phone_no           String             @unique(map: "phone_no") @db.VarChar(200)
   general_manager_id Int                @default(0)
@@ -279,7 +280,7 @@ model website_leads {
 
 view lead_status_entry_view {
   lead_entry_id      Int       @default(0)
-  lead_id            Int
+  lead_id            Int       @default(0)
   user_name          String    @db.VarChar(200)
   from_status        String?   @db.VarChar(200)
   to_status          String?   @db.VarChar(200)
@@ -291,6 +292,7 @@ view lead_status_entry_view {
 view leads_view {
   lead_id         Int       @default(0)
   customer_name   String?   @db.VarChar(200)
+  rm_user_id      Int
   assigned_to     String    @db.VarChar(200)
   sub_source_name String?   @db.VarChar(200)
   mobile_no       String?   @db.VarChar(200)

@@ -49,10 +49,17 @@ export default function UploadXlsx() {
       const responseData = await res.json();
 
       if (res.ok) {
-        toast.success("File uploaded successfully!");
+        
         console.log("Upload Response:", responseData);
 
         setData(responseData);
+        if (responseData?.duplicate_leads?.length === 0 ) {
+          if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+            window.location.href = "/leads";
+          }
+        } else {
+          toast.warn(responseData?.message || "File uploaded successfully");
+        }
 
         // ✅ Reset form after success
         form.reset();

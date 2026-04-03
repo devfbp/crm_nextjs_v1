@@ -152,8 +152,9 @@ export async function POST(request) {
       rowIndex++;
     }
     console.log("Duplicate Leads:", duplicateCount);
+    let message = `Docs uploaded successfully. ${duplicateCount.length} duplicate leads found.`;
     return Response.json({
-      message: "Excel uploaded successfully",
+      message: message,
       file: fileName,
       duplicate_leads: duplicateCount
     });

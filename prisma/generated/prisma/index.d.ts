@@ -5654,6 +5654,7 @@ export namespace Prisma {
   export type UserAvgAggregateOutputType = {
     user_id: number | null
     role_id: number | null
+    active: number | null
     general_manager_id: number | null
     reporting_to_id: number | null
     created_by: number | null
@@ -5665,6 +5666,7 @@ export namespace Prisma {
   export type UserSumAggregateOutputType = {
     user_id: number | null
     role_id: number | null
+    active: number | null
     general_manager_id: number | null
     reporting_to_id: number | null
     created_by: number | null
@@ -5677,6 +5679,7 @@ export namespace Prisma {
     user_id: number | null
     name: string | null
     role_id: number | null
+    active: number | null
     email: string | null
     phone_no: string | null
     general_manager_id: number | null
@@ -5694,6 +5697,7 @@ export namespace Prisma {
     user_id: number | null
     name: string | null
     role_id: number | null
+    active: number | null
     email: string | null
     phone_no: string | null
     general_manager_id: number | null
@@ -5711,6 +5715,7 @@ export namespace Prisma {
     user_id: number
     name: number
     role_id: number
+    active: number
     email: number
     phone_no: number
     general_manager_id: number
@@ -5729,6 +5734,7 @@ export namespace Prisma {
   export type UserAvgAggregateInputType = {
     user_id?: true
     role_id?: true
+    active?: true
     general_manager_id?: true
     reporting_to_id?: true
     created_by?: true
@@ -5740,6 +5746,7 @@ export namespace Prisma {
   export type UserSumAggregateInputType = {
     user_id?: true
     role_id?: true
+    active?: true
     general_manager_id?: true
     reporting_to_id?: true
     created_by?: true
@@ -5752,6 +5759,7 @@ export namespace Prisma {
     user_id?: true
     name?: true
     role_id?: true
+    active?: true
     email?: true
     phone_no?: true
     general_manager_id?: true
@@ -5769,6 +5777,7 @@ export namespace Prisma {
     user_id?: true
     name?: true
     role_id?: true
+    active?: true
     email?: true
     phone_no?: true
     general_manager_id?: true
@@ -5786,6 +5795,7 @@ export namespace Prisma {
     user_id?: true
     name?: true
     role_id?: true
+    active?: true
     email?: true
     phone_no?: true
     general_manager_id?: true
@@ -5890,6 +5900,7 @@ export namespace Prisma {
     user_id: number
     name: string
     role_id: number
+    active: number
     email: string
     phone_no: string
     general_manager_id: number
@@ -5926,6 +5937,7 @@ export namespace Prisma {
     user_id?: boolean
     name?: boolean
     role_id?: boolean
+    active?: boolean
     email?: boolean
     phone_no?: boolean
     general_manager_id?: boolean
@@ -5948,6 +5960,7 @@ export namespace Prisma {
     user_id?: boolean
     name?: boolean
     role_id?: boolean
+    active?: boolean
     email?: boolean
     phone_no?: boolean
     general_manager_id?: boolean
@@ -5961,7 +5974,7 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "name" | "role_id" | "email" | "phone_no" | "general_manager_id" | "reporting_to_id" | "password" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "name" | "role_id" | "active" | "email" | "phone_no" | "general_manager_id" | "reporting_to_id" | "password" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user_city?: boolean | user$user_cityArgs<ExtArgs>
     user_team_member?: boolean | user$user_team_memberArgs<ExtArgs>
@@ -5978,6 +5991,7 @@ export namespace Prisma {
       user_id: number
       name: string
       role_id: number
+      active: number
       email: string
       phone_no: string
       general_manager_id: number
@@ -6363,6 +6377,7 @@ export namespace Prisma {
     readonly user_id: FieldRef<"user", 'Int'>
     readonly name: FieldRef<"user", 'String'>
     readonly role_id: FieldRef<"user", 'Int'>
+    readonly active: FieldRef<"user", 'Int'>
     readonly email: FieldRef<"user", 'String'>
     readonly phone_no: FieldRef<"user", 'String'>
     readonly general_manager_id: FieldRef<"user", 'Int'>
@@ -21069,12 +21084,14 @@ export namespace Prisma {
 
   export type Leads_viewAvgAggregateOutputType = {
     lead_id: number | null
+    rm_user_id: number | null
     status_id: number | null
     flag: number | null
   }
 
   export type Leads_viewSumAggregateOutputType = {
     lead_id: number | null
+    rm_user_id: number | null
     status_id: number | null
     flag: number | null
   }
@@ -21082,6 +21099,7 @@ export namespace Prisma {
   export type Leads_viewMinAggregateOutputType = {
     lead_id: number | null
     customer_name: string | null
+    rm_user_id: number | null
     assigned_to: string | null
     sub_source_name: string | null
     mobile_no: string | null
@@ -21096,6 +21114,7 @@ export namespace Prisma {
   export type Leads_viewMaxAggregateOutputType = {
     lead_id: number | null
     customer_name: string | null
+    rm_user_id: number | null
     assigned_to: string | null
     sub_source_name: string | null
     mobile_no: string | null
@@ -21110,6 +21129,7 @@ export namespace Prisma {
   export type Leads_viewCountAggregateOutputType = {
     lead_id: number
     customer_name: number
+    rm_user_id: number
     assigned_to: number
     sub_source_name: number
     mobile_no: number
@@ -21125,12 +21145,14 @@ export namespace Prisma {
 
   export type Leads_viewAvgAggregateInputType = {
     lead_id?: true
+    rm_user_id?: true
     status_id?: true
     flag?: true
   }
 
   export type Leads_viewSumAggregateInputType = {
     lead_id?: true
+    rm_user_id?: true
     status_id?: true
     flag?: true
   }
@@ -21138,6 +21160,7 @@ export namespace Prisma {
   export type Leads_viewMinAggregateInputType = {
     lead_id?: true
     customer_name?: true
+    rm_user_id?: true
     assigned_to?: true
     sub_source_name?: true
     mobile_no?: true
@@ -21152,6 +21175,7 @@ export namespace Prisma {
   export type Leads_viewMaxAggregateInputType = {
     lead_id?: true
     customer_name?: true
+    rm_user_id?: true
     assigned_to?: true
     sub_source_name?: true
     mobile_no?: true
@@ -21166,6 +21190,7 @@ export namespace Prisma {
   export type Leads_viewCountAggregateInputType = {
     lead_id?: true
     customer_name?: true
+    rm_user_id?: true
     assigned_to?: true
     sub_source_name?: true
     mobile_no?: true
@@ -21261,6 +21286,7 @@ export namespace Prisma {
   export type Leads_viewGroupByOutputType = {
     lead_id: number
     customer_name: string | null
+    rm_user_id: number
     assigned_to: string
     sub_source_name: string | null
     mobile_no: string | null
@@ -21294,6 +21320,7 @@ export namespace Prisma {
   export type leads_viewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     lead_id?: boolean
     customer_name?: boolean
+    rm_user_id?: boolean
     assigned_to?: boolean
     sub_source_name?: boolean
     mobile_no?: boolean
@@ -21310,6 +21337,7 @@ export namespace Prisma {
   export type leads_viewSelectScalar = {
     lead_id?: boolean
     customer_name?: boolean
+    rm_user_id?: boolean
     assigned_to?: boolean
     sub_source_name?: boolean
     mobile_no?: boolean
@@ -21321,7 +21349,7 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "assigned_to" | "sub_source_name" | "mobile_no" | "project_name" | "status" | "status_id" | "created_at" | "status_color" | "flag", ExtArgs["result"]["leads_view"]>
+  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "rm_user_id" | "assigned_to" | "sub_source_name" | "mobile_no" | "project_name" | "status" | "status_id" | "created_at" | "status_color" | "flag", ExtArgs["result"]["leads_view"]>
 
   export type $leads_viewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "leads_view"
@@ -21329,6 +21357,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       lead_id: number
       customer_name: string | null
+      rm_user_id: number
       assigned_to: string
       sub_source_name: string | null
       mobile_no: string | null
@@ -21583,6 +21612,7 @@ export namespace Prisma {
   interface leads_viewFieldRefs {
     readonly lead_id: FieldRef<"leads_view", 'Int'>
     readonly customer_name: FieldRef<"leads_view", 'String'>
+    readonly rm_user_id: FieldRef<"leads_view", 'Int'>
     readonly assigned_to: FieldRef<"leads_view", 'String'>
     readonly sub_source_name: FieldRef<"leads_view", 'String'>
     readonly mobile_no: FieldRef<"leads_view", 'String'>
@@ -21801,6 +21831,7 @@ export namespace Prisma {
     user_id: 'user_id',
     name: 'name',
     role_id: 'role_id',
+    active: 'active',
     email: 'email',
     phone_no: 'phone_no',
     general_manager_id: 'general_manager_id',
@@ -22048,6 +22079,7 @@ export namespace Prisma {
   export const Leads_viewScalarFieldEnum: {
     lead_id: 'lead_id',
     customer_name: 'customer_name',
+    rm_user_id: 'rm_user_id',
     assigned_to: 'assigned_to',
     sub_source_name: 'sub_source_name',
     mobile_no: 'mobile_no',
@@ -22570,6 +22602,7 @@ export namespace Prisma {
     user_id?: IntFilter<"user"> | number
     name?: StringFilter<"user"> | string
     role_id?: IntFilter<"user"> | number
+    active?: IntFilter<"user"> | number
     email?: StringFilter<"user"> | string
     phone_no?: StringFilter<"user"> | string
     general_manager_id?: IntFilter<"user"> | number
@@ -22589,6 +22622,7 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     email?: SortOrder
     phone_no?: SortOrder
     general_manager_id?: SortOrder
@@ -22614,6 +22648,7 @@ export namespace Prisma {
     NOT?: userWhereInput | userWhereInput[]
     name?: StringFilter<"user"> | string
     role_id?: IntFilter<"user"> | number
+    active?: IntFilter<"user"> | number
     general_manager_id?: IntFilter<"user"> | number
     reporting_to_id?: IntFilter<"user"> | number
     password?: StringFilter<"user"> | string
@@ -22631,6 +22666,7 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     email?: SortOrder
     phone_no?: SortOrder
     general_manager_id?: SortOrder
@@ -22656,6 +22692,7 @@ export namespace Prisma {
     user_id?: IntWithAggregatesFilter<"user"> | number
     name?: StringWithAggregatesFilter<"user"> | string
     role_id?: IntWithAggregatesFilter<"user"> | number
+    active?: IntWithAggregatesFilter<"user"> | number
     email?: StringWithAggregatesFilter<"user"> | string
     phone_no?: StringWithAggregatesFilter<"user"> | string
     general_manager_id?: IntWithAggregatesFilter<"user"> | number
@@ -23841,6 +23878,7 @@ export namespace Prisma {
     NOT?: leads_viewWhereInput | leads_viewWhereInput[]
     lead_id?: IntFilter<"leads_view"> | number
     customer_name?: StringNullableFilter<"leads_view"> | string | null
+    rm_user_id?: IntFilter<"leads_view"> | number
     assigned_to?: StringFilter<"leads_view"> | string
     sub_source_name?: StringNullableFilter<"leads_view"> | string | null
     mobile_no?: StringNullableFilter<"leads_view"> | string | null
@@ -23855,6 +23893,7 @@ export namespace Prisma {
   export type leads_viewOrderByWithRelationInput = {
     lead_id?: SortOrder
     customer_name?: SortOrderInput | SortOrder
+    rm_user_id?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrderInput | SortOrder
     mobile_no?: SortOrderInput | SortOrder
@@ -23870,6 +23909,7 @@ export namespace Prisma {
   export type leads_viewOrderByWithAggregationInput = {
     lead_id?: SortOrder
     customer_name?: SortOrderInput | SortOrder
+    rm_user_id?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrderInput | SortOrder
     mobile_no?: SortOrderInput | SortOrder
@@ -23892,6 +23932,7 @@ export namespace Prisma {
     NOT?: leads_viewScalarWhereWithAggregatesInput | leads_viewScalarWhereWithAggregatesInput[]
     lead_id?: IntWithAggregatesFilter<"leads_view"> | number
     customer_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
+    rm_user_id?: IntWithAggregatesFilter<"leads_view"> | number
     assigned_to?: StringWithAggregatesFilter<"leads_view"> | string
     sub_source_name?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
     mobile_no?: StringNullableWithAggregatesFilter<"leads_view"> | string | null
@@ -24194,6 +24235,7 @@ export namespace Prisma {
   export type userCreateInput = {
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -24213,6 +24255,7 @@ export namespace Prisma {
     user_id?: number
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -24231,6 +24274,7 @@ export namespace Prisma {
   export type userUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -24250,6 +24294,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -24269,6 +24314,7 @@ export namespace Prisma {
     user_id?: number
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -24285,6 +24331,7 @@ export namespace Prisma {
   export type userUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -24302,6 +24349,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -25961,6 +26009,7 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     email?: SortOrder
     phone_no?: SortOrder
     general_manager_id?: SortOrder
@@ -25977,6 +26026,7 @@ export namespace Prisma {
   export type userAvgOrderByAggregateInput = {
     user_id?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     general_manager_id?: SortOrder
     reporting_to_id?: SortOrder
     created_by?: SortOrder
@@ -25989,6 +26039,7 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     email?: SortOrder
     phone_no?: SortOrder
     general_manager_id?: SortOrder
@@ -26006,6 +26057,7 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     email?: SortOrder
     phone_no?: SortOrder
     general_manager_id?: SortOrder
@@ -26022,6 +26074,7 @@ export namespace Prisma {
   export type userSumOrderByAggregateInput = {
     user_id?: SortOrder
     role_id?: SortOrder
+    active?: SortOrder
     general_manager_id?: SortOrder
     reporting_to_id?: SortOrder
     created_by?: SortOrder
@@ -26995,6 +27048,7 @@ export namespace Prisma {
   export type leads_viewCountOrderByAggregateInput = {
     lead_id?: SortOrder
     customer_name?: SortOrder
+    rm_user_id?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrder
     mobile_no?: SortOrder
@@ -27008,6 +27062,7 @@ export namespace Prisma {
 
   export type leads_viewAvgOrderByAggregateInput = {
     lead_id?: SortOrder
+    rm_user_id?: SortOrder
     status_id?: SortOrder
     flag?: SortOrder
   }
@@ -27015,6 +27070,7 @@ export namespace Prisma {
   export type leads_viewMaxOrderByAggregateInput = {
     lead_id?: SortOrder
     customer_name?: SortOrder
+    rm_user_id?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrder
     mobile_no?: SortOrder
@@ -27029,6 +27085,7 @@ export namespace Prisma {
   export type leads_viewMinOrderByAggregateInput = {
     lead_id?: SortOrder
     customer_name?: SortOrder
+    rm_user_id?: SortOrder
     assigned_to?: SortOrder
     sub_source_name?: SortOrder
     mobile_no?: SortOrder
@@ -27042,6 +27099,7 @@ export namespace Prisma {
 
   export type leads_viewSumOrderByAggregateInput = {
     lead_id?: SortOrder
+    rm_user_id?: SortOrder
     status_id?: SortOrder
     flag?: SortOrder
   }
@@ -28714,6 +28772,7 @@ export namespace Prisma {
   export type userCreateWithoutUser_cityInput = {
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -28732,6 +28791,7 @@ export namespace Prisma {
     user_id?: number
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -28801,6 +28861,7 @@ export namespace Prisma {
   export type userUpdateWithoutUser_cityInput = {
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -28819,6 +28880,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -28907,6 +28969,7 @@ export namespace Prisma {
   export type userCreateWithoutUser_team_memberInput = {
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -28925,6 +28988,7 @@ export namespace Prisma {
     user_id?: number
     name: string
     role_id: number
+    active?: number
     email: string
     phone_no: string
     general_manager_id?: number
@@ -28958,6 +29022,7 @@ export namespace Prisma {
   export type userUpdateWithoutUser_team_memberInput = {
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number
@@ -28976,6 +29041,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     role_id?: IntFieldUpdateOperationsInput | number
+    active?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     phone_no?: StringFieldUpdateOperationsInput | string
     general_manager_id?: IntFieldUpdateOperationsInput | number

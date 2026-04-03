@@ -6,6 +6,7 @@ import { getSessionFromToken } from "../session";
 INSERT INTO `lead_file` (`lead_file_id`, `lead_file_name`, `file_path`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES (NULL, 'Manual', '/', NULL, NULL, NULL, NULL, '0', '0');
 */
 export async function GET(request) {
+  const token = getSessionFromToken();
   try {
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
@@ -29,9 +30,26 @@ export async function GET(request) {
     }
     if (view=="1") {
       let vwhere = { flag: 0 }
+      if(token?.user_id && token?.role_id > 2) {
+        vwhere.rm_user_id = token.user_id;
+        const teamMembers = await prisma.user_team_member.findMany({
+          where: {
+            leader_id: token.user_id,
+            flag: 0
+          },
+          select: {
+            member_id: true
+          }        
+        });
+        if (teamMembers && teamMembers.length > 0) {
+          const memberIds = teamMembers.map(member => member.member_id);
+          vwhere.rm_user_id = { in: [token.user_id, ...memberIds] };
+        }        
+      }
+      console.log(token.user_id);
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,
-        take: limit,
+        take: 10000,
         orderBy: { lead_id: 'desc' }
       });
       return Response.json(dataItems);

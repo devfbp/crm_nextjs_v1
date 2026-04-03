@@ -143,9 +143,6 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
 
     try {
       await form_submit_call(payload);
-      // console.log("Form submitted successfully", payload);
-      // setForm(initialFormState);
-      // setSubmitConfig({ action: 1, endpoint: "lead" });
       if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
         window.location.href = "/leads";
       }
