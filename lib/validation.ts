@@ -65,6 +65,25 @@ export const userSchema = z.object({
   // confirm_password: z.string().min(6, "Confirm password must be at least 6 characters"),
 });
 
+export const userPasswordSchema = z.object({
+  old_password: z.string()
+    .min(1, "Old password is required"),
+
+  new_password: z.string()
+    .min(6, "New password must be at least 6 characters"),
+
+  confirm_password: z.string()
+    .min(6, "Confirm password must be at least 6 characters"),
+})
+.refine((data) => data.new_password === data.confirm_password, {
+  message: "Confirm password does not match new password",
+  path: ["confirm_password"],
+})
+.refine((data) => data.old_password !== data.new_password, {
+  message: "New password must be different from old password",
+  path: ["new_password"],
+});
+
 
 export const userTeamSchema = z.object({
   team_name: nameString("Name"),

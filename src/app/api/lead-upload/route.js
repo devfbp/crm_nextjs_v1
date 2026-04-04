@@ -84,10 +84,10 @@ export async function POST(request) {
     let rowIndex = 1; // Start from 1 to account for header row
     for (const row of rows) {
       let rm_user_id = token?.user_id ?? null;
-      if(row.user_email) {
+      if(row.user_name) {
         const user_data = await prisma.user.findFirst({
           where: {
-            email: String(row.user_email ?? "").trim()
+            name: String(row.user_name ?? "").trim()
           }
         });
         if(user_data) {
@@ -125,7 +125,7 @@ export async function POST(request) {
           flag: 0
         }
       });
-      if (duplicateLead) {
+      if (duplicateLead && process.env.NEXT_PUBLIC_DUPLICATE_LEADS === "yes") {
         duplicateCount.push({ row: rowIndex, customer_name: row.customer_name, mobile_no: row.mobile_no, project: String(row.project) });
       } else {
         const lead_data = await prisma.lead.create({

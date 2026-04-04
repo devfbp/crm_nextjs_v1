@@ -40,6 +40,7 @@ const LeadHistory = ({
                                     <th>Created Date</th>
                                     <th>From Status</th>
                                     <th>To Status</th>
+                                    <th>Status Remarks</th>
                                 </tr>
                             </thead>
 
@@ -52,6 +53,7 @@ const LeadHistory = ({
                                                 <td>{item.created_at}</td>
                                                 <td>{item.from_status}</td>
                                                 <td>{item.to_status}</td>
+                                                <td>{item.remarks}</td>
                                             </tr>
                                         );
                                     })

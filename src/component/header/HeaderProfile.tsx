@@ -76,6 +76,12 @@ const HeaderProfile = () => {
               </span>{" "}
               Profile
             </Link>
+            <Link className="dropdown-item" href={`/user/${sessionDataString?.user_id}/change-password`}>
+              <span className="dropdown-icon">
+                <i className="fa-regular fa-circle-user"></i>
+              </span>{" "}
+              Change Password
+            </Link>
           </li>
           {/* <li>
             <Link className="dropdown-item" href="/chat">
