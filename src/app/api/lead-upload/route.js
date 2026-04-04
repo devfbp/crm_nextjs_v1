@@ -83,6 +83,17 @@ export async function POST(request) {
     let duplicateCount = []
     let rowIndex = 1; // Start from 1 to account for header row
     for (const row of rows) {
+      let rm_user_id = token?.user_id ?? null;
+      if(row.user_email) {
+        const user_data = await prisma.user.findFirst({
+          where: {
+            email: String(row.user_email ?? "").trim()
+          }
+        });
+        if(user_data) {
+          rm_user_id = user_data?.user_id;
+        }
+      }
       const projectId = await getOrCreate(
         "project",
         "project_name",
@@ -129,7 +140,7 @@ export async function POST(request) {
             project_id: projectId ?? 0,
             source_id: Number(sourceId) ?? 0,
             sub_source_id: Number(subSourceId) ?? 0,
-            rm_user_id: token?.user_id ?? null,
+            rm_user_id: rm_user_id,
             lead_status_id: 1,
             lead_file_id: leadFile.lead_file_id,
             remarks: row.remarks ?? "",
@@ -144,7 +155,7 @@ export async function POST(request) {
               created_at: new Date(),
               from_status_id: 0,
               to_status_id: 1,
-              rm_user_id: 0,
+              rm_user_id: rm_user_id,
             },
           });
         }
