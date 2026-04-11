@@ -38,6 +38,7 @@ const Layout = ({ children, session, encryptedString }: Props) => {
     "/registration",
     "/registration-2",
     "/reset-password",
+    "/forgot-password",
     "/update-password",
     "/login-status",
     "/error-400",

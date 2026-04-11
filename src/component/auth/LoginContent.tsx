@@ -110,7 +110,7 @@ const LoginContent3 = () => {
                       Remember Me
                     </label>
                   </div>
-                  <Link href="/resetPassword" className="text-white fs-14">
+                  <Link href="/forgot-password" className="text-white fs-14">
                     Forgot Password?
                   </Link>
                 </div>

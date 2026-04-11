@@ -121,7 +121,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
     }
 
     if (submitConfig.action === 2) {
-      if (!form.schedule_date) {
+      if (!form.schedule_date && !["6", "7"].includes(form.lead_status_id)) {
         setErrors({ schedule_date: ["Schedule date is required for updating lead"] });
         return;
       }
