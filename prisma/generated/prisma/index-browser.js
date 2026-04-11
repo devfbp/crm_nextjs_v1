@@ -379,6 +379,7 @@ exports.Prisma.Leads_viewScalarFieldEnum = {
   status_id: 'status_id',
   created_at: 'created_at',
   status_color: 'status_color',
+  schedule_date: 'schedule_date',
   flag: 'flag'
 };
 

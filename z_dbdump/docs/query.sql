@@ -51,6 +51,7 @@ SELECT
     l.`lead_status_id` AS `status_id`,
     l.`created_at`,
     ls.`label_color` as `status_color`,
+    l.`schedule_date` as `schedule_date`,
     l.`flag` as `flag`
 FROM `lead` AS l
 JOIN `lead_status` ls ON l.`lead_status_id` = ls.`lead_status_id`

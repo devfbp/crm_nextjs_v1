@@ -301,5 +301,6 @@ view leads_view {
   status_id       Int
   created_at      DateTime? @db.DateTime(0)
   status_color    String    @default("success") @db.VarChar(200)
+  schedule_date   DateTime? @db.Date
   flag            Int       @default(0)
 }

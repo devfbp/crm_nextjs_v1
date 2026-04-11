@@ -14,6 +14,14 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(randomString, 16);
     const body = await request.json();
     const { email } = body;
+    const checkUser = await prisma.user.findUnique({
+      where: {
+        email: email
+      }    
+    });
+    if (!checkUser) {
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
+    }
     const userDetail = await prisma.user.update({
       where: {
         email: email
@@ -53,6 +61,7 @@ export async function POST(request) {
         // console.log("Email notification response:", mail_response);
       } catch (emailError) {
         console.error("Error sending email notification:", emailError);
+        return NextResponse.json({ success: false, message: 'Password reset but failed to send email notification.' }, { status: 500 });
       }
     }
 
@@ -60,5 +69,5 @@ export async function POST(request) {
     console.error('Database connection error:', error);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
-  //return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 });
+  return NextResponse.json({ success: true, message: 'Password reset successfully. Please check your email for the new password.' });
 }

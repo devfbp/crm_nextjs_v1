@@ -4,7 +4,6 @@ import PaginationSection from "../PaginationSection";
 import { toast } from "react-toastify";
 import EditAction from "../action/Edit";
 import DeleteAction from "../action/Delete";
-import "./Leads.scss";
 import Link from "next/link";
 import { Spinner, Alert } from "react-bootstrap";
 import { useDigiContext } from "@/context/DigiContext";
@@ -12,8 +11,17 @@ import { accessMenuRole } from "../utils/common";
 import BulkUpdateModal from "./BulkUpdate";
 import LeadHistory from "./LeadHistory";
 import { accessMenuCheck } from "@/component/utils/common";
+import "./Leads.scss";
+import UserList from "./UserList2";
+import LeadStatusList from "./LeadStatusList";
+import { rm } from "fs";
+import { set } from "date-fns";
 
 const LeadsTable = (props: any) => {
+  const [form, setForm] = useState({
+    rm_user_id: "",
+    lead_status_id: ""
+  });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(50);
@@ -23,12 +31,21 @@ const LeadsTable = (props: any) => {
   const [showLeadHistory, setShowLeadHistory] = useState(false);
   const [bulkStatus, setBulkStatus] = useState([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
   const [navQuickToggleValue, setNavQuickToggleValue] = useState(props?.fullwidth);
+  const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
+
 
   const [editAccess, setEditAccess] = useState(false);
   const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [userFilter, setUserFilter] = useState("");
+  const [filters, setFilters] = useState({
+    search: "",
+    status: "",
+    user: "",
+    dueDate: "",
+    assigned_to: "",
+  });
 
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
 
@@ -42,11 +59,22 @@ const LeadsTable = (props: any) => {
     setEditAccess(accessMenuCheck(7, 3));
   }, [navQuickToggle, navQuickToggleValue]);
 
-  const fetchData = async () => {
+  const fetchData = async (filters: any) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lead?view=1`);
+      let url = `${process.env.NEXT_PUBLIC_API_URL}lead?view=1`;
+      if (filters.dueDate) {
+        url += `&due_filter=${filters.dueDate}`;
+      }
+      if (filters.assigned_to) {
+        url += `&assigned_to=${filters.assigned_to}`;
+      }
+      if (filters.lead_status_id) {
+        url += `&lead_status_id=${filters.lead_status_id}`;
+      }
+      // alert(url);
+      const response = await fetch(url);
       const result = await response.json();
       setDataList(result.map((r: any) => ({ ...r, selected: false })));
     } catch (error) {
@@ -58,8 +86,8 @@ const LeadsTable = (props: any) => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(filters);
+  }, [filters]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -128,7 +156,7 @@ const LeadsTable = (props: any) => {
       toast.warning("Please select at least one lead for bulk update");
       return;
     }
-
+    setSelectedLeads(selectedLeads);
     setShowBulkModal(true);
   };
 
@@ -136,41 +164,34 @@ const LeadsTable = (props: any) => {
     setHistoryLead(data);
     setShowLeadHistory(true);
   };
-  const handleBulkSubmit = async () => {
-    const selectedLeads = dataList.filter((d) => d.selected);
+  
+  useEffect(() => {
+    // if (!form.rm_user_id) return;
 
-    if (!bulkStatus) {
-      toast.warning("Please select a status");
-      return;
+    const updatedFilters = {
+      ...filters,
+      assigned_to: form.rm_user_id,
+    };
+
+    setFilters(updatedFilters);
+    fetchData(updatedFilters);
+  }, [form.rm_user_id]);
+  useEffect(() => {
+    // if (!form.rm_user_id) return;
+
+    const updatedFilters = {
+      ...filters,
+      lead_status_id: form.lead_status_id,
+    };
+
+    setFilters(updatedFilters);
+    fetchData(updatedFilters);
+  }, [form.lead_status_id]);
+  const refreshfilters = () => {
+    if(typeof window !== "undefined") {
+      window.location.reload();
     }
-
-    try {
-      setLoading(true);
-
-      const ids = selectedLeads.map((d) => d.lead_id);
-
-      await fetch(process.env.NEXT_PUBLIC_API_URL + "/lead/bulk-update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          lead_ids: ids,
-          lead_status_id: bulkStatus,
-        }),
-      });
-
-      toast.success("Bulk update successful");
-
-      setShowBulkModal(false);
-      setBulkStatus([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
-    } catch (err) {
-      console.error(err);
-      toast.error("Bulk update failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }
   return (
     <React.Fragment>
       <div className="col-12">
@@ -178,7 +199,7 @@ const LeadsTable = (props: any) => {
           {/* Filters */}
           <div className="card-body p-3">
             <div className="row g-2 align-items-center mb-2">
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <input
                   type="text"
                   value={searchTerm}
@@ -203,16 +224,44 @@ const LeadsTable = (props: any) => {
                 ))}
               </select>
             </div> */}
+              <div className="col-md-1">
+                <select className="form-select" value={filters.dueDate} onChange={(e) => { const value = e.target.value; setFilters({ ...filters, dueDate: value }); fetchData({ ...filters, dueDate: value }); }}>
+                  <option value="">All</option>
+                  <option value="1">Due</option>
+                  <option value="0">Over Due</option>
+                </select>
+              </div>
               <div className="col-md-2">
-                <input type="radio" name="quick_status" value="1" id="quick_status1" />
-                <label htmlFor="quick_status1" className="ms-1">Due</label>
-                <input type="radio" name="quick_status" value="0" className="ms-1" id="quick_status2" />
-                <label htmlFor="quick_status2" className="ms-1">Over Due</label>
+                <UserList form={form} setForm={setForm} />
+                <input type="hidden"
+                  id="rm_user_id"
+                  name="rm_user_id"
+                  value={form.rm_user_id}
+                />
+              </div>
+              <div className="col-md-2">
+                <select
+                  id="lead_status_id"
+                  name="lead_status_id"
+                  className="form-select border-white"
+                  value={form.lead_status_id}
+                  onChange={(e) =>
+                    setForm({ ...form, lead_status_id: e.target.value })
+                  }
+                >
+                  <LeadStatusList
+                    name="lead_status_id"
+                    selected_options={form.lead_status_id}
+                  />
+                </select>
+              </div>
+              <div className="col-md-1">
+                <button className="btn btn-sm btn-secondary" onClick={refreshfilters}>Reset</button>
               </div>
               {editAccess &&
-              <div className="col-md-2">
-                <button className="btn btn-sm btn-primary" onClick={handleBulkUpdate}>Bulk Update</button>
-              </div>
+                <div className="col-md-2">
+                  <button className="btn btn-sm btn-primary" onClick={handleBulkUpdate}>Bulk Update</button>
+                </div>
               }
               <div className="col-md-1 ms-auto">
                 <select className="form-select" value={dataPerPage} onChange={(e) => setDataPerPage(Number(e.target.value))}>
@@ -231,13 +280,15 @@ const LeadsTable = (props: any) => {
               <table id="leadsTable" className="table table-hover table-striped">
                 <thead>
                   <tr>
+                    {accessMenuRole(1) &&
                     <th>
                       <input type="checkbox" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
                     </th>
+                    }
                     <th onClick={() => sortColumn("customer_name")}>Lead Name</th>
-                    <th onClick={() => sortColumn("mobile_no")}>Contact</th>                                       
+                    <th onClick={() => sortColumn("mobile_no")}>Contact</th>
                     <th onClick={() => sortColumn("project_name")}>Project</th>
-                    <th onClick={() => sortColumn("assigned_to")}>Assigned To</th> 
+                    <th onClick={() => sortColumn("assigned_to")}>Assigned To</th>
                     {accessMenuRole(1) &&
                       <th onClick={() => sortColumn("sub_source_name")}>Source</th>
                     }
@@ -251,9 +302,11 @@ const LeadsTable = (props: any) => {
                   {!loading && sortedData.length === 0 && <tr><td colSpan={8} className="text-center">No records found</td></tr>}
                   {!loading && sortedData.map((data) => (
                     <tr key={data.lead_id}>
+                      {accessMenuRole(1) &&
                       <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
-                      <td>{data.customer_name}</td>
-                      <td>{data.mobile_no}</td>                                            
+                      }
+                      <td>{data.customer_name} </td>
+                      <td>{data.mobile_no}</td>
                       <td title={data.project_name}>
                         {data.project_name.length > 25 ? data.project_name.substr(0, 20) + '...' : data.project_name}
                       </td>
@@ -266,7 +319,7 @@ const LeadsTable = (props: any) => {
                         <div className="btn-box">
                           <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />
                           {accessMenuRole(2) &&
-                           <Link
+                            <Link
                               title="History"
                               className="btn btn-sm btn-icon btn-warning"
                               href="javascript:void(0)"
@@ -301,18 +354,11 @@ const LeadsTable = (props: any) => {
       </div >
       <BulkUpdateModal
         show={showBulkModal}
-        handleClose={() => setShowBulkModal(false)}
-        handleSubmit={handleBulkSubmit}
-        bulkStatus={bulkStatus}
-        setBulkStatus={setBulkStatus}
-        uniqueStatuses={uniqueStatuses}
+        selectedLeads={selectedLeads}
       />
       <LeadHistory
         show={showLeadHistory}
         handleClose={() => setShowLeadHistory(false)}
-        bulkStatus={bulkStatus}
-        setBulkStatus={setBulkStatus}
-        uniqueStatuses={uniqueStatuses}
         slug={historyLead}
       />
     </React.Fragment>

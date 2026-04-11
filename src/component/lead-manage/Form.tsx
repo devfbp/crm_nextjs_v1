@@ -10,7 +10,7 @@ import SourceList from "./SourceList2";
 import { leadSchema } from "../../../lib/validation";
 import DatePicker from "react-datepicker";
 import { form_submit_call, displayDate, parseDate } from "../utils/common-client";
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
 import LastLeadEntry from "./LastLeadEntry";
 import { accessMenuRole } from "../utils/common";
 
@@ -188,6 +188,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       }
                       autoComplete="off"
                       placeholder=""
+                      readOnly={accessMenuRole(1) ? false : true}
                     />
                     {errors.customer_name && (
                       <p className="text-danger">{errors.customer_name[0]}</p>
@@ -213,6 +214,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         }
                         autoComplete="off"
                         placeholder="9876543210"
+                        readOnly={accessMenuRole(1) ? false : true}
                       />
                     </div>
                     {errors.mobile_no && (
@@ -238,6 +240,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         }
                         autoComplete="off"
                         placeholder="9876543210"
+                        readOnly={accessMenuRole(1) ? false : true}
                       />
                     </div>
                     {errors.alternate_no && (
@@ -264,6 +267,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         }
                         autoComplete="off"
                         placeholder="test@gmail"
+                        readOnly={accessMenuRole(1) ? false : true}
                       />
 
                     </div>

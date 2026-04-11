@@ -4,7 +4,7 @@ import { getSessionFromToken } from "../session";
 export async function GET(request) {
   try {
     const where = { flag: 0 };
-    
+
     // Calculate start and end of today
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -56,9 +56,31 @@ export async function GET(request) {
         leadcount: countObj?._count.to_status_id || 0
       };
     });
+
+
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    
+    // due and overdue counts
+    const dueCount = await prisma.lead.count({
+      where: {
+        flag: 0,
+        schedule_date: { gte: todayStart, lte: todayEnd}
+      }
+    });
+    const overdueCount = await prisma.lead.count({
+      where: {
+        flag: 0,
+        schedule_date: { lt: todayStart }
+      }
+    });
     // console.log(lead_status_with_count);
     return new Response(
-      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count }),
+      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count, dueCount, overdueCount }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 

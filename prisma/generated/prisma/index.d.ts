@@ -21108,6 +21108,7 @@ export namespace Prisma {
     status_id: number | null
     created_at: Date | null
     status_color: string | null
+    schedule_date: Date | null
     flag: number | null
   }
 
@@ -21123,6 +21124,7 @@ export namespace Prisma {
     status_id: number | null
     created_at: Date | null
     status_color: string | null
+    schedule_date: Date | null
     flag: number | null
   }
 
@@ -21138,6 +21140,7 @@ export namespace Prisma {
     status_id: number
     created_at: number
     status_color: number
+    schedule_date: number
     flag: number
     _all: number
   }
@@ -21169,6 +21172,7 @@ export namespace Prisma {
     status_id?: true
     created_at?: true
     status_color?: true
+    schedule_date?: true
     flag?: true
   }
 
@@ -21184,6 +21188,7 @@ export namespace Prisma {
     status_id?: true
     created_at?: true
     status_color?: true
+    schedule_date?: true
     flag?: true
   }
 
@@ -21199,6 +21204,7 @@ export namespace Prisma {
     status_id?: true
     created_at?: true
     status_color?: true
+    schedule_date?: true
     flag?: true
     _all?: true
   }
@@ -21295,6 +21301,7 @@ export namespace Prisma {
     status_id: number
     created_at: Date | null
     status_color: string
+    schedule_date: Date | null
     flag: number
     _count: Leads_viewCountAggregateOutputType | null
     _avg: Leads_viewAvgAggregateOutputType | null
@@ -21329,6 +21336,7 @@ export namespace Prisma {
     status_id?: boolean
     created_at?: boolean
     status_color?: boolean
+    schedule_date?: boolean
     flag?: boolean
   }, ExtArgs["result"]["leads_view"]>
 
@@ -21346,10 +21354,11 @@ export namespace Prisma {
     status_id?: boolean
     created_at?: boolean
     status_color?: boolean
+    schedule_date?: boolean
     flag?: boolean
   }
 
-  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "rm_user_id" | "assigned_to" | "sub_source_name" | "mobile_no" | "project_name" | "status" | "status_id" | "created_at" | "status_color" | "flag", ExtArgs["result"]["leads_view"]>
+  export type leads_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "rm_user_id" | "assigned_to" | "sub_source_name" | "mobile_no" | "project_name" | "status" | "status_id" | "created_at" | "status_color" | "schedule_date" | "flag", ExtArgs["result"]["leads_view"]>
 
   export type $leads_viewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "leads_view"
@@ -21366,6 +21375,7 @@ export namespace Prisma {
       status_id: number
       created_at: Date | null
       status_color: string
+      schedule_date: Date | null
       flag: number
     }, ExtArgs["result"]["leads_view"]>
     composites: {}
@@ -21621,6 +21631,7 @@ export namespace Prisma {
     readonly status_id: FieldRef<"leads_view", 'Int'>
     readonly created_at: FieldRef<"leads_view", 'DateTime'>
     readonly status_color: FieldRef<"leads_view", 'String'>
+    readonly schedule_date: FieldRef<"leads_view", 'DateTime'>
     readonly flag: FieldRef<"leads_view", 'Int'>
   }
     
@@ -22088,6 +22099,7 @@ export namespace Prisma {
     status_id: 'status_id',
     created_at: 'created_at',
     status_color: 'status_color',
+    schedule_date: 'schedule_date',
     flag: 'flag'
   };
 
@@ -23887,6 +23899,7 @@ export namespace Prisma {
     status_id?: IntFilter<"leads_view"> | number
     created_at?: DateTimeNullableFilter<"leads_view"> | Date | string | null
     status_color?: StringFilter<"leads_view"> | string
+    schedule_date?: DateTimeNullableFilter<"leads_view"> | Date | string | null
     flag?: IntFilter<"leads_view"> | number
   }
 
@@ -23902,6 +23915,7 @@ export namespace Prisma {
     status_id?: SortOrder
     created_at?: SortOrderInput | SortOrder
     status_color?: SortOrder
+    schedule_date?: SortOrderInput | SortOrder
     flag?: SortOrder
     _relevance?: leads_viewOrderByRelevanceInput
   }
@@ -23918,6 +23932,7 @@ export namespace Prisma {
     status_id?: SortOrder
     created_at?: SortOrderInput | SortOrder
     status_color?: SortOrder
+    schedule_date?: SortOrderInput | SortOrder
     flag?: SortOrder
     _count?: leads_viewCountOrderByAggregateInput
     _avg?: leads_viewAvgOrderByAggregateInput
@@ -23941,6 +23956,7 @@ export namespace Prisma {
     status_id?: IntWithAggregatesFilter<"leads_view"> | number
     created_at?: DateTimeNullableWithAggregatesFilter<"leads_view"> | Date | string | null
     status_color?: StringWithAggregatesFilter<"leads_view"> | string
+    schedule_date?: DateTimeNullableWithAggregatesFilter<"leads_view"> | Date | string | null
     flag?: IntWithAggregatesFilter<"leads_view"> | number
   }
 
@@ -27057,6 +27073,7 @@ export namespace Prisma {
     status_id?: SortOrder
     created_at?: SortOrder
     status_color?: SortOrder
+    schedule_date?: SortOrder
     flag?: SortOrder
   }
 
@@ -27079,6 +27096,7 @@ export namespace Prisma {
     status_id?: SortOrder
     created_at?: SortOrder
     status_color?: SortOrder
+    schedule_date?: SortOrder
     flag?: SortOrder
   }
 
@@ -27094,6 +27112,7 @@ export namespace Prisma {
     status_id?: SortOrder
     created_at?: SortOrder
     status_color?: SortOrder
+    schedule_date?: SortOrder
     flag?: SortOrder
   }
 

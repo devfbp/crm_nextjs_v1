@@ -11,16 +11,19 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
     let limit = parseInt(searchParams.get('limit')) || 100;
-    let orderBy = searchParams.get('orderBy') || 'lead_id';
+    let orderBy = searchParams.get('orderBy') || 'created_at';
     let view = searchParams.get('view');
+    let due_filter = searchParams.get('due_filter');
+    let assigned_to = searchParams.get('assigned_to');
+    let lead_status_id = searchParams.get('lead_status_id');
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
-        orderBy: { lead_id: 'desc' }
+        orderBy: { created_at: 'desc' }
       });
       const dataItems2 = await prisma.leads_view.findMany({
         where: { lead_id: id },
-        orderBy: { lead_id: 'desc' }
+        orderBy: { created_at: 'desc' }
       });
       let finalData = dataItem;
       if (dataItems2 && dataItems2.length > 0) {
@@ -29,7 +32,33 @@ export async function GET(request) {
       return Response.json(finalData);
     }
     if (view=="1") {
-      let vwhere = { flag: 0 }
+      let vwhere = { flag: 0 };
+      if (due_filter) {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
+
+        if (due_filter === "1") {
+          //EXACT today
+          vwhere.schedule_date = {
+            gte: todayStart,
+            lte: todayEnd,
+          };
+        } else if (due_filter === "0") {
+          //OVERDUE (before today)
+          vwhere.schedule_date = {
+            lt: todayStart,
+          };
+        }
+      }
+      if (assigned_to) {
+        vwhere.rm_user_id = parseInt(assigned_to);
+      }
+      if (lead_status_id) {
+        vwhere.status_id = parseInt(lead_status_id);
+      }
       if(token?.user_id && token?.role_id > 2) {
         vwhere.rm_user_id = token.user_id;
         const teamMembers = await prisma.user_team_member.findMany({
@@ -50,7 +79,7 @@ export async function GET(request) {
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,
         take: 10000,
-        orderBy: { lead_id: 'desc' }
+        orderBy: { created_at: 'desc' }
       });
       return Response.json(dataItems);
     }
@@ -161,7 +190,7 @@ export async function PUT(request) {
         rm_user_id: parseInt(req.rm_user_id),
         lead_status_id: parseInt(req.lead_status_id),
         remarks: req.remarks,
-        schedule_date: new Date(req.schedule_date), // use the parsed Date object
+        schedule_date: req?.schedule_date ? new Date(req?.schedule_date) : null , // use the parsed Date object
         modified_by: token?.user_id || null
       }
     });

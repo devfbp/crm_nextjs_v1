@@ -1,50 +1,85 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import LeadStatusList from "./LeadStatusList";
 import UserList from "./UserList2";
 import { useState, useEffect } from "react";
 
 interface BulkUpdateModalProps {
   show: boolean;
-  handleClose: () => void;
-  handleSubmit: () => void;
-  bulkStatus: any;
-  setBulkStatus: (status: any) => void;
-  uniqueStatuses: any[];
+  lead_id: string;
+  selectedLeads?: string[]; // array of lead IDs
+}
+
+interface LeadStatus {
+  lead_status_id: string;
+  lead_status_name: string;
 }
 
 const BulkUpdateModal = ({
   show,
-  handleClose,
-  handleSubmit,
-  bulkStatus,
-  setBulkStatus,
-  uniqueStatuses
+  selectedLeads,
 }: BulkUpdateModalProps) => {
-  // Local form state
-  const [form, setForm] = useState({
+  const [bulkForm, setBulkForm] = useState({
     lead_status_id: "",
     rm_user_id: "",
-    status_remarks: ""
+    status_remarks: "",
   });
 
-  // Sync parent bulkStatus to local form when modal opens
-  useEffect(() => {
-    if (show) {
-      setForm({
-        lead_status_id: bulkStatus?.lead_status_id || "",
-        rm_user_id: bulkStatus?.rm_user_id || "",
-        status_remarks: bulkStatus?.status_remarks || ""
-      });
-    }
-  }, [show, bulkStatus]);
+  const [data, setData] = useState<LeadStatus[]>([]);
 
-  // Optional: Update parent state whenever form changes
+  // Fetch lead statuses once
   useEffect(() => {
-    setBulkStatus(form);
-  }, [form, setBulkStatus]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_API_URL + "/lead-status"
+        );
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        console.error("Failed to fetch lead statuses:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Submit bulk update
+  const submitBulkUpdate = async () => {
+    try {
+      const ids: string[] = selectedLeads ?? [];
+
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/lead/bulk-update",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lead_ids: ids,
+            lead_status_id: bulkForm.lead_status_id,
+            rm_user_id: bulkForm.rm_user_id,
+            status_remarks: bulkForm.status_remarks,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Bulk update failed");
+      }
+
+      console.log("Bulk update successful");
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      // optional refresh logic
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+    }
+  };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={() => {}} centered>
       <Modal.Header closeButton>
         <Modal.Title>Bulk Update Leads</Modal.Title>
       </Modal.Header>
@@ -55,47 +90,54 @@ const BulkUpdateModal = ({
           <Form.Label>Select Status</Form.Label>
           <select
             className="form-select"
-            value={form.lead_status_id}
-            onChange={(e) => setForm({ ...form, lead_status_id: e.target.value })}
+            value={bulkForm.lead_status_id}
+            onChange={(e) =>
+              setBulkForm({
+                ...bulkForm,
+                lead_status_id: e.target.value,
+              })
+            }
           >
             <option value="">Select Status</option>
-            {uniqueStatuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
+            {data.map((item) => (
+              <option
+                key={item.lead_status_id}
+                value={item.lead_status_id}
+              >
+                {item.lead_status_name}
               </option>
             ))}
           </select>
         </Form.Group>
 
-        {/* Assigned User Selector */}
+        {/* Assign User */}
         <Form.Group className="mb-3">
           <Form.Label>Assign User</Form.Label>
-          <UserList form={form} setForm={setForm} />
+          <UserList form={bulkForm} setForm={setBulkForm} />
         </Form.Group>
 
-        {/* Status Remarks */}
+        {/* Remarks */}
         <Form.Group className="mb-3">
           <Form.Label>Status Remarks</Form.Label>
           <textarea
             className="form-control"
-            value={form.status_remarks}
-            onChange={(e) => setForm({ ...form, status_remarks: e.target.value })}
+            value={bulkForm.status_remarks}
+            onChange={(e) =>
+              setBulkForm({
+                ...bulkForm,
+                status_remarks: e.target.value,
+              })
+            }
           />
         </Form.Group>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={() => {}}>
           Cancel
         </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            handleSubmit(); // Submit parent handler
-            handleClose(); // Close modal after submit
-          }}
-          disabled={!form.lead_status_id} // Disable if status not selected
-        >
+
+        <Button variant="primary" onClick={submitBulkUpdate}>
           Update
         </Button>
       </Modal.Footer>

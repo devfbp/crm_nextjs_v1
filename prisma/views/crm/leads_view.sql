@@ -10,6 +10,7 @@ SELECT
   `l`.`lead_status_id` AS `status_id`,
   `l`.`created_at` AS `created_at`,
   `ls`.`label_color` AS `status_color`,
+  `l`.`schedule_date` AS `schedule_date`,
   `l`.`flag` AS `flag`
 FROM
   (
