@@ -355,6 +355,7 @@ const LeadsTable = (props: any) => {
       <BulkUpdateModal
         show={showBulkModal}
         selectedLeads={selectedLeads}
+        lead_id=""
       />
       <LeadHistory
         show={showLeadHistory}
