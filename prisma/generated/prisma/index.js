@@ -513,7 +513,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/nithyanandham/projects/crm_nextjs_v1/prisma/generated/prisma",
+      "value": "/home/dev/crm_nextjs_v1/prisma/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -529,7 +529,7 @@ const config = {
     "previewFeatures": [
       "views"
     ],
-    "sourceFilePath": "/home/nithyanandham/projects/crm_nextjs_v1/prisma/schema.prisma",
+    "sourceFilePath": "/home/dev/crm_nextjs_v1/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
