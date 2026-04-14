@@ -115,7 +115,7 @@ const BulkUpdateModal = ({
         {/* Assign User */}
         <Form.Group className="mb-3">
           <Form.Label>Assign User</Form.Label>
-          <UserList form={bulkForm} setForm={setBulkForm} />
+          <UserList form={bulkForm} setForm={setBulkForm} doptionion="Select RM User" />
         </Form.Group>
 
         {/* Remarks */}
