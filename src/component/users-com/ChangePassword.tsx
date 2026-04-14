@@ -79,11 +79,11 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
     try {
 
       await form_submit_call(payload);
-
+      
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "user" });
       if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
-        window.location.href = "/logout";
+        window.location.href = "/login";
       }
     } catch (err: any) {
       console.error("Submit error:", err);
@@ -127,7 +127,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                   <label htmlFor="old_password" className="form-label">
                     Old Password
                   </label>
-                  <div className="input-group">
+                  <div className="input-group-with-icon">
                     <input
                       type={oldpasswordVisible ? "text" : "password"}
                       id="old_password"
@@ -139,75 +139,82 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                       }
                       autoComplete="off"
                     />
-                    <a
-                      role="button"
-                      className="password-show"
-                      onClick={() => togglePasswordVisibility('old')}
-                    >
-                      <i className={`fa-duotone ${oldpasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                    </a>
+                    <span className="input-icon">
+                      <a
+                        role="button"
+                        className="password-show"
+                        onClick={() => togglePasswordVisibility('old')}
+                      >
+                        <i className={`fa-duotone ${oldpasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                      </a>
+                    </span>
                     {errors.old_password && (
                       <p className="text-danger">{errors.old_password[0]}</p>
                     )}
                   </div>
                 </div>
-              </div>
-              <div className="col-md-12 pt-3">
-                <label htmlFor="new_password" className="form-label">
-                  New Password
-                </label>
-                <div className="input-group">
-                  <input
-                    type={newpasswordVisible ? "text" : "password"}
-                    id="new_password"
-                    name="new_password"
-                    className="form-control"
-                    value={form.new_password}
-                    onChange={(e) =>
-                      setForm({ ...form, new_password: e.target.value })
-                    }
-                    autoComplete="off"
-                  />
-                  <a
-                    role="button"
-                    className="password-show"
-                    onClick={() => togglePasswordVisibility('new')}
-                  >
-                    <i className={`fa-duotone ${newpasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                  </a>
-                  {errors.new_password && (
-                    <p className="text-danger">{errors.new_password[0]}</p>
-                  )}
+                <div className="col-md-12 pt-3">
+                  <label htmlFor="new_password" className="form-label">
+                    New Password
+                  </label>
+                  <div className="input-group-with-icon">
+                    <input
+                      type={newpasswordVisible ? "text" : "password"}
+                      id="new_password"
+                      name="new_password"
+                      className="form-control"
+                      value={form.new_password}
+                      onChange={(e) =>
+                        setForm({ ...form, new_password: e.target.value })
+                      }
+                      autoComplete="off"
+                    />
+                    <span className="input-icon">
+                      <a
+                        role="button"
+                        className="password-show"
+                        onClick={() => togglePasswordVisibility('new')}
+                      >
+                        <i className={`fa-duotone ${newpasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                      </a>
+                    </span>
+                    {errors.new_password && (
+                      <p className="text-danger">{errors.new_password[0]}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="col-md-12 pt-3">
-                <label htmlFor="confirm_password" className="form-label">
-                  Confirm Password
-                </label>
-                <div className="input-group">
-                  <input
-                    type={confirmpasswordVisible ? "text" : "password"}
-                    id="confirm_password"
-                    name="confirm_password"
-                    className="form-control"
-                    value={form.confirm_password}
-                    onChange={(e) =>
-                      setForm({ ...form, confirm_password: e.target.value })
-                    }
-                    autoComplete="off"
-                  />
-                  <a
-                    role="button"
-                    className="password-show"
-                    onClick={() => togglePasswordVisibility('confirm')}
-                  >
-                    <i className={`fa-duotone ${confirmpasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                  </a>
-                  {errors.confirm_password && (
-                    <p className="text-danger">{errors.confirm_password[0]}</p>
-                  )}
+                <div className="col-md-12 pt-3">
+                  <label htmlFor="confirm_password" className="form-label">
+                    Confirm Password
+                  </label>
+                  <div className="input-group-with-icon">
+                    <input
+                      type={confirmpasswordVisible ? "text" : "password"}
+                      id="confirm_password"
+                      name="confirm_password"
+                      className="form-control"
+                      value={form.confirm_password}
+                      onChange={(e) =>
+                        setForm({ ...form, confirm_password: e.target.value })
+                      }
+                      autoComplete="off"
+                    />
+                    <span className="input-icon">
+                      <a
+                        role="button"
+                        className="password-show"
+                        onClick={() => togglePasswordVisibility('confirm')}
+                      >
+                        <i className={`fa-duotone ${confirmpasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                      </a>
+                    </span>
+                    {errors.confirm_password && (
+                      <p className="text-danger">{errors.confirm_password[0]}</p>
+                    )}
+                  </div>
                 </div>
+
               </div>
               <div className="col-md-12 pt-3">
                 <div className="clearfix">&nbsp;</div>

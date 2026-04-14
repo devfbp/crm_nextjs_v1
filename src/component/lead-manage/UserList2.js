@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import AsyncSelect from "react-select/async";
 
-export default function List({ form, setForm }) {
+export default function List({ form, setForm, doptionion }) {
   const [selectedrm_user, setSelectedrm_user] = useState(null);
 
   const loadOptions = async (inputValue) => {
@@ -68,7 +68,7 @@ export default function List({ form, setForm }) {
       loadOptions={loadOptions}
       value={selectedrm_user}
       onChange={handleChange}
-      placeholder="Select User"
+      placeholder={doptionion || "Select RM User"}
       classNamePrefix="async_select"
     />
   );

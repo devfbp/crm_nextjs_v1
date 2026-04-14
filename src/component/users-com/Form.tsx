@@ -345,9 +345,9 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                     </div>
                     <div className="card-body">
                       <div className="col-md-12 pt-3">
-                        <label htmlFor="user_name" className="form-label">
-                          Click to change password
-                        </label>
+                        <a href={`/user/${form.slug}/change-password/`} className="btn btn-secondary">
+                          Click to Change Password
+                        </a>
                       </div>
                     </div>
                   </div>

@@ -70,7 +70,7 @@ const LeadsTable = (props: any) => {
       if (filters.assigned_to) {
         url += `&assigned_to=${filters.assigned_to}`;
       }
-      if (filters.lead_status_id) {
+      if (filters.lead_status_id && filters.lead_status_id !== 0) {
         url += `&lead_status_id=${filters.lead_status_id}`;
       }
       // alert(url);
@@ -232,7 +232,7 @@ const LeadsTable = (props: any) => {
                 </select>
               </div>
               <div className="col-md-2">
-                <UserList form={form} setForm={setForm} />
+                <UserList form={form} setForm={setForm} doptionion="All" />
                 <input type="hidden"
                   id="rm_user_id"
                   name="rm_user_id"
@@ -252,6 +252,7 @@ const LeadsTable = (props: any) => {
                   <LeadStatusList
                     name="lead_status_id"
                     selected_options={form.lead_status_id}
+                    doptionion="All"
                   />
                 </select>
               </div>
@@ -356,6 +357,7 @@ const LeadsTable = (props: any) => {
         show={showBulkModal}
         selectedLeads={selectedLeads}
         lead_id=""
+        handleClose={() => setShowBulkModal(false)}
       />
       <LeadHistory
         show={showLeadHistory}

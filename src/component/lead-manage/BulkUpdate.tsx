@@ -16,6 +16,7 @@ interface LeadStatus {
 const BulkUpdateModal = ({
   show,
   selectedLeads,
+  handleClose
 }: BulkUpdateModalProps) => {
   const [bulkForm, setBulkForm] = useState({
     lead_status_id: "",
@@ -79,7 +80,7 @@ const BulkUpdateModal = ({
   };
 
   return (
-    <Modal show={show} onHide={() => {}} centered>
+    <Modal show={show} onHide={() => handleClose()} centered>
       <Modal.Header closeButton>
         <Modal.Title>Bulk Update Leads</Modal.Title>
       </Modal.Header>
@@ -133,7 +134,7 @@ const BulkUpdateModal = ({
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => {}}>
+        <Button variant="secondary" onClick={() => handleClose()}>
           Cancel
         </Button>
 

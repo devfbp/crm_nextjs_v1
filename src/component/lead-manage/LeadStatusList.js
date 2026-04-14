@@ -14,7 +14,7 @@ export default function List(props) {
     //console.log(data);
     return (
         <React.Fragment>            
-              <option value={0}>Choose...</option>
+              <option value={0}>{props.doptionion || "Choose..."}</option>
               {data.map((item) => (
                 <option key={item.lead_status_id} value={item.lead_status_id} selected={props.selected_options==item.lead_status_id ? "selected" : ""}>
                   {item.lead_status_name}
