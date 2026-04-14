@@ -6,6 +6,7 @@ interface BulkUpdateModalProps {
   show: boolean;
   lead_id: string;
   selectedLeads?: string[]; // array of lead IDs
+  handleClose: () => void;
 }
 
 interface LeadStatus {
