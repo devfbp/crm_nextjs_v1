@@ -433,7 +433,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                     <label htmlFor="rm_user_id" className="form-label">
                       RM
                     </label>
-                    <UserList form={form} setForm={setForm} />
+                    <UserList form={form} setForm={setForm} doptionion="Select RM User" />
                     <input type="hidden"
                       id="rm_user_id"
                       name="rm_user_id"
@@ -460,6 +460,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       <LeadStatusList
                         name="lead_status_id"
                         selected_options={form.lead_status_id}
+                        doptionion="Select Status"
                       />
                     </select>
                     {errors.lead_status_id && (
