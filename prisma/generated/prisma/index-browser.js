@@ -366,6 +366,7 @@ exports.Prisma.Lead_status_entry_viewScalarFieldEnum = {
   rm_user_id: 'rm_user_id',
   from_status: 'from_status',
   to_status: 'to_status',
+  created_by_name: 'created_by_name',
   created_at: 'created_at',
   remarks: 'remarks',
   display_created_at: 'display_created_at'
@@ -499,6 +500,7 @@ exports.Prisma.lead_status_entry_viewOrderByRelevanceFieldEnum = {
   user_name: 'user_name',
   from_status: 'from_status',
   to_status: 'to_status',
+  created_by_name: 'created_by_name',
   remarks: 'remarks',
   display_created_at: 'display_created_at'
 };
