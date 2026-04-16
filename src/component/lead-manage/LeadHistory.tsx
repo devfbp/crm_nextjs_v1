@@ -51,7 +51,7 @@ const LeadHistory = ({
                                     records?.map((item: any, index: number) => {
                                         return (
                                             <tr key={index}>
-                                                <td>{item.user_name}</td>
+                                                <td>{item.created_by_name}</td>
                                                 <td>{item.display_created_at}</td>
                                                 <td>{item.from_user_name}</td>
                                                 <td>{item.user_name}</td>
