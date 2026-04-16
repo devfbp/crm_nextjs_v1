@@ -149,22 +149,57 @@ const LeadsTable = (props: any) => {
   const uniqueStatuses = Array.from(new Set(dataList.map((d) => d.lead_status_id)));
   const uniqueUsers = Array.from(new Set(dataList.map((d) => d.rm_user_id)));
 
-  const handleBulkUpdate = () => {
+  const handleBulkUpdate = async (value) => {
     const selectedLeads = dataList.filter((d) => d.selected);
 
     if (selectedLeads.length === 0) {
       toast.warning("Please select at least one lead for bulk update");
       return;
     }
-    setSelectedLeads(selectedLeads);
-    setShowBulkModal(true);
+
+    if (value === 1) {
+      setSelectedLeads(selectedLeads);
+      setShowBulkModal(true);
+    } else if (value === 2) {
+      if (confirm("Are you sure you want to delete the selected leads?")) {
+        try {
+          const response = await fetch(
+            process.env.NEXT_PUBLIC_API_URL + "/lead/bulk-update",
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                lead_ids: selectedLeads,
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to delete leads");
+          }
+
+          toast.success("Leads deleted successfully");
+        } catch (error) {
+          console.error(error);
+          toast.error("Something went wrong");
+        } finally {
+          setTimeout(() => {
+            if (typeof window !== "undefined") {
+              window.location.reload();
+            }
+          }, 1000);
+        }
+      }
+    }
   };
 
   const handleLeadHistory = (data: any) => {
     setHistoryLead(data);
     setShowLeadHistory(true);
   };
-  
+
   useEffect(() => {
     // if (!form.rm_user_id) return;
 
@@ -188,7 +223,7 @@ const LeadsTable = (props: any) => {
     fetchData(updatedFilters);
   }, [form.lead_status_id]);
   const refreshfilters = () => {
-    if(typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       window.location.reload();
     }
   }
@@ -261,7 +296,17 @@ const LeadsTable = (props: any) => {
               </div>
               {editAccess &&
                 <div className="col-md-2">
-                  <button className="btn btn-sm btn-primary" onClick={handleBulkUpdate}>Bulk Update</button>
+                  <select
+                    id="lead_status_id"
+                    name="lead_status_id"
+                    className="form-select border-white"
+                    value={form.lead_status_id}
+                    onChange={(e) => handleBulkUpdate(Number(e.target.value))}
+                  >
+                    <option value="">--Bulk Action--</option>
+                    <option value="1">Bulk Update</option>
+                    <option value="2">Bulk Delete</option>
+                  </select>
                 </div>
               }
               <div className="col-md-1 ms-auto">
@@ -282,9 +327,9 @@ const LeadsTable = (props: any) => {
                 <thead>
                   <tr>
                     {accessMenuRole(1) &&
-                    <th>
-                      <input type="checkbox" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
-                    </th>
+                      <th>
+                        <input type="hidden" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
+                      </th>
                     }
                     <th onClick={() => sortColumn("customer_name")}>Lead Name</th>
                     <th onClick={() => sortColumn("mobile_no")}>Contact</th>
@@ -304,9 +349,12 @@ const LeadsTable = (props: any) => {
                   {!loading && sortedData.map((data) => (
                     <tr key={data.lead_id}>
                       {accessMenuRole(1) &&
-                      <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
+                        <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
                       }
-                      <td>{data.customer_name} </td>
+                      
+                      <td title={data.customer_name}>
+                        {data.customer_name.length > 15 ? data.customer_name.substr(0, 15) + '...' : data.customer_name}
+                      </td>
                       <td>{data.mobile_no}</td>
                       <td title={data.project_name}>
                         {data.project_name.length > 25 ? data.project_name.substr(0, 20) + '...' : data.project_name}

@@ -29,14 +29,17 @@ const ForgotPassword = () => {
         'Authorization': `Bearer ${process.env.NEXT_PUBLIC_BEARER_TOKEN}`
       }
     });
-
-    if (res.ok) {
-      setLoading(false);
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
+    if (res.ok) {      
+      toast.success("New Password has been sent to your email.");
+      setTimeout(() => {
+        setLoading(false);
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+      }, 3000);
     } else {
-      toast.error("Invalid Username and Password.");
+      toast.error("Invalid email address or not found.");
+      setLoading(false);
     }
   };
   const togglePasswordVisibility = () => {
@@ -45,11 +48,6 @@ const ForgotPassword = () => {
 
   return (
     <>
-      {loading && (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
-        </div>
-      )}
       <div className="main-content login-panel login-panel-3 min-vh-100">
         <div className="container">
           <div className="d-flex justify-content-end">
@@ -74,9 +72,15 @@ const ForgotPassword = () => {
                       Login Here
                     </Link>
                   </div>
-                  <button className="btn btn-primary w-100 login-btn">
-                    Submit
-                  </button>
+                  {loading ? (
+                    <button className="btn btn-primary w-100 login-btn" disabled>
+                      Loading...
+                    </button>
+                  ) : (
+                    <button className="btn btn-primary w-100 login-btn">
+                      Submit
+                    </button>
+                  )}
                 </form>
               </div>
             </div>

@@ -69,6 +69,7 @@ export async function PUT(request) {
               created_at: new Date(),
               from_status_id: beforeStatusId ?? 0,
               to_status_id: afterStatusId,
+              from_rm_user_id: beforeLeadData?.rm_user_id ?? null,
               rm_user_id: rm_user_id ?? null,
               remarks: status_remarks || "Status Updated"
             }
@@ -94,5 +95,27 @@ export async function PUT(request) {
       }),
       { status: 500 }
     );
+  }
+}
+
+export async function DELETE(request) {
+  const token = getSessionFromToken();
+  try {
+    const req = await request.json();
+    const ids = req.lead_ids;
+    if(ids) {
+      ids.map(async (id) => {
+        //console.log("Deleting lead with id:", id);
+        const deletedlead = await prisma.lead.update({
+          where: { lead_id: id?.lead_id },
+          data: { flag: 1, modified_by: token?.user_id || null, modified_at: new Date() }
+        });
+        // console.log("Lead with id marked as deleted:", id);
+      });    
+    }    
+    return Response.json({ success: true, message: "Lead(s) deleted successfully." });
+  } catch (error) {
+    console.error('Error deleting lead:', error);
+    return Response.json({ success: false, message: error.message }, { status: 500 });
   }
 }

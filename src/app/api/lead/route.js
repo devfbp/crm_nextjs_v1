@@ -11,7 +11,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
     let limit = parseInt(searchParams.get('limit')) || 100;
-    let orderBy = searchParams.get('orderBy') || 'created_at';
+    let orderBy = searchParams.get('orderBy') || 'modified_at';
     let view = searchParams.get('view');
     let due_filter = searchParams.get('due_filter');
     let assigned_to = searchParams.get('assigned_to');
@@ -19,11 +19,11 @@ export async function GET(request) {
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
-        orderBy: { created_at: 'desc' }
+        orderBy: { modified_at: 'asc' }
       });
       const dataItems2 = await prisma.leads_view.findMany({
         where: { lead_id: id },
-        orderBy: { created_at: 'desc' }
+        orderBy: { modified_at: 'asc' }
       });
       let finalData = dataItem;
       if (dataItems2 && dataItems2.length > 0) {
@@ -32,7 +32,7 @@ export async function GET(request) {
       return Response.json(finalData);
     }
     if (view=="1") {
-      let vwhere = { flag: 0 };
+      let vwhere = { flag: 0, status_id: { notIn: [6, 7] } };
       if (due_filter) {
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
@@ -75,11 +75,11 @@ export async function GET(request) {
           vwhere.rm_user_id = { in: [token.user_id, ...memberIds] };
         }        
       }
-      console.log(token.user_id);
+      // console.log(token.user_id);
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,
         take: 10000,
-        orderBy: { created_at: 'desc' }
+        orderBy: { modified_at: 'asc' }
       });
       return Response.json(dataItems);
     }
@@ -108,12 +108,12 @@ export async function POST(request) {
     const duplicateLead = await prisma.lead.findFirst({
       where: {
         mobile_no: req.mobile_no,
-        project_id: parseInt(req.project_id),
+        // project_id: parseInt(req.project_id),
         flag: 0
       }
     });
     if (duplicateLead) {
-      return Response.json({ success: false, message: "Lead with this mobile number already exists for the selected project." }, { status: 400 });
+      return Response.json({ duplicateLead: true, success: false, message: "Lead with this mobile number already exists for the selected project." }, { status: 400 });
     }
     const newlead = await prisma.lead.create({
       data: {
@@ -142,13 +142,17 @@ export async function POST(request) {
           created_at: new Date(),
           from_status_id: 0,
           to_status_id: 1,
+          from_rm_user_id: token?.user_id ?? null,
           rm_user_id: token?.user_id ?? null,
           remarks: "New Lead Created"
         },
       });
     }
-
-    return Response.json(newlead);
+    return Response.json({ 
+      success: true, 
+      message: "Lead created successfully.",
+      lead: newlead
+    });
   } catch (error) {
     console.error('Error creating lead:', error);
     return Response.json({ success: false, message: error.message }, { status: 500 });
@@ -163,7 +167,7 @@ export async function PUT(request) {
     const duplicateLead = await prisma.lead.findFirst({
       where: {
         mobile_no: req.mobile_no,
-        project_id: parseInt(req.project_id),
+        // project_id: parseInt(req.project_id),
         lead_id: { not: id },
         flag: 0
       }
@@ -202,7 +206,8 @@ export async function PUT(request) {
           created_at: new Date(),
           from_status_id: beforeLeadData?.lead_status_id ?? 0,
           to_status_id: updatedlead.lead_status_id,
-          rm_user_id: token?.user_id ?? null,
+          from_rm_user_id: beforeLeadData?.rm_user_id ?? null,
+          rm_user_id: updatedlead?.rm_user_id ?? null,
           remarks: req.status_remarks ? req.status_remarks : "Status Updated"
         },
       });
@@ -243,7 +248,11 @@ export async function PUT(request) {
         console.error("Error sending email notification:", emailError);
       }
     }
-    return Response.json(updatedlead);
+    return Response.json({ 
+      success: true, 
+      message: "Lead updated successfully.",
+      lead: updatedlead
+    });
   } catch (error) {
     console.error('Error updating lead:', error);
     return Response.json({ success: false, message: error.message }, { status: 500 });

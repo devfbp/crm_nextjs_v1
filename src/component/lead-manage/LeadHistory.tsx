@@ -22,7 +22,7 @@ const LeadHistory = ({
         fetchData();
     }, [slug]);
     return (
-        <Modal show={show} onHide={handleClose} size="lg" top="true">
+        <Modal show={show} onHide={handleClose} size="xl" top="true" >
             <Modal.Header closeButton>
                 <Modal.Title>Lead History: {slug?.customer_name}, {slug?.mobile_no}</Modal.Title>
             </Modal.Header>
@@ -38,6 +38,8 @@ const LeadHistory = ({
                                 <tr>
                                     <th>Created User</th>
                                     <th>Created Date</th>
+                                    <th>From User</th>
+                                    <th>To User</th>
                                     <th>From Status</th>
                                     <th>To Status</th>
                                     <th>Status Remarks</th>
@@ -50,7 +52,9 @@ const LeadHistory = ({
                                         return (
                                             <tr key={index}>
                                                 <td>{item.user_name}</td>
-                                                <td>{item.created_at}</td>
+                                                <td>{item.display_created_at}</td>
+                                                <td>{item.from_user_name}</td>
+                                                <td>{item.user_name}</td>
                                                 <td>{item.from_status}</td>
                                                 <td>{item.to_status}</td>
                                                 <td>{item.remarks}</td>

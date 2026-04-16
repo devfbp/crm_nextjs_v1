@@ -245,6 +245,7 @@ exports.Prisma.Lead_status_entryScalarFieldEnum = {
   lead_id: 'lead_id',
   from_status_id: 'from_status_id',
   to_status_id: 'to_status_id',
+  from_rm_user_id: 'from_rm_user_id',
   rm_user_id: 'rm_user_id',
   remarks: 'remarks',
   created_at: 'created_at',
@@ -359,7 +360,10 @@ exports.Prisma.Website_leadsScalarFieldEnum = {
 exports.Prisma.Lead_status_entry_viewScalarFieldEnum = {
   lead_entry_id: 'lead_entry_id',
   lead_id: 'lead_id',
+  from_user_name: 'from_user_name',
   user_name: 'user_name',
+  from_rm_user_id: 'from_rm_user_id',
+  rm_user_id: 'rm_user_id',
   from_status: 'from_status',
   to_status: 'to_status',
   created_at: 'created_at',
@@ -378,6 +382,7 @@ exports.Prisma.Leads_viewScalarFieldEnum = {
   status: 'status',
   status_id: 'status_id',
   created_at: 'created_at',
+  modified_at: 'modified_at',
   status_color: 'status_color',
   schedule_date: 'schedule_date',
   flag: 'flag'
@@ -490,6 +495,7 @@ exports.Prisma.website_leadsOrderByRelevanceFieldEnum = {
 };
 
 exports.Prisma.lead_status_entry_viewOrderByRelevanceFieldEnum = {
+  from_user_name: 'from_user_name',
   user_name: 'user_name',
   from_status: 'from_status',
   to_status: 'to_status',

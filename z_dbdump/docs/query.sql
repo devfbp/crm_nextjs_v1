@@ -2,13 +2,17 @@ CREATE VIEW `leads_view` AS
 SELECT 
     l.`lead_id` as `lead_id`,
     l.`customer_name`,
+    l.`rm_user_id`,
     u.`name` AS `assigned_to`,
     ss.`sub_source_name`,
-    CONCAT(l.`mobile_no`, '-', p.`project_name`) AS `contact_project`,
+    l.`mobile_no` as `mobile_no`,
+    p.`project_name` as `project_name`,
     ls.`lead_status_name` AS `status`,
     l.`lead_status_id` AS `status_id`,
     l.`created_at`,
+    l.`modified_at`,
     ls.`label_color` as `status_color`,
+    l.`schedule_date` as `schedule_date`,
     l.`flag` as `flag`
 FROM `lead` AS l
 JOIN `lead_status` ls ON l.`lead_status_id` = ls.`lead_status_id`
@@ -17,11 +21,15 @@ JOIN `user` u ON l.`rm_user_id` = u.`user_id`
 JOIN `sub_source` ss ON l.`sub_source_id` = ss.`sub_source_id`;
 
 
+
 CREATE VIEW `lead_status_entry_view` AS
 SELECT 
     le.`lead_entry_id` AS `lead_entry_id`,
-    l.`lead_id` AS `lead_id`,    
-    u.`name` AS `user_name`,
+    l.`lead_id` AS `lead_id`,   
+    u2.`name` AS `from_user_name`, 
+    u.`name` AS `user_name`,  
+    le.`from_rm_user_id`,  
+    le.`rm_user_id`,    
     ls1.`lead_status_name` AS `from_status`,
     ls2.`lead_status_name` AS `to_status`,
     le.`created_at`,
@@ -35,26 +43,6 @@ JOIN `lead_status` ls1
 JOIN `lead_status` ls2 
     ON le.`to_status_id` = ls2.`lead_status_id`
 JOIN `user` u 
-    ON l.`rm_user_id` = u.`user_id`;
-
-
-CREATE VIEW `leads_view` AS
-SELECT 
-    l.`lead_id` as `lead_id`,
-    l.`customer_name`,
-    l.`rm_user_id`,
-    u.`name` AS `assigned_to`,
-    ss.`sub_source_name`,
-    l.`mobile_no` as `mobile_no`,
-    p.`project_name` as `project_name`,
-    ls.`lead_status_name` AS `status`,
-    l.`lead_status_id` AS `status_id`,
-    l.`created_at`,
-    ls.`label_color` as `status_color`,
-    l.`schedule_date` as `schedule_date`,
-    l.`flag` as `flag`
-FROM `lead` AS l
-JOIN `lead_status` ls ON l.`lead_status_id` = ls.`lead_status_id`
-JOIN `project` p ON l.`project_id` = p.`project_id`
-JOIN `user` u ON l.`rm_user_id` = u.`user_id`
-JOIN `sub_source` ss ON l.`sub_source_id` = ss.`sub_source_id`;
+    ON le.`rm_user_id` = u.`user_id`
+JOIN `user` u2 
+    ON le.`from_rm_user_id` = u2.`user_id`;

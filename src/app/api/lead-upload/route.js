@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import prisma from "../../../../lib/prisma";
 import { getSessionFromToken } from "../session";
+import { fr } from "date-fns/locale";
 
 export async function GET(request) {
   const token = getSessionFromToken();
@@ -121,7 +122,7 @@ export async function POST(request) {
       const duplicateLead = await prisma.lead.findFirst({
         where: {
           mobile_no: String(row.mobile_no),
-          project_id: parseInt(projectId),
+          // project_id: parseInt(projectId),
           flag: 0
         }
       });
@@ -156,6 +157,8 @@ export async function POST(request) {
               from_status_id: 0,
               to_status_id: 1,
               rm_user_id: rm_user_id,
+              from_rm_user_id: token?.user_id ?? null,
+              remarks: "New Lead Created from Upload"
             },
           });
         }

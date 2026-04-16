@@ -103,7 +103,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
       // setForm(initialFormState);
       // setSubmitConfig({ action: 1, endpoint: "user" });
       if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
-        // window.location.href = "/user";
+        window.location.href = "/user";
       }
     } catch (err: any) {
       console.error("Submit error:", err);

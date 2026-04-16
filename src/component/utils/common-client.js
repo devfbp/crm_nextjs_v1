@@ -14,13 +14,13 @@ export async function form_submit_call(props) {
     if (res.ok) {
         const responseData = await res.json();
         toast.success(responseData.message || "Operation successful");
-        return true;
+        return responseData;
         // alert(responseData.message);
         // navigatePage('/' + props?.endpoint);
     } else {
         const error = await res.json();
         toast.error(error.message || "Operation failed");
-        return false;
+        return error;
         // alert(error.message);
     }
     return

@@ -13,6 +13,9 @@ import { form_submit_call, displayDate, parseDate } from "../utils/common-client
 // import "react-datepicker/dist/react-datepicker.css";
 import LastLeadEntry from "./LastLeadEntry";
 import { accessMenuRole } from "../utils/common";
+import LeadHistory from "./LeadHistory";
+import Link from "next/link";
+import "./Leads.scss";
 
 interface InputFormProps {
   records?: {
@@ -65,7 +68,7 @@ const initialFormState = {
 
 const InputForm: React.FC<InputFormProps> = ({ records }) => {
   const formRef = useRef<HTMLFormElement>(null);
-
+  const [showLeadHistory, setShowLeadHistory] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [submitConfig, setSubmitConfig] = useState({
     action: 1, // 1 = add, 2 = edit
@@ -142,11 +145,13 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
     };
 
     try {
-      await form_submit_call(payload);
-      if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+      const response: any = await form_submit_call(payload);
+      console.log("API response:", response.success);
+      if (response.duplicateLead) {
+        toast.success(response.message);
+      } else if (response.success && typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
         window.location.href = "/leads";
       }
-
     } catch (err: any) {
       console.error("Submit error:", err);
       toast.error(err?.message || "Failed to submit");
@@ -158,6 +163,9 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
     setSubmitConfig({ action: 1, endpoint: "lead" });
     setErrors({});
     formRef.current?.reset();
+  };
+  const handleLeadHistory = () => {
+    setShowLeadHistory(true);
   };
 
   return (
@@ -420,10 +428,12 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
           <div className="col-lg-8">
             <div className="card">
               <div className="card-header">
-                Lead Status
+                <div>Lead Status</div>
               </div>
+
               <div className="card-body">
                 <div className="row">
+
                   {/* <div className="col-md-12 pb-3">
                     {submitConfig.action === 2 &&
                       <LastLeadEntry leadId={form.lead_id} />
@@ -485,6 +495,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                             dateFormat="dd-MM-yyyy"
                             name="schedule_date"
                             id="schedule_date"
+                            autoComplete="off"
                             placeholderText="Click to select a date"
                           />
                         </div>
@@ -521,6 +532,19 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                           </label>
                         </div>
                       </div>
+                      <div className="col-sm-6 ol-6">
+                        <Link
+                          title="History"
+                          className="btn btn-warning"
+                          href="javascript:void(0)"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleLeadHistory(); // pass the specific data item here
+                          }}
+                        >
+                          Show History
+                        </Link>
+                      </div>
                     </>
                   }
                 </div>
@@ -545,6 +569,11 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
           </div>
         </div>
       </form >
+      <LeadHistory
+        show={showLeadHistory}
+        handleClose={() => setShowLeadHistory(false)}
+        slug={form}
+      />
     </>
   );
 };
