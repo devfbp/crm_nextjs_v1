@@ -53,7 +53,7 @@ export async function POST(request) {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            email: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
+            email: email || process.env.NEXT_PUBLIC_ADMIN_EMAIL,
             message: html_body,
             subject: "Password Reset"
           })
