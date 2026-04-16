@@ -28,7 +28,7 @@ const LeadHistory = ({
             </Modal.Header>
 
             <Modal.Body>
-                <div className="col-12">
+                <div className="col-12" style={{ maxHeight: "400px", overflowY: "auto" }}>
                     <div className="card">
                         <table
                             className="table table-dashed table-hover digi-dataTable leads-table table-striped"
@@ -42,14 +42,14 @@ const LeadHistory = ({
                                     <th>To User</th>
                                     <th>From Status</th>
                                     <th>To Status</th>
-                                    <th>Status Remarks</th>
-                                </tr>
+                                </tr>                                
                             </thead>
 
                             <tbody>
                                 {records &&
                                     records?.map((item: any, index: number) => {
                                         return (
+                                            <>
                                             <tr key={index}>
                                                 <td>{item.created_by_name}</td>
                                                 <td>{item.display_created_at}</td>
@@ -57,8 +57,12 @@ const LeadHistory = ({
                                                 <td>{item.user_name}</td>
                                                 <td>{item.from_status}</td>
                                                 <td>{item.to_status}</td>
-                                                <td>{item.remarks}</td>
                                             </tr>
+                                            <tr>
+                                                <th>Status Remarks</th>
+                                                <th colSpan={5}>{item.remarks}</th>
+                                            </tr>
+                                            </>
                                         );
                                     })
                                 }

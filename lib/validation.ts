@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const nameRegex = /^[A-Za-z0-9&\- ]+$/;
+const nameRegex = /^[A-Za-z0-9&.\- ]+$/;
 const phoneRegex = /^[0-9+\-() ]+$/;
 
 // Helper for names

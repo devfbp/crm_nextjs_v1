@@ -61,7 +61,7 @@ export async function PUT(request) {
         const beforeStatusId = beforeLeadData.lead_status_id;
         const afterStatusId = parsedStatusId;
 
-        if (beforeStatusId !== afterStatusId) {
+        if (updatedLead) {
           await prisma.lead_status_entry.create({
             data: {
               lead_id: leadId,

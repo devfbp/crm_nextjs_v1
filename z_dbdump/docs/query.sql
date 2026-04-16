@@ -32,7 +32,8 @@ SELECT
     le.`rm_user_id`,    
     ls1.`lead_status_name` AS `from_status`,
     ls2.`lead_status_name` AS `to_status`,
-    le.`created_at`,
+    u3.`name` AS `created_by_name`,
+    le.`created_at` as `created_at`,
     le.`remarks`,
     DATE_FORMAT(le.`created_at`, '%d-%M-%Y %H:%i:%s') AS `display_created_at`
 FROM `lead_status_entry` AS le
@@ -45,4 +46,6 @@ JOIN `lead_status` ls2
 JOIN `user` u 
     ON le.`rm_user_id` = u.`user_id`
 JOIN `user` u2 
-    ON le.`from_rm_user_id` = u2.`user_id`;
+    ON le.`from_rm_user_id` = u2.`user_id`
+JOIN `user` u3
+    ON le.`created_by` = u3.`user_id`;
