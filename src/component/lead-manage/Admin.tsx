@@ -149,7 +149,7 @@ const LeadsTable = (props: any) => {
   const uniqueStatuses = Array.from(new Set(dataList.map((d) => d.lead_status_id)));
   const uniqueUsers = Array.from(new Set(dataList.map((d) => d.rm_user_id)));
 
-  const handleBulkUpdate = async (value) => {
+  const handleBulkUpdate = async (value:any) => {
     const selectedLeads = dataList.filter((d) => d.selected);
 
     if (selectedLeads.length === 0) {
