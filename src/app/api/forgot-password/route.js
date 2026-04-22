@@ -47,13 +47,17 @@ export async function POST(request) {
       <p>Thank you for being part of our community!</p>`
 
       try {
+        let to = email || process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+        if(request.from === "admin") {
+          to += `, ${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`;
+        }
         const mail_response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/send-email`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            email: email || process.env.NEXT_PUBLIC_ADMIN_EMAIL,
+            email: to,
             message: html_body,
             subject: "Password Reset"
           })

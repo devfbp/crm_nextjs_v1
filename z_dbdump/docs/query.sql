@@ -49,3 +49,34 @@ JOIN `user` u2
     ON le.`from_rm_user_id` = u2.`user_id`
 JOIN `user` u3
     ON le.`created_by` = u3.`user_id`;
+
+
+################################# CLEANUP SCRIPT ############
+SET FOREIGN_KEY_CHECKS = 0;
+
+DELETE FROM `lead_status_entry`;
+DELETE FROM `lead`;
+DELETE FROM `lead_file`;
+DELETE FROM `project`;
+DELETE FROM `sub_source`;
+DELETE FROM `source`;
+DELETE FROM `user_city`;
+DELETE FROM `user_team`;
+DELETE FROM `user_team_member`;
+DELETE FROM `city`;
+DELETE FROM `state`;
+
+ALTER TABLE `lead_status_entry` AUTO_INCREMENT = 1;
+ALTER TABLE `lead` AUTO_INCREMENT = 1;
+ALTER TABLE `lead_file` AUTO_INCREMENT = 1;
+ALTER TABLE `project` AUTO_INCREMENT = 1;
+ALTER TABLE `sub_source` AUTO_INCREMENT = 1;
+ALTER TABLE `source` AUTO_INCREMENT = 1;
+ALTER TABLE `user_city` AUTO_INCREMENT = 1;
+ALTER TABLE `user_team` AUTO_INCREMENT = 1;
+ALTER TABLE `user_team_member` AUTO_INCREMENT = 1;
+ALTER TABLE `city` AUTO_INCREMENT = 1;
+ALTER TABLE `state` AUTO_INCREMENT = 1;
+
+SET FOREIGN_KEY_CHECKS = 1;
+################################# END OF CLEANUP SCRIPT ############

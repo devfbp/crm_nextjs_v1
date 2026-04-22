@@ -94,6 +94,23 @@ export async function GET(request) {
       };
     });
 
+    const NumberofClosuresDone = lead_status_with_count.find(s => s.lead_status_id === 7)?.leadcount || 0;
+
+    const NumberofDaysLastBookingDone = 0;
+
+    const LastBookingDate = await prisma.lead.findFirst({
+      where: {
+        flag: 0,
+        lead_status_id: 7,
+        rm_user_id: token?.user_id && token?.role_id > 2 ? token.user_id : undefined
+      },
+      orderBy: {
+        closed_date: 'desc'
+      },
+      select: {
+        closed_date: true
+      }
+    });
 
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -117,7 +134,7 @@ export async function GET(request) {
     });
     // console.log(lead_status_with_count);
     return new Response(
-      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count, dueCount, overdueCount }),
+      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count, dueCount, overdueCount, NumberofClosuresDone, LastBookingDate: LastBookingDate?.closed_date || null }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 

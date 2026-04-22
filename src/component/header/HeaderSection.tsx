@@ -44,7 +44,7 @@ const HeaderSection = () => {
                   src={`${
                     currentTheme === "light"
                       ? "/assets/images/logo-black.png"
-                      : "/assets/images/logo-big.png"
+                      : "/assets/images/logo-big2.png"
                   }`}
                   alt="Logo"
                 />
@@ -76,7 +76,7 @@ const HeaderSection = () => {
                 src={`${
                   currentTheme === "light"
                     ? "/assets/images/logo-black.png"
-                    : "/assets/images/logo-big.png"
+                    : "/assets/images/logo-big2.png"
                 }`}
                 alt="Logo"
               />

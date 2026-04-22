@@ -18,16 +18,16 @@ FROM
         (
           (
             (
-              `dev_crm`.`lead_status_entry` `le`
-              JOIN `dev_crm`.`lead` `l` ON((`le`.`lead_id` = `l`.`lead_id`))
+              `crm`.`lead_status_entry` `le`
+              JOIN `crm`.`lead` `l` ON((`le`.`lead_id` = `l`.`lead_id`))
             )
-            JOIN `dev_crm`.`lead_status` `ls1` ON((`le`.`from_status_id` = `ls1`.`lead_status_id`))
+            JOIN `crm`.`lead_status` `ls1` ON((`le`.`from_status_id` = `ls1`.`lead_status_id`))
           )
-          JOIN `dev_crm`.`lead_status` `ls2` ON((`le`.`to_status_id` = `ls2`.`lead_status_id`))
+          JOIN `crm`.`lead_status` `ls2` ON((`le`.`to_status_id` = `ls2`.`lead_status_id`))
         )
-        JOIN `dev_crm`.`user` `u` ON((`le`.`rm_user_id` = `u`.`user_id`))
+        JOIN `crm`.`user` `u` ON((`le`.`rm_user_id` = `u`.`user_id`))
       )
-      JOIN `dev_crm`.`user` `u2` ON((`le`.`from_rm_user_id` = `u2`.`user_id`))
+      JOIN `crm`.`user` `u2` ON((`le`.`from_rm_user_id` = `u2`.`user_id`))
     )
-    JOIN `dev_crm`.`user` `u3` ON((`le`.`created_by` = `u3`.`user_id`))
+    JOIN `crm`.`user` `u3` ON((`le`.`created_by` = `u3`.`user_id`))
   )

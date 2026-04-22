@@ -8,6 +8,8 @@ const Board1 = () => {
   const [callsDoneToday, setCallsDoneToday] = useState(0);
   const [totalLeadsToday, setTotalLeadsToday] = useState(0);
   const [svd, setSvd] = useState(0);
+  const [NumberofClosuresDone, setNumberofClosuresDone] = useState(0);
+  const [LastBookingDate, setLastBookingDate] = useState(null);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -18,6 +20,8 @@ const Board1 = () => {
         setCallsDoneToday(data.callsDoneToday);
         setTotalLeadsToday(data.totalLeadsToday);
         setSvd(data.svd);
+        setNumberofClosuresDone(data.NumberofClosuresDone);
+        setLastBookingDate(data.LastBookingDate);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       }
@@ -29,7 +33,7 @@ const Board1 = () => {
 
   return (
     <div className="row mb-30">
-      <div className="col-lg-3 col-6 col-xs-12">
+      <div className="col-lg-4 col-6 col-xs-12 border-2 border-secondary">
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">
@@ -51,7 +55,7 @@ const Board1 = () => {
           </div>
         </div>
       </div>
-      <div className="col-lg-3 col-6 col-xs-12">
+      <div className="col-lg-4 col-6 col-xs-12 border-2 border-secondary">
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">Total Calls Done Today</p>
@@ -71,7 +75,7 @@ const Board1 = () => {
           </div>
         </div>
       </div>
-      <div className="col-lg-3 col-6 col-xs-12">
+      <div className="col-lg-4 col-6 col-xs-12 border-2 border-secondary">
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">Today Total Leads</p>
@@ -91,7 +95,7 @@ const Board1 = () => {
           </div>
         </div>
       </div>
-      <div className="col-lg-3 col-6 col-xs-12">
+      <div className="col-lg-4 col-6 col-xs-12 border-2 border-secondary">
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">
@@ -108,6 +112,50 @@ const Board1 = () => {
             <div className="part-icon text-light rounded bg-danger">
               <span>
                 <i className="fa-light fa-magnifying-glass-chart"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="col-lg-4 col-6 col-xs-12 border-2 border-secondary">
+        <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
+          <div className="left">
+            <p className="d-flex justify-content-between mb-2">
+              Number of Closures done
+            </p>
+            <h3 className="fw-normal">
+              <CountUp end={NumberofClosuresDone} />
+            </h3>
+            <p className="text-muted">
+              {/* <small>124 for last month</small> */}
+            </p>
+          </div>
+          <div className="right">
+            <div className="part-icon text-light rounded bg-warning">
+              <span>
+                <i className="fa-light fa-chart-line"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="col-lg-4 col-6 col-xs-12 border-2 border-secondary">
+        <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
+          <div className="left">
+            <p className="d-flex justify-content-between mb-2">
+              Number of Days Last Booking done
+            </p>
+            <h3 className="fw-normal">
+              {LastBookingDate ? new Date(LastBookingDate).toLocaleDateString(process.env.NEXT_PUBLIC_DATE_FORMAT) : 'N/A'}
+            </h3>
+            <p className="text-muted">
+              {/* <small>124 for last month</small> */}
+            </p>
+          </div>
+          <div className="right">
+            <div className="part-icon text-light rounded bg-secondary">
+              <span>
+                <i className="fa-light fa-calendar-days"></i>
               </span>
             </div>
           </div>

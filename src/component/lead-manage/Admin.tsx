@@ -264,6 +264,7 @@ const LeadsTable = (props: any) => {
                   <option value="">All</option>
                   <option value="1">Due</option>
                   <option value="0">Over Due</option>
+                  <option value="2">Upcoming</option>
                 </select>
               </div>
               <div className="col-md-2">
@@ -294,7 +295,7 @@ const LeadsTable = (props: any) => {
               <div className="col-md-1">
                 <button className="btn btn-sm btn-secondary" onClick={refreshfilters}>Reset</button>
               </div>
-              {editAccess &&
+              {accessMenuRole(1) &&
                 <div className="col-md-2">
                   <select
                     id="lead_status_id"

@@ -232,6 +232,8 @@ exports.Prisma.LeadScalarFieldEnum = {
   lead_status_id: 'lead_status_id',
   lead_file_id: 'lead_file_id',
   remarks: 'remarks',
+  closed_date: 'closed_date',
+  revenue: 'revenue',
   created_at: 'created_at',
   created_by: 'created_by',
   modified_at: 'modified_at',

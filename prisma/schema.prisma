@@ -133,6 +133,8 @@ model lead {
   lead_status_id  Int
   lead_file_id    Int?        @default(1)
   remarks         String?     @db.Text
+  closed_date     DateTime?   @db.DateTime(0)
+  revenue         Float       @default(0.00) @db.Float
   created_at      DateTime?   @db.DateTime(0)
   created_by      Int?
   modified_at     DateTime?   @db.DateTime(0)

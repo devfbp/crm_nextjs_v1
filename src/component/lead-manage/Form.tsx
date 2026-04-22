@@ -31,13 +31,15 @@ interface InputFormProps {
     source_id: any,
     sub_source_id: any,
     rm_user_id: any,
-    lead_status_id: string,
+    lead_status_id: any,
     lead_file_id: string,
     remarks: string,
     schedule_date: any,
     status_remarks: string,
     send_email: boolean,
-    view_data: any
+    view_data: any,
+    closed_date: any,
+    revenue: any,
   },
   setRecords?: (records: any) => void;
   editid: any;
@@ -64,6 +66,8 @@ const initialFormState = {
   status_remarks: "",
   send_email: false,
   view_data: null,
+  closed_date: "",
+  revenue: "",
 };
 
 const InputForm: React.FC<InputFormProps> = ({ records }) => {
@@ -76,6 +80,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
   });
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [selectedSourceId, setSelectedSourceId] = useState(null);
+  const [closeStatus, setCloseStatus] = useState(false);
   // Populate form when editing
   useEffect(() => {
     if (!records) return;
@@ -100,7 +105,14 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       status_remarks: records.status_remarks,
       send_email: false,
       view_data: records.view_data || null,
+      closed_date: records.closed_date,
+      revenue: records.revenue,
     });
+    console.log("Form populated with records:", records);
+    if(records.lead_status_id === 7) {
+      console.log("Lead is closed, setting closeStatus to true");
+      setCloseStatus(true);
+    }
 
     setSubmitConfig((prev) => ({ ...prev, action: 2 }));
   }, [records]);
@@ -127,6 +139,17 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       if (!form.schedule_date && !["6", "7"].includes(form.lead_status_id)) {
         setErrors({ schedule_date: ["Schedule date is required for updating lead"] });
         return;
+      }      
+      
+      if (form.lead_status_id === "7") {
+        if (closeStatus && !form.closed_date) {
+          setErrors({ closed_date: ["Closed date is required when lead status is Closed"] });
+          return;
+        }
+        if (!form.revenue) {
+          setErrors({ revenue: ["Revenue is required when lead status is Closed"] });
+          return;
+        }
       }
       if (!form.status_remarks) {
         setErrors({ status_remarks: ["Status remarks is required for updating lead"] });
@@ -466,6 +489,10 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       onChange={(e) =>
                         setForm({ ...form, lead_status_id: e.target.value })
                       }
+                      onClick={() => {
+                        setCloseStatus(form.lead_status_id === "7");
+                      }}
+                          
                     >
                       <LeadStatusList
                         name="lead_status_id"
@@ -503,6 +530,58 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                           <p className="text-danger">{errors.schedule_date[0]}</p>
                         )}
                       </div>
+                      {closeStatus &&
+                        <>
+                          <div className="col-sm-6 ol-6">
+                            <label htmlFor="closed_date" className="form-label">Closed Date</label>
+                            <div className="input-group-with-icon">
+                              <DatePicker
+                                selected={form.closed_date ? new Date(form.closed_date) : null}
+                                onChange={(date) =>
+                                  setForm({
+                                    ...form,
+                                    closed_date: date ? date.toISOString().split("T")[0] : "",
+                                  })
+                                }
+                                dateFormat="dd-MM-yyyy"
+                                name="closed_date"
+                                id="closed_date"
+                                autoComplete="off"
+                                placeholderText="Click to select a date"
+                              />
+                            </div>
+                            {errors.closed_date && (
+                              <p className="text-danger">{errors.closed_date[0]}</p>
+                            )}
+                          </div>
+                          <div className="col-sm-6 ol-6">
+                            <label htmlFor="email" className="form-label">
+                              Revenue
+                            </label>
+                            <div className="input-group-with-icon">
+                              <span className="input-icon">
+                                <i className="fa-light fa-rupee-sign"></i>
+                              </span>
+                              <input
+                                type="number"
+                                id="revenue"
+                                name="revenue"
+                                className="form-control"
+                                value={form.revenue}
+                                onChange={(e) =>
+                                  setForm({ ...form, revenue: e.target.value })
+                                }
+                                autoComplete="off"
+                                placeholder="Enter revenue"
+                              />
+
+                            </div>
+                            {errors.revenue && (
+                              <p className="text-danger">{errors.revenue[0]}</p>
+                            )}
+                          </div>
+                        </>
+                      }
                       <div className="col-sm-6 ol-6">
                         <label htmlFor="remarks" className="form-label">Status Remarks</label>
                         <textarea

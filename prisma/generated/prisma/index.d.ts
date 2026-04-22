@@ -9990,6 +9990,7 @@ export namespace Prisma {
     rm_user_id: number | null
     lead_status_id: number | null
     lead_file_id: number | null
+    revenue: number | null
     created_by: number | null
     modified_by: number | null
     company_id: number | null
@@ -10004,6 +10005,7 @@ export namespace Prisma {
     rm_user_id: number | null
     lead_status_id: number | null
     lead_file_id: number | null
+    revenue: number | null
     created_by: number | null
     modified_by: number | null
     company_id: number | null
@@ -10026,6 +10028,8 @@ export namespace Prisma {
     lead_status_id: number | null
     lead_file_id: number | null
     remarks: string | null
+    closed_date: Date | null
+    revenue: number | null
     created_at: Date | null
     created_by: number | null
     modified_at: Date | null
@@ -10050,6 +10054,8 @@ export namespace Prisma {
     lead_status_id: number | null
     lead_file_id: number | null
     remarks: string | null
+    closed_date: Date | null
+    revenue: number | null
     created_at: Date | null
     created_by: number | null
     modified_at: Date | null
@@ -10074,6 +10080,8 @@ export namespace Prisma {
     lead_status_id: number
     lead_file_id: number
     remarks: number
+    closed_date: number
+    revenue: number
     created_at: number
     created_by: number
     modified_at: number
@@ -10092,6 +10100,7 @@ export namespace Prisma {
     rm_user_id?: true
     lead_status_id?: true
     lead_file_id?: true
+    revenue?: true
     created_by?: true
     modified_by?: true
     company_id?: true
@@ -10106,6 +10115,7 @@ export namespace Prisma {
     rm_user_id?: true
     lead_status_id?: true
     lead_file_id?: true
+    revenue?: true
     created_by?: true
     modified_by?: true
     company_id?: true
@@ -10128,6 +10138,8 @@ export namespace Prisma {
     lead_status_id?: true
     lead_file_id?: true
     remarks?: true
+    closed_date?: true
+    revenue?: true
     created_at?: true
     created_by?: true
     modified_at?: true
@@ -10152,6 +10164,8 @@ export namespace Prisma {
     lead_status_id?: true
     lead_file_id?: true
     remarks?: true
+    closed_date?: true
+    revenue?: true
     created_at?: true
     created_by?: true
     modified_at?: true
@@ -10176,6 +10190,8 @@ export namespace Prisma {
     lead_status_id?: true
     lead_file_id?: true
     remarks?: true
+    closed_date?: true
+    revenue?: true
     created_at?: true
     created_by?: true
     modified_at?: true
@@ -10287,6 +10303,8 @@ export namespace Prisma {
     lead_status_id: number
     lead_file_id: number | null
     remarks: string | null
+    closed_date: Date | null
+    revenue: number
     created_at: Date | null
     created_by: number | null
     modified_at: Date | null
@@ -10330,6 +10348,8 @@ export namespace Prisma {
     lead_status_id?: boolean
     lead_file_id?: boolean
     remarks?: boolean
+    closed_date?: boolean
+    revenue?: boolean
     created_at?: boolean
     created_by?: boolean
     modified_at?: boolean
@@ -10358,6 +10378,8 @@ export namespace Prisma {
     lead_status_id?: boolean
     lead_file_id?: boolean
     remarks?: boolean
+    closed_date?: boolean
+    revenue?: boolean
     created_at?: boolean
     created_by?: boolean
     modified_at?: boolean
@@ -10366,7 +10388,7 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type leadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "mobile_no" | "email_id" | "alternate_no" | "whatsapp_no" | "alternate_email" | "project_id" | "source_id" | "sub_source_id" | "rm_user_id" | "schedule_date" | "lead_status_id" | "lead_file_id" | "remarks" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead"]>
+  export type leadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "mobile_no" | "email_id" | "alternate_no" | "whatsapp_no" | "alternate_email" | "project_id" | "source_id" | "sub_source_id" | "rm_user_id" | "schedule_date" | "lead_status_id" | "lead_file_id" | "remarks" | "closed_date" | "revenue" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead"]>
   export type leadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lead_status?: boolean | lead_statusDefaultArgs<ExtArgs>
     lead_files?: boolean | lead$lead_filesArgs<ExtArgs>
@@ -10394,6 +10416,8 @@ export namespace Prisma {
       lead_status_id: number
       lead_file_id: number | null
       remarks: string | null
+      closed_date: Date | null
+      revenue: number
       created_at: Date | null
       created_by: number | null
       modified_at: Date | null
@@ -10786,6 +10810,8 @@ export namespace Prisma {
     readonly lead_status_id: FieldRef<"lead", 'Int'>
     readonly lead_file_id: FieldRef<"lead", 'Int'>
     readonly remarks: FieldRef<"lead", 'String'>
+    readonly closed_date: FieldRef<"lead", 'DateTime'>
+    readonly revenue: FieldRef<"lead", 'Float'>
     readonly created_at: FieldRef<"lead", 'DateTime'>
     readonly created_by: FieldRef<"lead", 'Int'>
     readonly modified_at: FieldRef<"lead", 'DateTime'>
@@ -21997,6 +22023,8 @@ export namespace Prisma {
     lead_status_id: 'lead_status_id',
     lead_file_id: 'lead_file_id',
     remarks: 'remarks',
+    closed_date: 'closed_date',
+    revenue: 'revenue',
     created_at: 'created_at',
     created_by: 'created_by',
     modified_at: 'modified_at',
@@ -23058,6 +23086,8 @@ export namespace Prisma {
     lead_status_id?: IntFilter<"lead"> | number
     lead_file_id?: IntNullableFilter<"lead"> | number | null
     remarks?: StringNullableFilter<"lead"> | string | null
+    closed_date?: DateTimeNullableFilter<"lead"> | Date | string | null
+    revenue?: FloatFilter<"lead"> | number
     created_at?: DateTimeNullableFilter<"lead"> | Date | string | null
     created_by?: IntNullableFilter<"lead"> | number | null
     modified_at?: DateTimeNullableFilter<"lead"> | Date | string | null
@@ -23084,6 +23114,8 @@ export namespace Prisma {
     lead_status_id?: SortOrder
     lead_file_id?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
+    closed_date?: SortOrderInput | SortOrder
+    revenue?: SortOrder
     created_at?: SortOrderInput | SortOrder
     created_by?: SortOrderInput | SortOrder
     modified_at?: SortOrderInput | SortOrder
@@ -23114,6 +23146,8 @@ export namespace Prisma {
     lead_status_id?: IntFilter<"lead"> | number
     lead_file_id?: IntNullableFilter<"lead"> | number | null
     remarks?: StringNullableFilter<"lead"> | string | null
+    closed_date?: DateTimeNullableFilter<"lead"> | Date | string | null
+    revenue?: FloatFilter<"lead"> | number
     created_at?: DateTimeNullableFilter<"lead"> | Date | string | null
     created_by?: IntNullableFilter<"lead"> | number | null
     modified_at?: DateTimeNullableFilter<"lead"> | Date | string | null
@@ -23140,6 +23174,8 @@ export namespace Prisma {
     lead_status_id?: SortOrder
     lead_file_id?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
+    closed_date?: SortOrderInput | SortOrder
+    revenue?: SortOrder
     created_at?: SortOrderInput | SortOrder
     created_by?: SortOrderInput | SortOrder
     modified_at?: SortOrderInput | SortOrder
@@ -23172,6 +23208,8 @@ export namespace Prisma {
     lead_status_id?: IntWithAggregatesFilter<"lead"> | number
     lead_file_id?: IntNullableWithAggregatesFilter<"lead"> | number | null
     remarks?: StringNullableWithAggregatesFilter<"lead"> | string | null
+    closed_date?: DateTimeNullableWithAggregatesFilter<"lead"> | Date | string | null
+    revenue?: FloatWithAggregatesFilter<"lead"> | number
     created_at?: DateTimeNullableWithAggregatesFilter<"lead"> | Date | string | null
     created_by?: IntNullableWithAggregatesFilter<"lead"> | number | null
     modified_at?: DateTimeNullableWithAggregatesFilter<"lead"> | Date | string | null
@@ -24754,6 +24792,8 @@ export namespace Prisma {
     rm_user_id: number
     schedule_date?: Date | string | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -24780,6 +24820,8 @@ export namespace Prisma {
     lead_status_id: number
     lead_file_id?: number | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -24801,6 +24843,8 @@ export namespace Prisma {
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24827,6 +24871,8 @@ export namespace Prisma {
     lead_status_id?: IntFieldUpdateOperationsInput | number
     lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24851,6 +24897,8 @@ export namespace Prisma {
     lead_status_id: number
     lead_file_id?: number | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -24872,6 +24920,8 @@ export namespace Prisma {
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24896,6 +24946,8 @@ export namespace Prisma {
     lead_status_id?: IntFieldUpdateOperationsInput | number
     lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26425,6 +26477,17 @@ export namespace Prisma {
     flag?: SortOrder
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type Lead_statusScalarRelationFilter = {
     is?: lead_statusWhereInput
     isNot?: lead_statusWhereInput
@@ -26457,6 +26520,8 @@ export namespace Prisma {
     lead_status_id?: SortOrder
     lead_file_id?: SortOrder
     remarks?: SortOrder
+    closed_date?: SortOrder
+    revenue?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
     modified_at?: SortOrder
@@ -26473,6 +26538,7 @@ export namespace Prisma {
     rm_user_id?: SortOrder
     lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    revenue?: SortOrder
     created_by?: SortOrder
     modified_by?: SortOrder
     company_id?: SortOrder
@@ -26495,6 +26561,8 @@ export namespace Prisma {
     lead_status_id?: SortOrder
     lead_file_id?: SortOrder
     remarks?: SortOrder
+    closed_date?: SortOrder
+    revenue?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
     modified_at?: SortOrder
@@ -26519,6 +26587,8 @@ export namespace Prisma {
     lead_status_id?: SortOrder
     lead_file_id?: SortOrder
     remarks?: SortOrder
+    closed_date?: SortOrder
+    revenue?: SortOrder
     created_at?: SortOrder
     created_by?: SortOrder
     modified_at?: SortOrder
@@ -26535,10 +26605,27 @@ export namespace Prisma {
     rm_user_id?: SortOrder
     lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    revenue?: SortOrder
     created_by?: SortOrder
     modified_by?: SortOrder
     company_id?: SortOrder
     flag?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type lead_status_entryOrderByRelevanceInput = {
@@ -27627,6 +27714,14 @@ export namespace Prisma {
     connect?: lead_fileWhereUniqueInput
   }
 
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type lead_statusUpdateOneRequiredWithoutLeadNestedInput = {
     create?: XOR<lead_statusCreateWithoutLeadInput, lead_statusUncheckedCreateWithoutLeadInput>
     connectOrCreate?: lead_statusCreateOrConnectWithoutLeadInput
@@ -27987,6 +28082,22 @@ export namespace Prisma {
     gt?: InputJsonValue
     gte?: InputJsonValue
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type menu_groupCreateWithoutMenuInput = {
@@ -28505,6 +28616,8 @@ export namespace Prisma {
     rm_user_id: number
     schedule_date?: Date | string | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -28529,6 +28642,8 @@ export namespace Prisma {
     schedule_date?: Date | string | null
     lead_file_id?: number | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -28582,6 +28697,8 @@ export namespace Prisma {
     lead_status_id?: IntFilter<"lead"> | number
     lead_file_id?: IntNullableFilter<"lead"> | number | null
     remarks?: StringNullableFilter<"lead"> | string | null
+    closed_date?: DateTimeNullableFilter<"lead"> | Date | string | null
+    revenue?: FloatFilter<"lead"> | number
     created_at?: DateTimeNullableFilter<"lead"> | Date | string | null
     created_by?: IntNullableFilter<"lead"> | number | null
     modified_at?: DateTimeNullableFilter<"lead"> | Date | string | null
@@ -29069,6 +29186,8 @@ export namespace Prisma {
     rm_user_id: number
     schedule_date?: Date | string | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -29093,6 +29212,8 @@ export namespace Prisma {
     schedule_date?: Date | string | null
     lead_status_id: number
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -29518,6 +29639,8 @@ export namespace Prisma {
     schedule_date?: Date | string | null
     lead_file_id?: number | null
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -29539,6 +29662,8 @@ export namespace Prisma {
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29563,6 +29688,8 @@ export namespace Prisma {
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29586,6 +29713,8 @@ export namespace Prisma {
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29652,6 +29781,8 @@ export namespace Prisma {
     schedule_date?: Date | string | null
     lead_status_id: number
     remarks?: string | null
+    closed_date?: Date | string | null
+    revenue?: number
     created_at?: Date | string | null
     created_by?: number | null
     modified_at?: Date | string | null
@@ -29673,6 +29804,8 @@ export namespace Prisma {
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29697,6 +29830,8 @@ export namespace Prisma {
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lead_status_id?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29720,6 +29855,8 @@ export namespace Prisma {
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lead_status_id?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revenue?: FloatFieldUpdateOperationsInput | number
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_by?: NullableIntFieldUpdateOperationsInput | number | null
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

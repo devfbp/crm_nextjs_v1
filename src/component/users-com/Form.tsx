@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, act } from "react";
 import { toast } from "react-toastify";
 import RoleList from "./RoleList";
 import { userSchema } from "../../../lib/validation";
 import { form_submit_call } from "../utils/common-client";
 import ManagerList from "./ManagerList";
+import { accessMenuRole } from "../utils/common";
 
 interface InputFormProps {
   records?: {
@@ -117,6 +118,23 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
     setErrors({});
     formRef.current?.reset();
   };
+
+  const resetPassword = () => {
+    const payload = {
+      method: "POST",
+      endpoint: "user/change-password",
+      action: 2,
+      data: { email: form.email },
+    };
+    form_submit_call(payload)
+      .then(() => {
+        toast.success("Password reset email sent");
+      })
+      .catch((err) => {
+        console.error("Reset password error:", err);
+        toast.error(err?.message || "Failed to reset password");
+      });
+  }
 
   return (
     <React.Fragment>
@@ -343,6 +361,11 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                     <div className="card-header">
                       Change Password
                     </div>
+                    {accessMenuRole(1) ?
+                    <a href={`/forgot-password?from=admin&email=${form.email}`} className="btn btn-secondary m-3">
+                      Reset Password
+                    </a>
+                    :
                     <div className="card-body">
                       <div className="col-md-12 pt-3">
                         <a href={`/user/${form.slug}/change-password/`} className="btn btn-secondary">
@@ -350,6 +373,7 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                         </a>
                       </div>
                     </div>
+      }
                   </div>
                 </div>
               </>

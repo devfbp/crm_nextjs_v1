@@ -27,8 +27,8 @@ export default function Home() {
       
       {/* <ViewProfileCards /> */}
       <div className="row">
-        <Chart_1 />
-      <Pie1 />
+        {/* <Chart_1 />
+        <Pie1 /> */}
         {/* <SalesAnalytics />
         <SocialVisitors />
         <NewCustomer />

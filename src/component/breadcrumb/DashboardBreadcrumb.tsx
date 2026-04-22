@@ -54,7 +54,7 @@ const DashboardBreadcrumb = ({ title }: Props) => {
   return (
     <div className="dashboard-breadcrumb dashboard-panel-header mb-30">
       <h2>{title}</h2>
-      <div className="input-group dashboard-filter">
+      {/* <div className="input-group dashboard-filter">
         <input
           ref={inputRef}
           type="text"
@@ -84,7 +84,7 @@ const DashboardBreadcrumb = ({ title }: Props) => {
             />
           </div>
         ) : null}
-      </div>
+      </div> */}
     </div>
   );
 };
