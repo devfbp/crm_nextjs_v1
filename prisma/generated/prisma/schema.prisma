@@ -114,38 +114,32 @@ model lead_status {
   modified_by      Int       @default(0)
   company_id       Int       @default(0)
   flag             Int       @default(0)
-  lead             lead[]
 }
 
 model lead {
-  lead_id         Int         @id @default(autoincrement())
-  customer_name   String?     @db.VarChar(200)
-  mobile_no       String?     @db.VarChar(200)
-  email_id        String?     @db.VarChar(200)
-  alternate_no    String?     @db.VarChar(200)
-  whatsapp_no     String?     @db.VarChar(200)
-  alternate_email String?     @db.VarChar(200)
+  lead_id         Int       @id @default(autoincrement())
+  customer_name   String?   @db.VarChar(200)
+  mobile_no       String?   @db.VarChar(200)
+  email_id        String?   @db.VarChar(200)
+  alternate_no    String?   @db.VarChar(200)
+  whatsapp_no     String?   @db.VarChar(200)
+  alternate_email String?   @db.VarChar(200)
   project_id      Int?
-  source_id       Int         @default(0)
-  sub_source_id   Int         @default(0)
+  source_id       Int       @default(0)
+  sub_source_id   Int       @default(0)
   rm_user_id      Int
-  schedule_date   DateTime?   @db.Date
+  schedule_date   DateTime? @db.Date
+  lead_file_id    Int?      @default(1)
   lead_status_id  Int
-  lead_file_id    Int?        @default(1)
-  remarks         String?     @db.Text
-  closed_date     DateTime?   @db.DateTime(0)
-  revenue         Float       @default(0.00) @db.Float
-  created_at      DateTime?   @db.DateTime(0)
+  remarks         String?   @db.Text
+  closed_date     DateTime? @db.DateTime(0)
+  revenue         Float     @default(0.00) @db.Float
+  created_at      DateTime? @db.DateTime(0)
   created_by      Int?
-  modified_at     DateTime?   @db.DateTime(0)
+  modified_at     DateTime? @db.DateTime(0)
   modified_by     Int?
-  company_id      Int         @default(0)
-  flag            Int         @default(0)
-  lead_status     lead_status @relation(fields: [lead_status_id], references: [lead_status_id], onUpdate: Restrict, map: "lead_ibfk_5")
-  lead_files      lead_file?  @relation(fields: [lead_file_id], references: [lead_file_id], onDelete: Restrict, onUpdate: Restrict, map: "lead_ibfk_6")
-
-  @@index([lead_file_id], map: "lead_file_id")
-  @@index([lead_status_id], map: "lead_status_id")
+  company_id      Int       @default(0)
+  flag            Int       @default(0)
 }
 
 model lead_status_entry {
@@ -233,7 +227,6 @@ model lead_file {
   modified_by    Int?
   company_id     Int       @default(0)
   flag           Int       @default(0)
-  lead           lead[]
 }
 
 model user_team {

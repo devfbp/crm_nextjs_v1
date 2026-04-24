@@ -474,7 +474,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.2
+   * Prisma Client JS version: 6.19.3
    * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
@@ -2413,37 +2413,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type Lead_statusCountOutputType
-   */
-
-  export type Lead_statusCountOutputType = {
-    lead: number
-  }
-
-  export type Lead_statusCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | Lead_statusCountOutputTypeCountLeadArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * Lead_statusCountOutputType without action
-   */
-  export type Lead_statusCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lead_statusCountOutputType
-     */
-    select?: Lead_statusCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * Lead_statusCountOutputType without action
-   */
-  export type Lead_statusCountOutputTypeCountLeadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: leadWhereInput
-  }
-
-
-  /**
    * Count Type SourceCountOutputType
    */
 
@@ -2471,37 +2440,6 @@ export namespace Prisma {
    */
   export type SourceCountOutputTypeCountSub_sourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: sub_sourceWhereInput
-  }
-
-
-  /**
-   * Count Type Lead_fileCountOutputType
-   */
-
-  export type Lead_fileCountOutputType = {
-    lead: number
-  }
-
-  export type Lead_fileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | Lead_fileCountOutputTypeCountLeadArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * Lead_fileCountOutputType without action
-   */
-  export type Lead_fileCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lead_fileCountOutputType
-     */
-    select?: Lead_fileCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * Lead_fileCountOutputType without action
-   */
-  export type Lead_fileCountOutputTypeCountLeadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: leadWhereInput
   }
 
 
@@ -9167,8 +9105,6 @@ export namespace Prisma {
     modified_by?: boolean
     company_id?: boolean
     flag?: boolean
-    lead?: boolean | lead_status$leadArgs<ExtArgs>
-    _count?: boolean | Lead_statusCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lead_status"]>
 
 
@@ -9186,16 +9122,10 @@ export namespace Prisma {
   }
 
   export type lead_statusOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_status_id" | "lead_status_name" | "label_color" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead_status"]>
-  export type lead_statusInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | lead_status$leadArgs<ExtArgs>
-    _count?: boolean | Lead_statusCountOutputTypeDefaultArgs<ExtArgs>
-  }
 
   export type $lead_statusPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "lead_status"
-    objects: {
-      lead: Prisma.$leadPayload<ExtArgs>[]
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       lead_status_id: number
       lead_status_name: string | null
@@ -9546,7 +9476,6 @@ export namespace Prisma {
    */
   export interface Prisma__lead_statusClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lead<T extends lead_status$leadArgs<ExtArgs> = {}>(args?: Subset<T, lead_status$leadArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$leadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9602,10 +9531,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * Filter, which lead_status to fetch.
      */
     where: lead_statusWhereUniqueInput
@@ -9624,10 +9549,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * Filter, which lead_status to fetch.
      */
     where: lead_statusWhereUniqueInput
@@ -9645,10 +9566,6 @@ export namespace Prisma {
      * Omit specific fields from the lead_status
      */
     omit?: lead_statusOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
     /**
      * Filter, which lead_status to fetch.
      */
@@ -9698,10 +9615,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * Filter, which lead_status to fetch.
      */
     where?: lead_statusWhereInput
@@ -9750,10 +9663,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * Filter, which lead_statuses to fetch.
      */
     where?: lead_statusWhereInput
@@ -9797,10 +9706,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * The data needed to create a lead_status.
      */
     data?: XOR<lead_statusCreateInput, lead_statusUncheckedCreateInput>
@@ -9829,10 +9734,6 @@ export namespace Prisma {
      * Omit specific fields from the lead_status
      */
     omit?: lead_statusOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
     /**
      * The data needed to update a lead_status.
      */
@@ -9874,10 +9775,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * The filter to search for the lead_status to update in case it exists.
      */
     where: lead_statusWhereUniqueInput
@@ -9904,10 +9801,6 @@ export namespace Prisma {
      */
     omit?: lead_statusOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
-    /**
      * Filter which lead_status to delete.
      */
     where: lead_statusWhereUniqueInput
@@ -9928,30 +9821,6 @@ export namespace Prisma {
   }
 
   /**
-   * lead_status.lead
-   */
-  export type lead_status$leadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the lead
-     */
-    select?: leadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the lead
-     */
-    omit?: leadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    where?: leadWhereInput
-    orderBy?: leadOrderByWithRelationInput | leadOrderByWithRelationInput[]
-    cursor?: leadWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
-  }
-
-  /**
    * lead_status without action
    */
   export type lead_statusDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9963,10 +9832,6 @@ export namespace Prisma {
      * Omit specific fields from the lead_status
      */
     omit?: lead_statusOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_statusInclude<ExtArgs> | null
   }
 
 
@@ -9988,8 +9853,8 @@ export namespace Prisma {
     source_id: number | null
     sub_source_id: number | null
     rm_user_id: number | null
-    lead_status_id: number | null
     lead_file_id: number | null
+    lead_status_id: number | null
     revenue: number | null
     created_by: number | null
     modified_by: number | null
@@ -10003,8 +9868,8 @@ export namespace Prisma {
     source_id: number | null
     sub_source_id: number | null
     rm_user_id: number | null
-    lead_status_id: number | null
     lead_file_id: number | null
+    lead_status_id: number | null
     revenue: number | null
     created_by: number | null
     modified_by: number | null
@@ -10025,8 +9890,8 @@ export namespace Prisma {
     sub_source_id: number | null
     rm_user_id: number | null
     schedule_date: Date | null
-    lead_status_id: number | null
     lead_file_id: number | null
+    lead_status_id: number | null
     remarks: string | null
     closed_date: Date | null
     revenue: number | null
@@ -10051,8 +9916,8 @@ export namespace Prisma {
     sub_source_id: number | null
     rm_user_id: number | null
     schedule_date: Date | null
-    lead_status_id: number | null
     lead_file_id: number | null
+    lead_status_id: number | null
     remarks: string | null
     closed_date: Date | null
     revenue: number | null
@@ -10077,8 +9942,8 @@ export namespace Prisma {
     sub_source_id: number
     rm_user_id: number
     schedule_date: number
-    lead_status_id: number
     lead_file_id: number
+    lead_status_id: number
     remarks: number
     closed_date: number
     revenue: number
@@ -10098,8 +9963,8 @@ export namespace Prisma {
     source_id?: true
     sub_source_id?: true
     rm_user_id?: true
-    lead_status_id?: true
     lead_file_id?: true
+    lead_status_id?: true
     revenue?: true
     created_by?: true
     modified_by?: true
@@ -10113,8 +9978,8 @@ export namespace Prisma {
     source_id?: true
     sub_source_id?: true
     rm_user_id?: true
-    lead_status_id?: true
     lead_file_id?: true
+    lead_status_id?: true
     revenue?: true
     created_by?: true
     modified_by?: true
@@ -10135,8 +10000,8 @@ export namespace Prisma {
     sub_source_id?: true
     rm_user_id?: true
     schedule_date?: true
-    lead_status_id?: true
     lead_file_id?: true
+    lead_status_id?: true
     remarks?: true
     closed_date?: true
     revenue?: true
@@ -10161,8 +10026,8 @@ export namespace Prisma {
     sub_source_id?: true
     rm_user_id?: true
     schedule_date?: true
-    lead_status_id?: true
     lead_file_id?: true
+    lead_status_id?: true
     remarks?: true
     closed_date?: true
     revenue?: true
@@ -10187,8 +10052,8 @@ export namespace Prisma {
     sub_source_id?: true
     rm_user_id?: true
     schedule_date?: true
-    lead_status_id?: true
     lead_file_id?: true
+    lead_status_id?: true
     remarks?: true
     closed_date?: true
     revenue?: true
@@ -10300,8 +10165,8 @@ export namespace Prisma {
     sub_source_id: number
     rm_user_id: number
     schedule_date: Date | null
-    lead_status_id: number
     lead_file_id: number | null
+    lead_status_id: number
     remarks: string | null
     closed_date: Date | null
     revenue: number
@@ -10345,8 +10210,8 @@ export namespace Prisma {
     sub_source_id?: boolean
     rm_user_id?: boolean
     schedule_date?: boolean
-    lead_status_id?: boolean
     lead_file_id?: boolean
+    lead_status_id?: boolean
     remarks?: boolean
     closed_date?: boolean
     revenue?: boolean
@@ -10356,8 +10221,6 @@ export namespace Prisma {
     modified_by?: boolean
     company_id?: boolean
     flag?: boolean
-    lead_status?: boolean | lead_statusDefaultArgs<ExtArgs>
-    lead_files?: boolean | lead$lead_filesArgs<ExtArgs>
   }, ExtArgs["result"]["lead"]>
 
 
@@ -10375,8 +10238,8 @@ export namespace Prisma {
     sub_source_id?: boolean
     rm_user_id?: boolean
     schedule_date?: boolean
-    lead_status_id?: boolean
     lead_file_id?: boolean
+    lead_status_id?: boolean
     remarks?: boolean
     closed_date?: boolean
     revenue?: boolean
@@ -10388,18 +10251,11 @@ export namespace Prisma {
     flag?: boolean
   }
 
-  export type leadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "mobile_no" | "email_id" | "alternate_no" | "whatsapp_no" | "alternate_email" | "project_id" | "source_id" | "sub_source_id" | "rm_user_id" | "schedule_date" | "lead_status_id" | "lead_file_id" | "remarks" | "closed_date" | "revenue" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead"]>
-  export type leadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead_status?: boolean | lead_statusDefaultArgs<ExtArgs>
-    lead_files?: boolean | lead$lead_filesArgs<ExtArgs>
-  }
+  export type leadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_id" | "customer_name" | "mobile_no" | "email_id" | "alternate_no" | "whatsapp_no" | "alternate_email" | "project_id" | "source_id" | "sub_source_id" | "rm_user_id" | "schedule_date" | "lead_file_id" | "lead_status_id" | "remarks" | "closed_date" | "revenue" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead"]>
 
   export type $leadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "lead"
-    objects: {
-      lead_status: Prisma.$lead_statusPayload<ExtArgs>
-      lead_files: Prisma.$lead_filePayload<ExtArgs> | null
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       lead_id: number
       customer_name: string | null
@@ -10413,8 +10269,8 @@ export namespace Prisma {
       sub_source_id: number
       rm_user_id: number
       schedule_date: Date | null
-      lead_status_id: number
       lead_file_id: number | null
+      lead_status_id: number
       remarks: string | null
       closed_date: Date | null
       revenue: number
@@ -10764,8 +10620,6 @@ export namespace Prisma {
    */
   export interface Prisma__leadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lead_status<T extends lead_statusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, lead_statusDefaultArgs<ExtArgs>>): Prisma__lead_statusClient<$Result.GetResult<Prisma.$lead_statusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    lead_files<T extends lead$lead_filesArgs<ExtArgs> = {}>(args?: Subset<T, lead$lead_filesArgs<ExtArgs>>): Prisma__lead_fileClient<$Result.GetResult<Prisma.$lead_filePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10807,8 +10661,8 @@ export namespace Prisma {
     readonly sub_source_id: FieldRef<"lead", 'Int'>
     readonly rm_user_id: FieldRef<"lead", 'Int'>
     readonly schedule_date: FieldRef<"lead", 'DateTime'>
-    readonly lead_status_id: FieldRef<"lead", 'Int'>
     readonly lead_file_id: FieldRef<"lead", 'Int'>
+    readonly lead_status_id: FieldRef<"lead", 'Int'>
     readonly remarks: FieldRef<"lead", 'String'>
     readonly closed_date: FieldRef<"lead", 'DateTime'>
     readonly revenue: FieldRef<"lead", 'Float'>
@@ -10835,10 +10689,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * Filter, which lead to fetch.
      */
     where: leadWhereUniqueInput
@@ -10857,10 +10707,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * Filter, which lead to fetch.
      */
     where: leadWhereUniqueInput
@@ -10878,10 +10724,6 @@ export namespace Prisma {
      * Omit specific fields from the lead
      */
     omit?: leadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
     /**
      * Filter, which lead to fetch.
      */
@@ -10931,10 +10773,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * Filter, which lead to fetch.
      */
     where?: leadWhereInput
@@ -10983,10 +10821,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * Filter, which leads to fetch.
      */
     where?: leadWhereInput
@@ -11030,10 +10864,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * The data needed to create a lead.
      */
     data: XOR<leadCreateInput, leadUncheckedCreateInput>
@@ -11062,10 +10892,6 @@ export namespace Prisma {
      * Omit specific fields from the lead
      */
     omit?: leadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
     /**
      * The data needed to update a lead.
      */
@@ -11107,10 +10933,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * The filter to search for the lead to update in case it exists.
      */
     where: leadWhereUniqueInput
@@ -11137,10 +10959,6 @@ export namespace Prisma {
      */
     omit?: leadOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    /**
      * Filter which lead to delete.
      */
     where: leadWhereUniqueInput
@@ -11161,25 +10979,6 @@ export namespace Prisma {
   }
 
   /**
-   * lead.lead_files
-   */
-  export type lead$lead_filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the lead_file
-     */
-    select?: lead_fileSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the lead_file
-     */
-    omit?: lead_fileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    where?: lead_fileWhereInput
-  }
-
-  /**
    * lead without action
    */
   export type leadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11191,10 +10990,6 @@ export namespace Prisma {
      * Omit specific fields from the lead
      */
     omit?: leadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
   }
 
 
@@ -16611,8 +16406,6 @@ export namespace Prisma {
     modified_by?: boolean
     company_id?: boolean
     flag?: boolean
-    lead?: boolean | lead_file$leadArgs<ExtArgs>
-    _count?: boolean | Lead_fileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lead_file"]>
 
 
@@ -16630,16 +16423,10 @@ export namespace Prisma {
   }
 
   export type lead_fileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_file_id" | "lead_file_name" | "file_path" | "created_at" | "created_by" | "modified_at" | "modified_by" | "company_id" | "flag", ExtArgs["result"]["lead_file"]>
-  export type lead_fileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | lead_file$leadArgs<ExtArgs>
-    _count?: boolean | Lead_fileCountOutputTypeDefaultArgs<ExtArgs>
-  }
 
   export type $lead_filePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "lead_file"
-    objects: {
-      lead: Prisma.$leadPayload<ExtArgs>[]
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       lead_file_id: number
       lead_file_name: string
@@ -16990,7 +16777,6 @@ export namespace Prisma {
    */
   export interface Prisma__lead_fileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lead<T extends lead_file$leadArgs<ExtArgs> = {}>(args?: Subset<T, lead_file$leadArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$leadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17046,10 +16832,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * Filter, which lead_file to fetch.
      */
     where: lead_fileWhereUniqueInput
@@ -17068,10 +16850,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * Filter, which lead_file to fetch.
      */
     where: lead_fileWhereUniqueInput
@@ -17089,10 +16867,6 @@ export namespace Prisma {
      * Omit specific fields from the lead_file
      */
     omit?: lead_fileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
     /**
      * Filter, which lead_file to fetch.
      */
@@ -17142,10 +16916,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * Filter, which lead_file to fetch.
      */
     where?: lead_fileWhereInput
@@ -17194,10 +16964,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * Filter, which lead_files to fetch.
      */
     where?: lead_fileWhereInput
@@ -17241,10 +17007,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * The data needed to create a lead_file.
      */
     data: XOR<lead_fileCreateInput, lead_fileUncheckedCreateInput>
@@ -17273,10 +17035,6 @@ export namespace Prisma {
      * Omit specific fields from the lead_file
      */
     omit?: lead_fileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
     /**
      * The data needed to update a lead_file.
      */
@@ -17318,10 +17076,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * The filter to search for the lead_file to update in case it exists.
      */
     where: lead_fileWhereUniqueInput
@@ -17348,10 +17102,6 @@ export namespace Prisma {
      */
     omit?: lead_fileOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
-    /**
      * Filter which lead_file to delete.
      */
     where: lead_fileWhereUniqueInput
@@ -17372,30 +17122,6 @@ export namespace Prisma {
   }
 
   /**
-   * lead_file.lead
-   */
-  export type lead_file$leadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the lead
-     */
-    select?: leadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the lead
-     */
-    omit?: leadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: leadInclude<ExtArgs> | null
-    where?: leadWhereInput
-    orderBy?: leadOrderByWithRelationInput | leadOrderByWithRelationInput[]
-    cursor?: leadWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
-  }
-
-  /**
    * lead_file without action
    */
   export type lead_fileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17407,10 +17133,6 @@ export namespace Prisma {
      * Omit specific fields from the lead_file
      */
     omit?: lead_fileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: lead_fileInclude<ExtArgs> | null
   }
 
 
@@ -22020,8 +21742,8 @@ export namespace Prisma {
     sub_source_id: 'sub_source_id',
     rm_user_id: 'rm_user_id',
     schedule_date: 'schedule_date',
-    lead_status_id: 'lead_status_id',
     lead_file_id: 'lead_file_id',
+    lead_status_id: 'lead_status_id',
     remarks: 'remarks',
     closed_date: 'closed_date',
     revenue: 'revenue',
@@ -23002,7 +22724,6 @@ export namespace Prisma {
     modified_by?: IntFilter<"lead_status"> | number
     company_id?: IntFilter<"lead_status"> | number
     flag?: IntFilter<"lead_status"> | number
-    lead?: LeadListRelationFilter
   }
 
   export type lead_statusOrderByWithRelationInput = {
@@ -23015,7 +22736,6 @@ export namespace Prisma {
     modified_by?: SortOrder
     company_id?: SortOrder
     flag?: SortOrder
-    lead?: leadOrderByRelationAggregateInput
     _relevance?: lead_statusOrderByRelevanceInput
   }
 
@@ -23032,7 +22752,6 @@ export namespace Prisma {
     modified_by?: IntFilter<"lead_status"> | number
     company_id?: IntFilter<"lead_status"> | number
     flag?: IntFilter<"lead_status"> | number
-    lead?: LeadListRelationFilter
   }, "lead_status_id" | "lead_status_name">
 
   export type lead_statusOrderByWithAggregationInput = {
@@ -23083,8 +22802,8 @@ export namespace Prisma {
     sub_source_id?: IntFilter<"lead"> | number
     rm_user_id?: IntFilter<"lead"> | number
     schedule_date?: DateTimeNullableFilter<"lead"> | Date | string | null
-    lead_status_id?: IntFilter<"lead"> | number
     lead_file_id?: IntNullableFilter<"lead"> | number | null
+    lead_status_id?: IntFilter<"lead"> | number
     remarks?: StringNullableFilter<"lead"> | string | null
     closed_date?: DateTimeNullableFilter<"lead"> | Date | string | null
     revenue?: FloatFilter<"lead"> | number
@@ -23094,8 +22813,6 @@ export namespace Prisma {
     modified_by?: IntNullableFilter<"lead"> | number | null
     company_id?: IntFilter<"lead"> | number
     flag?: IntFilter<"lead"> | number
-    lead_status?: XOR<Lead_statusScalarRelationFilter, lead_statusWhereInput>
-    lead_files?: XOR<Lead_fileNullableScalarRelationFilter, lead_fileWhereInput> | null
   }
 
   export type leadOrderByWithRelationInput = {
@@ -23111,8 +22828,8 @@ export namespace Prisma {
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
     schedule_date?: SortOrderInput | SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrderInput | SortOrder
+    lead_status_id?: SortOrder
     remarks?: SortOrderInput | SortOrder
     closed_date?: SortOrderInput | SortOrder
     revenue?: SortOrder
@@ -23122,8 +22839,6 @@ export namespace Prisma {
     modified_by?: SortOrderInput | SortOrder
     company_id?: SortOrder
     flag?: SortOrder
-    lead_status?: lead_statusOrderByWithRelationInput
-    lead_files?: lead_fileOrderByWithRelationInput
     _relevance?: leadOrderByRelevanceInput
   }
 
@@ -23143,8 +22858,8 @@ export namespace Prisma {
     sub_source_id?: IntFilter<"lead"> | number
     rm_user_id?: IntFilter<"lead"> | number
     schedule_date?: DateTimeNullableFilter<"lead"> | Date | string | null
-    lead_status_id?: IntFilter<"lead"> | number
     lead_file_id?: IntNullableFilter<"lead"> | number | null
+    lead_status_id?: IntFilter<"lead"> | number
     remarks?: StringNullableFilter<"lead"> | string | null
     closed_date?: DateTimeNullableFilter<"lead"> | Date | string | null
     revenue?: FloatFilter<"lead"> | number
@@ -23154,8 +22869,6 @@ export namespace Prisma {
     modified_by?: IntNullableFilter<"lead"> | number | null
     company_id?: IntFilter<"lead"> | number
     flag?: IntFilter<"lead"> | number
-    lead_status?: XOR<Lead_statusScalarRelationFilter, lead_statusWhereInput>
-    lead_files?: XOR<Lead_fileNullableScalarRelationFilter, lead_fileWhereInput> | null
   }, "lead_id">
 
   export type leadOrderByWithAggregationInput = {
@@ -23171,8 +22884,8 @@ export namespace Prisma {
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
     schedule_date?: SortOrderInput | SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrderInput | SortOrder
+    lead_status_id?: SortOrder
     remarks?: SortOrderInput | SortOrder
     closed_date?: SortOrderInput | SortOrder
     revenue?: SortOrder
@@ -23205,8 +22918,8 @@ export namespace Prisma {
     sub_source_id?: IntWithAggregatesFilter<"lead"> | number
     rm_user_id?: IntWithAggregatesFilter<"lead"> | number
     schedule_date?: DateTimeNullableWithAggregatesFilter<"lead"> | Date | string | null
-    lead_status_id?: IntWithAggregatesFilter<"lead"> | number
     lead_file_id?: IntNullableWithAggregatesFilter<"lead"> | number | null
+    lead_status_id?: IntWithAggregatesFilter<"lead"> | number
     remarks?: StringNullableWithAggregatesFilter<"lead"> | string | null
     closed_date?: DateTimeNullableWithAggregatesFilter<"lead"> | Date | string | null
     revenue?: FloatWithAggregatesFilter<"lead"> | number
@@ -23635,7 +23348,6 @@ export namespace Prisma {
     modified_by?: IntNullableFilter<"lead_file"> | number | null
     company_id?: IntFilter<"lead_file"> | number
     flag?: IntFilter<"lead_file"> | number
-    lead?: LeadListRelationFilter
   }
 
   export type lead_fileOrderByWithRelationInput = {
@@ -23648,7 +23360,6 @@ export namespace Prisma {
     modified_by?: SortOrderInput | SortOrder
     company_id?: SortOrder
     flag?: SortOrder
-    lead?: leadOrderByRelationAggregateInput
     _relevance?: lead_fileOrderByRelevanceInput
   }
 
@@ -23665,7 +23376,6 @@ export namespace Prisma {
     modified_by?: IntNullableFilter<"lead_file"> | number | null
     company_id?: IntFilter<"lead_file"> | number
     flag?: IntFilter<"lead_file"> | number
-    lead?: LeadListRelationFilter
   }, "lead_file_id">
 
   export type lead_fileOrderByWithAggregationInput = {
@@ -24703,7 +24413,6 @@ export namespace Prisma {
     modified_by?: number
     company_id?: number
     flag?: number
-    lead?: leadCreateNestedManyWithoutLead_statusInput
   }
 
   export type lead_statusUncheckedCreateInput = {
@@ -24716,7 +24425,6 @@ export namespace Prisma {
     modified_by?: number
     company_id?: number
     flag?: number
-    lead?: leadUncheckedCreateNestedManyWithoutLead_statusInput
   }
 
   export type lead_statusUpdateInput = {
@@ -24728,7 +24436,6 @@ export namespace Prisma {
     modified_by?: IntFieldUpdateOperationsInput | number
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
-    lead?: leadUpdateManyWithoutLead_statusNestedInput
   }
 
   export type lead_statusUncheckedUpdateInput = {
@@ -24741,7 +24448,6 @@ export namespace Prisma {
     modified_by?: IntFieldUpdateOperationsInput | number
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
-    lead?: leadUncheckedUpdateManyWithoutLead_statusNestedInput
   }
 
   export type lead_statusCreateManyInput = {
@@ -24791,6 +24497,8 @@ export namespace Prisma {
     sub_source_id?: number
     rm_user_id: number
     schedule_date?: Date | string | null
+    lead_file_id?: number | null
+    lead_status_id: number
     remarks?: string | null
     closed_date?: Date | string | null
     revenue?: number
@@ -24800,8 +24508,6 @@ export namespace Prisma {
     modified_by?: number | null
     company_id?: number
     flag?: number
-    lead_status: lead_statusCreateNestedOneWithoutLeadInput
-    lead_files?: lead_fileCreateNestedOneWithoutLeadInput
   }
 
   export type leadUncheckedCreateInput = {
@@ -24817,8 +24523,8 @@ export namespace Prisma {
     sub_source_id?: number
     rm_user_id: number
     schedule_date?: Date | string | null
-    lead_status_id: number
     lead_file_id?: number | null
+    lead_status_id: number
     remarks?: string | null
     closed_date?: Date | string | null
     revenue?: number
@@ -24842,6 +24548,8 @@ export namespace Prisma {
     sub_source_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
+    lead_status_id?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     revenue?: FloatFieldUpdateOperationsInput | number
@@ -24851,8 +24559,6 @@ export namespace Prisma {
     modified_by?: NullableIntFieldUpdateOperationsInput | number | null
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
-    lead_status?: lead_statusUpdateOneRequiredWithoutLeadNestedInput
-    lead_files?: lead_fileUpdateOneWithoutLeadNestedInput
   }
 
   export type leadUncheckedUpdateInput = {
@@ -24868,8 +24574,8 @@ export namespace Prisma {
     sub_source_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lead_status_id?: IntFieldUpdateOperationsInput | number
     lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
+    lead_status_id?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     revenue?: FloatFieldUpdateOperationsInput | number
@@ -24894,8 +24600,8 @@ export namespace Prisma {
     sub_source_id?: number
     rm_user_id: number
     schedule_date?: Date | string | null
-    lead_status_id: number
     lead_file_id?: number | null
+    lead_status_id: number
     remarks?: string | null
     closed_date?: Date | string | null
     revenue?: number
@@ -24919,6 +24625,8 @@ export namespace Prisma {
     sub_source_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
+    lead_status_id?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     revenue?: FloatFieldUpdateOperationsInput | number
@@ -24943,8 +24651,8 @@ export namespace Prisma {
     sub_source_id?: IntFieldUpdateOperationsInput | number
     rm_user_id?: IntFieldUpdateOperationsInput | number
     schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lead_status_id?: IntFieldUpdateOperationsInput | number
     lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
+    lead_status_id?: IntFieldUpdateOperationsInput | number
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     revenue?: FloatFieldUpdateOperationsInput | number
@@ -25391,7 +25099,6 @@ export namespace Prisma {
     modified_by?: number | null
     company_id?: number
     flag?: number
-    lead?: leadCreateNestedManyWithoutLead_filesInput
   }
 
   export type lead_fileUncheckedCreateInput = {
@@ -25404,7 +25111,6 @@ export namespace Prisma {
     modified_by?: number | null
     company_id?: number
     flag?: number
-    lead?: leadUncheckedCreateNestedManyWithoutLead_filesInput
   }
 
   export type lead_fileUpdateInput = {
@@ -25416,7 +25122,6 @@ export namespace Prisma {
     modified_by?: NullableIntFieldUpdateOperationsInput | number | null
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
-    lead?: leadUpdateManyWithoutLead_filesNestedInput
   }
 
   export type lead_fileUncheckedUpdateInput = {
@@ -25429,7 +25134,6 @@ export namespace Prisma {
     modified_by?: NullableIntFieldUpdateOperationsInput | number | null
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
-    lead?: leadUncheckedUpdateManyWithoutLead_filesNestedInput
   }
 
   export type lead_fileCreateManyInput = {
@@ -26409,16 +26113,6 @@ export namespace Prisma {
     flag?: SortOrder
   }
 
-  export type LeadListRelationFilter = {
-    every?: leadWhereInput
-    some?: leadWhereInput
-    none?: leadWhereInput
-  }
-
-  export type leadOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type lead_statusOrderByRelevanceInput = {
     fields: lead_statusOrderByRelevanceFieldEnum | lead_statusOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -26488,16 +26182,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type Lead_statusScalarRelationFilter = {
-    is?: lead_statusWhereInput
-    isNot?: lead_statusWhereInput
-  }
-
-  export type Lead_fileNullableScalarRelationFilter = {
-    is?: lead_fileWhereInput | null
-    isNot?: lead_fileWhereInput | null
-  }
-
   export type leadOrderByRelevanceInput = {
     fields: leadOrderByRelevanceFieldEnum | leadOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -26517,8 +26201,8 @@ export namespace Prisma {
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
     schedule_date?: SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    lead_status_id?: SortOrder
     remarks?: SortOrder
     closed_date?: SortOrder
     revenue?: SortOrder
@@ -26536,8 +26220,8 @@ export namespace Prisma {
     source_id?: SortOrder
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    lead_status_id?: SortOrder
     revenue?: SortOrder
     created_by?: SortOrder
     modified_by?: SortOrder
@@ -26558,8 +26242,8 @@ export namespace Prisma {
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
     schedule_date?: SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    lead_status_id?: SortOrder
     remarks?: SortOrder
     closed_date?: SortOrder
     revenue?: SortOrder
@@ -26584,8 +26268,8 @@ export namespace Prisma {
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
     schedule_date?: SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    lead_status_id?: SortOrder
     remarks?: SortOrder
     closed_date?: SortOrder
     revenue?: SortOrder
@@ -26603,8 +26287,8 @@ export namespace Prisma {
     source_id?: SortOrder
     sub_source_id?: SortOrder
     rm_user_id?: SortOrder
-    lead_status_id?: SortOrder
     lead_file_id?: SortOrder
+    lead_status_id?: SortOrder
     revenue?: SortOrder
     created_by?: SortOrder
     modified_by?: SortOrder
@@ -27660,84 +27344,12 @@ export namespace Prisma {
     deleteMany?: user_cityScalarWhereInput | user_cityScalarWhereInput[]
   }
 
-  export type leadCreateNestedManyWithoutLead_statusInput = {
-    create?: XOR<leadCreateWithoutLead_statusInput, leadUncheckedCreateWithoutLead_statusInput> | leadCreateWithoutLead_statusInput[] | leadUncheckedCreateWithoutLead_statusInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_statusInput | leadCreateOrConnectWithoutLead_statusInput[]
-    createMany?: leadCreateManyLead_statusInputEnvelope
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-  }
-
-  export type leadUncheckedCreateNestedManyWithoutLead_statusInput = {
-    create?: XOR<leadCreateWithoutLead_statusInput, leadUncheckedCreateWithoutLead_statusInput> | leadCreateWithoutLead_statusInput[] | leadUncheckedCreateWithoutLead_statusInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_statusInput | leadCreateOrConnectWithoutLead_statusInput[]
-    createMany?: leadCreateManyLead_statusInputEnvelope
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-  }
-
-  export type leadUpdateManyWithoutLead_statusNestedInput = {
-    create?: XOR<leadCreateWithoutLead_statusInput, leadUncheckedCreateWithoutLead_statusInput> | leadCreateWithoutLead_statusInput[] | leadUncheckedCreateWithoutLead_statusInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_statusInput | leadCreateOrConnectWithoutLead_statusInput[]
-    upsert?: leadUpsertWithWhereUniqueWithoutLead_statusInput | leadUpsertWithWhereUniqueWithoutLead_statusInput[]
-    createMany?: leadCreateManyLead_statusInputEnvelope
-    set?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    disconnect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    delete?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    update?: leadUpdateWithWhereUniqueWithoutLead_statusInput | leadUpdateWithWhereUniqueWithoutLead_statusInput[]
-    updateMany?: leadUpdateManyWithWhereWithoutLead_statusInput | leadUpdateManyWithWhereWithoutLead_statusInput[]
-    deleteMany?: leadScalarWhereInput | leadScalarWhereInput[]
-  }
-
-  export type leadUncheckedUpdateManyWithoutLead_statusNestedInput = {
-    create?: XOR<leadCreateWithoutLead_statusInput, leadUncheckedCreateWithoutLead_statusInput> | leadCreateWithoutLead_statusInput[] | leadUncheckedCreateWithoutLead_statusInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_statusInput | leadCreateOrConnectWithoutLead_statusInput[]
-    upsert?: leadUpsertWithWhereUniqueWithoutLead_statusInput | leadUpsertWithWhereUniqueWithoutLead_statusInput[]
-    createMany?: leadCreateManyLead_statusInputEnvelope
-    set?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    disconnect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    delete?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    update?: leadUpdateWithWhereUniqueWithoutLead_statusInput | leadUpdateWithWhereUniqueWithoutLead_statusInput[]
-    updateMany?: leadUpdateManyWithWhereWithoutLead_statusInput | leadUpdateManyWithWhereWithoutLead_statusInput[]
-    deleteMany?: leadScalarWhereInput | leadScalarWhereInput[]
-  }
-
-  export type lead_statusCreateNestedOneWithoutLeadInput = {
-    create?: XOR<lead_statusCreateWithoutLeadInput, lead_statusUncheckedCreateWithoutLeadInput>
-    connectOrCreate?: lead_statusCreateOrConnectWithoutLeadInput
-    connect?: lead_statusWhereUniqueInput
-  }
-
-  export type lead_fileCreateNestedOneWithoutLeadInput = {
-    create?: XOR<lead_fileCreateWithoutLeadInput, lead_fileUncheckedCreateWithoutLeadInput>
-    connectOrCreate?: lead_fileCreateOrConnectWithoutLeadInput
-    connect?: lead_fileWhereUniqueInput
-  }
-
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type lead_statusUpdateOneRequiredWithoutLeadNestedInput = {
-    create?: XOR<lead_statusCreateWithoutLeadInput, lead_statusUncheckedCreateWithoutLeadInput>
-    connectOrCreate?: lead_statusCreateOrConnectWithoutLeadInput
-    upsert?: lead_statusUpsertWithoutLeadInput
-    connect?: lead_statusWhereUniqueInput
-    update?: XOR<XOR<lead_statusUpdateToOneWithWhereWithoutLeadInput, lead_statusUpdateWithoutLeadInput>, lead_statusUncheckedUpdateWithoutLeadInput>
-  }
-
-  export type lead_fileUpdateOneWithoutLeadNestedInput = {
-    create?: XOR<lead_fileCreateWithoutLeadInput, lead_fileUncheckedCreateWithoutLeadInput>
-    connectOrCreate?: lead_fileCreateOrConnectWithoutLeadInput
-    upsert?: lead_fileUpsertWithoutLeadInput
-    disconnect?: lead_fileWhereInput | boolean
-    delete?: lead_fileWhereInput | boolean
-    connect?: lead_fileWhereUniqueInput
-    update?: XOR<XOR<lead_fileUpdateToOneWithWhereWithoutLeadInput, lead_fileUpdateWithoutLeadInput>, lead_fileUncheckedUpdateWithoutLeadInput>
   }
 
   export type cityCreateNestedOneWithoutProjectInput = {
@@ -27836,48 +27448,6 @@ export namespace Prisma {
     upsert?: userUpsertWithoutUser_cityInput
     connect?: userWhereUniqueInput
     update?: XOR<XOR<userUpdateToOneWithWhereWithoutUser_cityInput, userUpdateWithoutUser_cityInput>, userUncheckedUpdateWithoutUser_cityInput>
-  }
-
-  export type leadCreateNestedManyWithoutLead_filesInput = {
-    create?: XOR<leadCreateWithoutLead_filesInput, leadUncheckedCreateWithoutLead_filesInput> | leadCreateWithoutLead_filesInput[] | leadUncheckedCreateWithoutLead_filesInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_filesInput | leadCreateOrConnectWithoutLead_filesInput[]
-    createMany?: leadCreateManyLead_filesInputEnvelope
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-  }
-
-  export type leadUncheckedCreateNestedManyWithoutLead_filesInput = {
-    create?: XOR<leadCreateWithoutLead_filesInput, leadUncheckedCreateWithoutLead_filesInput> | leadCreateWithoutLead_filesInput[] | leadUncheckedCreateWithoutLead_filesInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_filesInput | leadCreateOrConnectWithoutLead_filesInput[]
-    createMany?: leadCreateManyLead_filesInputEnvelope
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-  }
-
-  export type leadUpdateManyWithoutLead_filesNestedInput = {
-    create?: XOR<leadCreateWithoutLead_filesInput, leadUncheckedCreateWithoutLead_filesInput> | leadCreateWithoutLead_filesInput[] | leadUncheckedCreateWithoutLead_filesInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_filesInput | leadCreateOrConnectWithoutLead_filesInput[]
-    upsert?: leadUpsertWithWhereUniqueWithoutLead_filesInput | leadUpsertWithWhereUniqueWithoutLead_filesInput[]
-    createMany?: leadCreateManyLead_filesInputEnvelope
-    set?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    disconnect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    delete?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    update?: leadUpdateWithWhereUniqueWithoutLead_filesInput | leadUpdateWithWhereUniqueWithoutLead_filesInput[]
-    updateMany?: leadUpdateManyWithWhereWithoutLead_filesInput | leadUpdateManyWithWhereWithoutLead_filesInput[]
-    deleteMany?: leadScalarWhereInput | leadScalarWhereInput[]
-  }
-
-  export type leadUncheckedUpdateManyWithoutLead_filesNestedInput = {
-    create?: XOR<leadCreateWithoutLead_filesInput, leadUncheckedCreateWithoutLead_filesInput> | leadCreateWithoutLead_filesInput[] | leadUncheckedCreateWithoutLead_filesInput[]
-    connectOrCreate?: leadCreateOrConnectWithoutLead_filesInput | leadCreateOrConnectWithoutLead_filesInput[]
-    upsert?: leadUpsertWithWhereUniqueWithoutLead_filesInput | leadUpsertWithWhereUniqueWithoutLead_filesInput[]
-    createMany?: leadCreateManyLead_filesInputEnvelope
-    set?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    disconnect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    delete?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    connect?: leadWhereUniqueInput | leadWhereUniqueInput[]
-    update?: leadUpdateWithWhereUniqueWithoutLead_filesInput | leadUpdateWithWhereUniqueWithoutLead_filesInput[]
-    updateMany?: leadUpdateManyWithWhereWithoutLead_filesInput | leadUpdateManyWithWhereWithoutLead_filesInput[]
-    deleteMany?: leadScalarWhereInput | leadScalarWhereInput[]
   }
 
   export type userCreateNestedOneWithoutUser_team_memberInput = {
@@ -28603,234 +28173,6 @@ export namespace Prisma {
     data: XOR<user_cityUpdateManyMutationInput, user_cityUncheckedUpdateManyWithoutCityInput>
   }
 
-  export type leadCreateWithoutLead_statusInput = {
-    customer_name?: string | null
-    mobile_no?: string | null
-    email_id?: string | null
-    alternate_no?: string | null
-    whatsapp_no?: string | null
-    alternate_email?: string | null
-    project_id?: number | null
-    source_id?: number
-    sub_source_id?: number
-    rm_user_id: number
-    schedule_date?: Date | string | null
-    remarks?: string | null
-    closed_date?: Date | string | null
-    revenue?: number
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-    lead_files?: lead_fileCreateNestedOneWithoutLeadInput
-  }
-
-  export type leadUncheckedCreateWithoutLead_statusInput = {
-    lead_id?: number
-    customer_name?: string | null
-    mobile_no?: string | null
-    email_id?: string | null
-    alternate_no?: string | null
-    whatsapp_no?: string | null
-    alternate_email?: string | null
-    project_id?: number | null
-    source_id?: number
-    sub_source_id?: number
-    rm_user_id: number
-    schedule_date?: Date | string | null
-    lead_file_id?: number | null
-    remarks?: string | null
-    closed_date?: Date | string | null
-    revenue?: number
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-  }
-
-  export type leadCreateOrConnectWithoutLead_statusInput = {
-    where: leadWhereUniqueInput
-    create: XOR<leadCreateWithoutLead_statusInput, leadUncheckedCreateWithoutLead_statusInput>
-  }
-
-  export type leadCreateManyLead_statusInputEnvelope = {
-    data: leadCreateManyLead_statusInput | leadCreateManyLead_statusInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type leadUpsertWithWhereUniqueWithoutLead_statusInput = {
-    where: leadWhereUniqueInput
-    update: XOR<leadUpdateWithoutLead_statusInput, leadUncheckedUpdateWithoutLead_statusInput>
-    create: XOR<leadCreateWithoutLead_statusInput, leadUncheckedCreateWithoutLead_statusInput>
-  }
-
-  export type leadUpdateWithWhereUniqueWithoutLead_statusInput = {
-    where: leadWhereUniqueInput
-    data: XOR<leadUpdateWithoutLead_statusInput, leadUncheckedUpdateWithoutLead_statusInput>
-  }
-
-  export type leadUpdateManyWithWhereWithoutLead_statusInput = {
-    where: leadScalarWhereInput
-    data: XOR<leadUpdateManyMutationInput, leadUncheckedUpdateManyWithoutLead_statusInput>
-  }
-
-  export type leadScalarWhereInput = {
-    AND?: leadScalarWhereInput | leadScalarWhereInput[]
-    OR?: leadScalarWhereInput[]
-    NOT?: leadScalarWhereInput | leadScalarWhereInput[]
-    lead_id?: IntFilter<"lead"> | number
-    customer_name?: StringNullableFilter<"lead"> | string | null
-    mobile_no?: StringNullableFilter<"lead"> | string | null
-    email_id?: StringNullableFilter<"lead"> | string | null
-    alternate_no?: StringNullableFilter<"lead"> | string | null
-    whatsapp_no?: StringNullableFilter<"lead"> | string | null
-    alternate_email?: StringNullableFilter<"lead"> | string | null
-    project_id?: IntNullableFilter<"lead"> | number | null
-    source_id?: IntFilter<"lead"> | number
-    sub_source_id?: IntFilter<"lead"> | number
-    rm_user_id?: IntFilter<"lead"> | number
-    schedule_date?: DateTimeNullableFilter<"lead"> | Date | string | null
-    lead_status_id?: IntFilter<"lead"> | number
-    lead_file_id?: IntNullableFilter<"lead"> | number | null
-    remarks?: StringNullableFilter<"lead"> | string | null
-    closed_date?: DateTimeNullableFilter<"lead"> | Date | string | null
-    revenue?: FloatFilter<"lead"> | number
-    created_at?: DateTimeNullableFilter<"lead"> | Date | string | null
-    created_by?: IntNullableFilter<"lead"> | number | null
-    modified_at?: DateTimeNullableFilter<"lead"> | Date | string | null
-    modified_by?: IntNullableFilter<"lead"> | number | null
-    company_id?: IntFilter<"lead"> | number
-    flag?: IntFilter<"lead"> | number
-  }
-
-  export type lead_statusCreateWithoutLeadInput = {
-    lead_status_name?: string | null
-    label_color?: string
-    created_at?: Date | string | null
-    created_by?: number
-    modified_at?: Date | string | null
-    modified_by?: number
-    company_id?: number
-    flag?: number
-  }
-
-  export type lead_statusUncheckedCreateWithoutLeadInput = {
-    lead_status_id?: number
-    lead_status_name?: string | null
-    label_color?: string
-    created_at?: Date | string | null
-    created_by?: number
-    modified_at?: Date | string | null
-    modified_by?: number
-    company_id?: number
-    flag?: number
-  }
-
-  export type lead_statusCreateOrConnectWithoutLeadInput = {
-    where: lead_statusWhereUniqueInput
-    create: XOR<lead_statusCreateWithoutLeadInput, lead_statusUncheckedCreateWithoutLeadInput>
-  }
-
-  export type lead_fileCreateWithoutLeadInput = {
-    lead_file_name: string
-    file_path?: string | null
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-  }
-
-  export type lead_fileUncheckedCreateWithoutLeadInput = {
-    lead_file_id?: number
-    lead_file_name: string
-    file_path?: string | null
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-  }
-
-  export type lead_fileCreateOrConnectWithoutLeadInput = {
-    where: lead_fileWhereUniqueInput
-    create: XOR<lead_fileCreateWithoutLeadInput, lead_fileUncheckedCreateWithoutLeadInput>
-  }
-
-  export type lead_statusUpsertWithoutLeadInput = {
-    update: XOR<lead_statusUpdateWithoutLeadInput, lead_statusUncheckedUpdateWithoutLeadInput>
-    create: XOR<lead_statusCreateWithoutLeadInput, lead_statusUncheckedCreateWithoutLeadInput>
-    where?: lead_statusWhereInput
-  }
-
-  export type lead_statusUpdateToOneWithWhereWithoutLeadInput = {
-    where?: lead_statusWhereInput
-    data: XOR<lead_statusUpdateWithoutLeadInput, lead_statusUncheckedUpdateWithoutLeadInput>
-  }
-
-  export type lead_statusUpdateWithoutLeadInput = {
-    lead_status_name?: NullableStringFieldUpdateOperationsInput | string | null
-    label_color?: StringFieldUpdateOperationsInput | string
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: IntFieldUpdateOperationsInput | number
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: IntFieldUpdateOperationsInput | number
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type lead_statusUncheckedUpdateWithoutLeadInput = {
-    lead_status_id?: IntFieldUpdateOperationsInput | number
-    lead_status_name?: NullableStringFieldUpdateOperationsInput | string | null
-    label_color?: StringFieldUpdateOperationsInput | string
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: IntFieldUpdateOperationsInput | number
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: IntFieldUpdateOperationsInput | number
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type lead_fileUpsertWithoutLeadInput = {
-    update: XOR<lead_fileUpdateWithoutLeadInput, lead_fileUncheckedUpdateWithoutLeadInput>
-    create: XOR<lead_fileCreateWithoutLeadInput, lead_fileUncheckedCreateWithoutLeadInput>
-    where?: lead_fileWhereInput
-  }
-
-  export type lead_fileUpdateToOneWithWhereWithoutLeadInput = {
-    where?: lead_fileWhereInput
-    data: XOR<lead_fileUpdateWithoutLeadInput, lead_fileUncheckedUpdateWithoutLeadInput>
-  }
-
-  export type lead_fileUpdateWithoutLeadInput = {
-    lead_file_name?: StringFieldUpdateOperationsInput | string
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type lead_fileUncheckedUpdateWithoutLeadInput = {
-    lead_file_id?: IntFieldUpdateOperationsInput | number
-    lead_file_name?: StringFieldUpdateOperationsInput | string
-    file_path?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
   export type cityCreateWithoutProjectInput = {
     city_name: string
     created_at?: Date | string | null
@@ -29171,81 +28513,6 @@ export namespace Prisma {
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
     user_team_member?: user_team_memberUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type leadCreateWithoutLead_filesInput = {
-    customer_name?: string | null
-    mobile_no?: string | null
-    email_id?: string | null
-    alternate_no?: string | null
-    whatsapp_no?: string | null
-    alternate_email?: string | null
-    project_id?: number | null
-    source_id?: number
-    sub_source_id?: number
-    rm_user_id: number
-    schedule_date?: Date | string | null
-    remarks?: string | null
-    closed_date?: Date | string | null
-    revenue?: number
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-    lead_status: lead_statusCreateNestedOneWithoutLeadInput
-  }
-
-  export type leadUncheckedCreateWithoutLead_filesInput = {
-    lead_id?: number
-    customer_name?: string | null
-    mobile_no?: string | null
-    email_id?: string | null
-    alternate_no?: string | null
-    whatsapp_no?: string | null
-    alternate_email?: string | null
-    project_id?: number | null
-    source_id?: number
-    sub_source_id?: number
-    rm_user_id: number
-    schedule_date?: Date | string | null
-    lead_status_id: number
-    remarks?: string | null
-    closed_date?: Date | string | null
-    revenue?: number
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-  }
-
-  export type leadCreateOrConnectWithoutLead_filesInput = {
-    where: leadWhereUniqueInput
-    create: XOR<leadCreateWithoutLead_filesInput, leadUncheckedCreateWithoutLead_filesInput>
-  }
-
-  export type leadCreateManyLead_filesInputEnvelope = {
-    data: leadCreateManyLead_filesInput | leadCreateManyLead_filesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type leadUpsertWithWhereUniqueWithoutLead_filesInput = {
-    where: leadWhereUniqueInput
-    update: XOR<leadUpdateWithoutLead_filesInput, leadUncheckedUpdateWithoutLead_filesInput>
-    create: XOR<leadCreateWithoutLead_filesInput, leadUncheckedCreateWithoutLead_filesInput>
-  }
-
-  export type leadUpdateWithWhereUniqueWithoutLead_filesInput = {
-    where: leadWhereUniqueInput
-    data: XOR<leadUpdateWithoutLead_filesInput, leadUncheckedUpdateWithoutLead_filesInput>
-  }
-
-  export type leadUpdateManyWithWhereWithoutLead_filesInput = {
-    where: leadScalarWhereInput
-    data: XOR<leadUpdateManyMutationInput, leadUncheckedUpdateManyWithoutLead_filesInput>
   }
 
   export type userCreateWithoutUser_team_memberInput = {
@@ -29624,105 +28891,6 @@ export namespace Prisma {
     flag?: IntFieldUpdateOperationsInput | number
   }
 
-  export type leadCreateManyLead_statusInput = {
-    lead_id?: number
-    customer_name?: string | null
-    mobile_no?: string | null
-    email_id?: string | null
-    alternate_no?: string | null
-    whatsapp_no?: string | null
-    alternate_email?: string | null
-    project_id?: number | null
-    source_id?: number
-    sub_source_id?: number
-    rm_user_id: number
-    schedule_date?: Date | string | null
-    lead_file_id?: number | null
-    remarks?: string | null
-    closed_date?: Date | string | null
-    revenue?: number
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-  }
-
-  export type leadUpdateWithoutLead_statusInput = {
-    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
-    mobile_no?: NullableStringFieldUpdateOperationsInput | string | null
-    email_id?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_no?: NullableStringFieldUpdateOperationsInput | string | null
-    whatsapp_no?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_email?: NullableStringFieldUpdateOperationsInput | string | null
-    project_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_id?: IntFieldUpdateOperationsInput | number
-    sub_source_id?: IntFieldUpdateOperationsInput | number
-    rm_user_id?: IntFieldUpdateOperationsInput | number
-    schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    revenue?: FloatFieldUpdateOperationsInput | number
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-    lead_files?: lead_fileUpdateOneWithoutLeadNestedInput
-  }
-
-  export type leadUncheckedUpdateWithoutLead_statusInput = {
-    lead_id?: IntFieldUpdateOperationsInput | number
-    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
-    mobile_no?: NullableStringFieldUpdateOperationsInput | string | null
-    email_id?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_no?: NullableStringFieldUpdateOperationsInput | string | null
-    whatsapp_no?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_email?: NullableStringFieldUpdateOperationsInput | string | null
-    project_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_id?: IntFieldUpdateOperationsInput | number
-    sub_source_id?: IntFieldUpdateOperationsInput | number
-    rm_user_id?: IntFieldUpdateOperationsInput | number
-    schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    revenue?: FloatFieldUpdateOperationsInput | number
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type leadUncheckedUpdateManyWithoutLead_statusInput = {
-    lead_id?: IntFieldUpdateOperationsInput | number
-    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
-    mobile_no?: NullableStringFieldUpdateOperationsInput | string | null
-    email_id?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_no?: NullableStringFieldUpdateOperationsInput | string | null
-    whatsapp_no?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_email?: NullableStringFieldUpdateOperationsInput | string | null
-    project_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_id?: IntFieldUpdateOperationsInput | number
-    sub_source_id?: IntFieldUpdateOperationsInput | number
-    rm_user_id?: IntFieldUpdateOperationsInput | number
-    schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lead_file_id?: NullableIntFieldUpdateOperationsInput | number | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    revenue?: FloatFieldUpdateOperationsInput | number
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
   export type sub_sourceCreateManySourceInput = {
     sub_source_id?: number
     sub_source_name?: string | null
@@ -29762,105 +28930,6 @@ export namespace Prisma {
     created_by?: IntFieldUpdateOperationsInput | number
     modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     modified_by?: IntFieldUpdateOperationsInput | number
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type leadCreateManyLead_filesInput = {
-    lead_id?: number
-    customer_name?: string | null
-    mobile_no?: string | null
-    email_id?: string | null
-    alternate_no?: string | null
-    whatsapp_no?: string | null
-    alternate_email?: string | null
-    project_id?: number | null
-    source_id?: number
-    sub_source_id?: number
-    rm_user_id: number
-    schedule_date?: Date | string | null
-    lead_status_id: number
-    remarks?: string | null
-    closed_date?: Date | string | null
-    revenue?: number
-    created_at?: Date | string | null
-    created_by?: number | null
-    modified_at?: Date | string | null
-    modified_by?: number | null
-    company_id?: number
-    flag?: number
-  }
-
-  export type leadUpdateWithoutLead_filesInput = {
-    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
-    mobile_no?: NullableStringFieldUpdateOperationsInput | string | null
-    email_id?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_no?: NullableStringFieldUpdateOperationsInput | string | null
-    whatsapp_no?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_email?: NullableStringFieldUpdateOperationsInput | string | null
-    project_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_id?: IntFieldUpdateOperationsInput | number
-    sub_source_id?: IntFieldUpdateOperationsInput | number
-    rm_user_id?: IntFieldUpdateOperationsInput | number
-    schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    revenue?: FloatFieldUpdateOperationsInput | number
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-    lead_status?: lead_statusUpdateOneRequiredWithoutLeadNestedInput
-  }
-
-  export type leadUncheckedUpdateWithoutLead_filesInput = {
-    lead_id?: IntFieldUpdateOperationsInput | number
-    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
-    mobile_no?: NullableStringFieldUpdateOperationsInput | string | null
-    email_id?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_no?: NullableStringFieldUpdateOperationsInput | string | null
-    whatsapp_no?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_email?: NullableStringFieldUpdateOperationsInput | string | null
-    project_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_id?: IntFieldUpdateOperationsInput | number
-    sub_source_id?: IntFieldUpdateOperationsInput | number
-    rm_user_id?: IntFieldUpdateOperationsInput | number
-    schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lead_status_id?: IntFieldUpdateOperationsInput | number
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    revenue?: FloatFieldUpdateOperationsInput | number
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
-    company_id?: IntFieldUpdateOperationsInput | number
-    flag?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type leadUncheckedUpdateManyWithoutLead_filesInput = {
-    lead_id?: IntFieldUpdateOperationsInput | number
-    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
-    mobile_no?: NullableStringFieldUpdateOperationsInput | string | null
-    email_id?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_no?: NullableStringFieldUpdateOperationsInput | string | null
-    whatsapp_no?: NullableStringFieldUpdateOperationsInput | string | null
-    alternate_email?: NullableStringFieldUpdateOperationsInput | string | null
-    project_id?: NullableIntFieldUpdateOperationsInput | number | null
-    source_id?: IntFieldUpdateOperationsInput | number
-    sub_source_id?: IntFieldUpdateOperationsInput | number
-    rm_user_id?: IntFieldUpdateOperationsInput | number
-    schedule_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    lead_status_id?: IntFieldUpdateOperationsInput | number
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    closed_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    revenue?: FloatFieldUpdateOperationsInput | number
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_by?: NullableIntFieldUpdateOperationsInput | number | null
-    modified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    modified_by?: NullableIntFieldUpdateOperationsInput | number | null
     company_id?: IntFieldUpdateOperationsInput | number
     flag?: IntFieldUpdateOperationsInput | number
   }

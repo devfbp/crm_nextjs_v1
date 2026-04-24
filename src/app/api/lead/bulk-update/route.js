@@ -45,11 +45,7 @@ export async function PUT(request) {
         const updatedLead = await prisma.lead.update({
           where: { lead_id: leadId },
           data: {
-            lead_status: {
-              connect: {
-                lead_status_id: parsedStatusId
-              }
-            },
+            lead_status_id: parsedStatusId,
             remarks: status_remarks,
             rm_user_id: rm_user_id,
             modified_at: new Date(),

@@ -24,7 +24,7 @@ const LeadsTable = (props: any) => {
   });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(50);
+  const [dataPerPage, setDataPerPage] = useState(150);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -229,6 +229,7 @@ const LeadsTable = (props: any) => {
   }
   return (
     <React.Fragment>
+    
       <div className="col-12">
         <div className="card">
           {/* Filters */}
@@ -312,7 +313,7 @@ const LeadsTable = (props: any) => {
               }
               <div className="col-md-1 ms-auto">
                 <select className="form-select" value={dataPerPage} onChange={(e) => setDataPerPage(Number(e.target.value))}>
-                  {[10, 25, 50, 100].map((count) => (
+                  {[10, 25, 50, 100, 250, 500].map((count) => (
                     <option key={count} value={count}>{count}</option>
                   ))}
                 </select>
@@ -368,7 +369,7 @@ const LeadsTable = (props: any) => {
                       <td>
                         <div className="btn-box">
                           <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />
-                          {accessMenuRole(2) &&
+                          
                             <Link
                               title="History"
                               className="btn btn-sm btn-icon btn-warning"
@@ -380,7 +381,6 @@ const LeadsTable = (props: any) => {
                             >
                               <i className="fa-light fa-history text-white"></i>
                             </Link>
-                          }
                           <DeleteAction id={data.lead_id} page="lead" setRefresh="" menu_id={7} iconclass={false} reload={true} />
                         </div>
                       </td>

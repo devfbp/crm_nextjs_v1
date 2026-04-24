@@ -21,11 +21,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
+ * Prisma Client JS version: 6.19.3
  * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
+  client: "6.19.3",
   engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
@@ -229,8 +229,8 @@ exports.Prisma.LeadScalarFieldEnum = {
   sub_source_id: 'sub_source_id',
   rm_user_id: 'rm_user_id',
   schedule_date: 'schedule_date',
-  lead_status_id: 'lead_status_id',
   lead_file_id: 'lead_file_id',
+  lead_status_id: 'lead_status_id',
   remarks: 'remarks',
   closed_date: 'closed_date',
   revenue: 'revenue',

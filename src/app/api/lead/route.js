@@ -42,10 +42,7 @@ export async function GET(request) {
 
         if (due_filter === "1") {
           //EXACT today
-          vwhere.schedule_date = {
-            gte: todayStart,
-            lte: todayEnd,
-          };
+          vwhere.status_id=1;
         } else if (due_filter === "0") {
           //OVERDUE (before today)
           vwhere.schedule_date = {
@@ -65,7 +62,7 @@ export async function GET(request) {
       if (lead_status_id) {
         vwhere.status_id = parseInt(lead_status_id);
       }
-      if(token?.user_id && token?.role_id > 2) {
+      if(token?.user_id && token?.role_id > 2 && !assigned_to) {
         vwhere.rm_user_id = token.user_id;
         const teamMembers = await prisma.user_team_member.findMany({
           where: {
@@ -203,7 +200,7 @@ export async function PUT(request) {
         schedule_date: req?.schedule_date ? new Date(req?.schedule_date) : null , // use the parsed Date object
         modified_by: token?.user_id || null,
         closed_date: req?.closed_date ? new Date(req?.closed_date) : null, // use the parsed Date object
-        revenue: req?.revenue ? parseFloat(req?.revenue) : null 
+        revenue: req?.revenue ? parseFloat(req?.revenue) : 0
       }
     });
     if (updatedlead && beforeLeadData?.lead_status_id !== updatedlead.lead_status_id) {
