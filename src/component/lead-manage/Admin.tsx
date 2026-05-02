@@ -14,8 +14,6 @@ import { accessMenuCheck } from "@/component/utils/common";
 import "./Leads.scss";
 import UserList from "./UserList2";
 import LeadStatusList from "./LeadStatusList";
-import { rm } from "fs";
-import { set } from "date-fns";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
@@ -24,7 +22,7 @@ const LeadsTable = (props: any) => {
   });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(150);
+  const [dataPerPage, setDataPerPage] = useState(250);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -32,8 +30,6 @@ const LeadsTable = (props: any) => {
   const [bulkStatus, setBulkStatus] = useState([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
   const [navQuickToggleValue, setNavQuickToggleValue] = useState(props?.fullwidth);
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-
-
   const [editAccess, setEditAccess] = useState(false);
   const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,16 +42,11 @@ const LeadsTable = (props: any) => {
     dueDate: "",
     assigned_to: "",
   });
-
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
-
   const { navQuickToggle } = useDigiContext();
+  
 
   useEffect(() => {
-    // if (navQuickToggleValue) {
-    //   navQuickToggle();
-    //   setNavQuickToggleValue(false);
-    // }
     setEditAccess(accessMenuCheck(7, 3));
   }, [navQuickToggle, navQuickToggleValue]);
 
@@ -66,12 +57,15 @@ const LeadsTable = (props: any) => {
       let url = `${process.env.NEXT_PUBLIC_API_URL}lead?view=1`;
       if (filters.dueDate) {
         url += `&due_filter=${filters.dueDate}`;
+        localStorage.setItem("lead_due_filter", filters.dueDate);
       }
       if (filters.assigned_to) {
         url += `&assigned_to=${filters.assigned_to}`;
+        localStorage.setItem("lead_assigned_to", filters.assigned_to);
       }
       if (filters.lead_status_id && filters.lead_status_id !== 0) {
         url += `&lead_status_id=${filters.lead_status_id}`;
+        localStorage.setItem("lead_status_id", filters.lead_status_id);
       }
       // alert(url);
       const response = await fetch(url);
@@ -84,24 +78,11 @@ const LeadsTable = (props: any) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchData(filters);
-  }, [filters]);
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    localStorage.setItem("lead_search", e.target.value);
     setCurrentPage(1);
   };
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatusFilter(e.target.value);
-    setCurrentPage(1);
-  };
-  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setUserFilter(e.target.value);
-    setCurrentPage(1);
-  };
-
   const filteredData = useMemo(() => {
     return dataList.filter((d) => {
       const matchesSearch =
@@ -199,34 +180,34 @@ const LeadsTable = (props: any) => {
     setHistoryLead(data);
     setShowLeadHistory(true);
   };
-
-  useEffect(() => {
-    // if (!form.rm_user_id) return;
-
-    const updatedFilters = {
-      ...filters,
-      assigned_to: form.rm_user_id,
-    };
-
-    setFilters(updatedFilters);
-    fetchData(updatedFilters);
-  }, [form.rm_user_id]);
-  useEffect(() => {
-    // if (!form.rm_user_id) return;
-
-    const updatedFilters = {
-      ...filters,
-      lead_status_id: form.lead_status_id,
-    };
-
-    setFilters(updatedFilters);
-    fetchData(updatedFilters);
-  }, [form.lead_status_id]);
   const refreshfilters = () => {
+    localStorage.removeItem("lead_due_filter");
+    localStorage.removeItem("lead_assigned_to");
+    localStorage.removeItem("lead_status_id");
+    localStorage.removeItem("lead_search");
     if (typeof window !== "undefined") {
       window.location.reload();
     }
   }
+  useEffect(() => {
+    const savedSearch = localStorage.getItem("lead_search") || "";
+    setSearchTerm(savedSearch);
+    const savedDueFilter = localStorage.getItem("lead_due_filter") || "";
+    const savedAssignedTo = localStorage.getItem("lead_assigned_to") || "";
+    const savedLeadStatusId = localStorage.getItem("lead_status_id") || "";
+    setFilters({
+      ...filters,
+      dueDate: savedDueFilter,
+      assigned_to: savedAssignedTo,
+      lead_status_id: savedLeadStatusId,
+    }); 
+    fetchData({
+      dueDate: savedDueFilter,
+      assigned_to: savedAssignedTo,
+      lead_status_id: savedLeadStatusId,
+    });
+  }, []);
+  
   return (
     <React.Fragment>
     
@@ -244,24 +225,16 @@ const LeadsTable = (props: any) => {
                   className="form-control"
                 />
               </div>
-              {/* <div className="col-md-2">
-              <select className="form-select" value={statusFilter} onChange={handleStatusChange}>
-                <option value="">All Statuses</option>
-                {uniqueStatuses.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-2">
-              <select className="form-select" value={userFilter} onChange={handleUserChange}>
-                <option value="">All Users</option>
-                {uniqueUsers.map((u) => (
-                  <option key={u} value={u}>{u}</option>
-                ))}
-              </select>
-            </div> */}
+              
               <div className="col-md-1">
-                <select className="form-select" value={filters.dueDate} onChange={(e) => { const value = e.target.value; setFilters({ ...filters, dueDate: value }); fetchData({ ...filters, dueDate: value }); }}>
+                <select 
+                  className="form-select" 
+                  value={filters.dueDate}
+                  onChange={(e) => { 
+                    const value = e.target.value; 
+                    setFilters({ ...filters, dueDate: value });
+                    fetchData({ ...filters, dueDate: value });
+                  }}>
                   <option value="">All</option>
                   <option value="1">Due</option>
                   <option value="0">Over Due</option>
@@ -281,10 +254,12 @@ const LeadsTable = (props: any) => {
                   id="lead_status_id"
                   name="lead_status_id"
                   className="form-select border-white"
-                  value={form.lead_status_id}
-                  onChange={(e) =>
-                    setForm({ ...form, lead_status_id: e.target.value })
-                  }
+                  value={filters.lead_status_id}
+                  onChange={(e) => { 
+                    const value = e.target.value; 
+                    setFilters({ ...filters, lead_status_id: value });
+                    fetchData({ ...filters, lead_status_id: value });
+                  }}
                 >
                   <LeadStatusList
                     name="lead_status_id"
@@ -323,6 +298,15 @@ const LeadsTable = (props: any) => {
           </div>
 
           {/* Table */}
+          <PaginationSection
+            currentPage={currentPage}
+            totalPages={totalPages}
+            paginate={paginate}
+            pageNumbers={pageNumbers}
+            indexOfFirstData={indexOfFirstData}
+            indexOfLastData={indexOfLastData}
+            dataList={filteredData}
+          />
           <div id="leadsDiv">
             <div className="table-wrapper">
               <table id="leadsTable" className="table table-hover table-striped">
@@ -361,7 +345,9 @@ const LeadsTable = (props: any) => {
                       <td title={data.project_name}>
                         {data.project_name.length > 25 ? data.project_name.substr(0, 20) + '...' : data.project_name}
                       </td>
-                      <td>{data.assigned_to}</td>
+                      <td title={data.assigned_to}>
+                        {data.assigned_to.length > 10 ? data.assigned_to.substr(0, 20) + '...' : data.assigned_to}
+                      </td>
                       {accessMenuRole(1) &&
                         <td>{data.sub_source_name}</td>
                       }
@@ -391,15 +377,7 @@ const LeadsTable = (props: any) => {
             </div>
           </div>
           {/* Pagination */}
-          <PaginationSection
-            currentPage={currentPage}
-            totalPages={totalPages}
-            paginate={paginate}
-            pageNumbers={pageNumbers}
-            indexOfFirstData={indexOfFirstData}
-            indexOfLastData={indexOfLastData}
-            dataList={filteredData}
-          />
+          
         </div>
       </div >
       <BulkUpdateModal

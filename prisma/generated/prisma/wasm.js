@@ -36,11 +36,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.3
+ * Prisma Client JS version: 6.19.2
  * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.3",
+  client: "6.19.2",
   engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
@@ -522,7 +522,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/live/crm_nextjs_v1/prisma/generated/prisma",
+      "value": "/home/dev/crm_nextjs_v1/prisma/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -538,7 +538,7 @@ const config = {
     "previewFeatures": [
       "views"
     ],
-    "sourceFilePath": "/home/live/crm_nextjs_v1/prisma/schema.prisma",
+    "sourceFilePath": "/home/dev/crm_nextjs_v1/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -546,7 +546,7 @@ const config = {
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../..",
-  "clientVersion": "6.19.3",
+  "clientVersion": "6.19.2",
   "engineVersion": "c2990dca591cba766e3b7ef5d9e8a84796e47ab7",
   "datasourceNames": [
     "db"

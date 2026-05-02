@@ -16,8 +16,10 @@ import { accessMenuRole } from "../utils/common";
 import LeadHistory from "./LeadHistory";
 import Link from "next/link";
 import "./Leads.scss";
+import { useRouter } from "next/navigation";
 
 interface InputFormProps {
+  
   records?: {
     slug: any,
     lead_id: string,
@@ -71,6 +73,7 @@ const initialFormState = {
 };
 
 const InputForm: React.FC<InputFormProps> = ({ records }) => {
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [showLeadHistory, setShowLeadHistory] = useState(false);
   const [form, setForm] = useState(initialFormState);
@@ -172,7 +175,10 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       console.log("API response:", response.success);
       if (response.duplicateLead) {
         toast.success(response.message);
-      } else if (response.success && typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+      } else if (response.success && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+        router.push("/leads");
+      }
+       else if (response.success && typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
         window.location.href = "/leads";
       }
     } catch (err: any) {
