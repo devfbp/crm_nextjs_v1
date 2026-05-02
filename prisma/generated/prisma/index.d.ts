@@ -474,7 +474,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.2
+   * Prisma Client JS version: 6.19.3
    * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
@@ -20210,6 +20210,8 @@ export namespace Prisma {
     lead_id: number | null
     from_rm_user_id: number | null
     rm_user_id: number | null
+    from_status_id: number | null
+    to_status_id: number | null
   }
 
   export type Lead_status_entry_viewSumAggregateOutputType = {
@@ -20217,6 +20219,8 @@ export namespace Prisma {
     lead_id: number | null
     from_rm_user_id: number | null
     rm_user_id: number | null
+    from_status_id: number | null
+    to_status_id: number | null
   }
 
   export type Lead_status_entry_viewMinAggregateOutputType = {
@@ -20226,8 +20230,12 @@ export namespace Prisma {
     user_name: string | null
     from_rm_user_id: number | null
     rm_user_id: number | null
+    from_status_id: number | null
     from_status: string | null
+    from_status_color: string | null
     to_status: string | null
+    to_status_id: number | null
+    to_status_color: string | null
     created_by_name: string | null
     created_at: Date | null
     remarks: string | null
@@ -20241,8 +20249,12 @@ export namespace Prisma {
     user_name: string | null
     from_rm_user_id: number | null
     rm_user_id: number | null
+    from_status_id: number | null
     from_status: string | null
+    from_status_color: string | null
     to_status: string | null
+    to_status_id: number | null
+    to_status_color: string | null
     created_by_name: string | null
     created_at: Date | null
     remarks: string | null
@@ -20256,8 +20268,12 @@ export namespace Prisma {
     user_name: number
     from_rm_user_id: number
     rm_user_id: number
+    from_status_id: number
     from_status: number
+    from_status_color: number
     to_status: number
+    to_status_id: number
+    to_status_color: number
     created_by_name: number
     created_at: number
     remarks: number
@@ -20271,6 +20287,8 @@ export namespace Prisma {
     lead_id?: true
     from_rm_user_id?: true
     rm_user_id?: true
+    from_status_id?: true
+    to_status_id?: true
   }
 
   export type Lead_status_entry_viewSumAggregateInputType = {
@@ -20278,6 +20296,8 @@ export namespace Prisma {
     lead_id?: true
     from_rm_user_id?: true
     rm_user_id?: true
+    from_status_id?: true
+    to_status_id?: true
   }
 
   export type Lead_status_entry_viewMinAggregateInputType = {
@@ -20287,8 +20307,12 @@ export namespace Prisma {
     user_name?: true
     from_rm_user_id?: true
     rm_user_id?: true
+    from_status_id?: true
     from_status?: true
+    from_status_color?: true
     to_status?: true
+    to_status_id?: true
+    to_status_color?: true
     created_by_name?: true
     created_at?: true
     remarks?: true
@@ -20302,8 +20326,12 @@ export namespace Prisma {
     user_name?: true
     from_rm_user_id?: true
     rm_user_id?: true
+    from_status_id?: true
     from_status?: true
+    from_status_color?: true
     to_status?: true
+    to_status_id?: true
+    to_status_color?: true
     created_by_name?: true
     created_at?: true
     remarks?: true
@@ -20317,8 +20345,12 @@ export namespace Prisma {
     user_name?: true
     from_rm_user_id?: true
     rm_user_id?: true
+    from_status_id?: true
     from_status?: true
+    from_status_color?: true
     to_status?: true
+    to_status_id?: true
+    to_status_color?: true
     created_by_name?: true
     created_at?: true
     remarks?: true
@@ -20413,8 +20445,12 @@ export namespace Prisma {
     user_name: string
     from_rm_user_id: number
     rm_user_id: number
+    from_status_id: number
     from_status: string | null
+    from_status_color: string
     to_status: string | null
+    to_status_id: number
+    to_status_color: string
     created_by_name: string
     created_at: Date | null
     remarks: string | null
@@ -20447,8 +20483,12 @@ export namespace Prisma {
     user_name?: boolean
     from_rm_user_id?: boolean
     rm_user_id?: boolean
+    from_status_id?: boolean
     from_status?: boolean
+    from_status_color?: boolean
     to_status?: boolean
+    to_status_id?: boolean
+    to_status_color?: boolean
     created_by_name?: boolean
     created_at?: boolean
     remarks?: boolean
@@ -20464,15 +20504,19 @@ export namespace Prisma {
     user_name?: boolean
     from_rm_user_id?: boolean
     rm_user_id?: boolean
+    from_status_id?: boolean
     from_status?: boolean
+    from_status_color?: boolean
     to_status?: boolean
+    to_status_id?: boolean
+    to_status_color?: boolean
     created_by_name?: boolean
     created_at?: boolean
     remarks?: boolean
     display_created_at?: boolean
   }
 
-  export type lead_status_entry_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_entry_id" | "lead_id" | "from_user_name" | "user_name" | "from_rm_user_id" | "rm_user_id" | "from_status" | "to_status" | "created_by_name" | "created_at" | "remarks" | "display_created_at", ExtArgs["result"]["lead_status_entry_view"]>
+  export type lead_status_entry_viewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"lead_entry_id" | "lead_id" | "from_user_name" | "user_name" | "from_rm_user_id" | "rm_user_id" | "from_status_id" | "from_status" | "from_status_color" | "to_status" | "to_status_id" | "to_status_color" | "created_by_name" | "created_at" | "remarks" | "display_created_at", ExtArgs["result"]["lead_status_entry_view"]>
 
   export type $lead_status_entry_viewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "lead_status_entry_view"
@@ -20484,8 +20528,12 @@ export namespace Prisma {
       user_name: string
       from_rm_user_id: number
       rm_user_id: number
+      from_status_id: number
       from_status: string | null
+      from_status_color: string
       to_status: string | null
+      to_status_id: number
+      to_status_color: string
       created_by_name: string
       created_at: Date | null
       remarks: string | null
@@ -20739,8 +20787,12 @@ export namespace Prisma {
     readonly user_name: FieldRef<"lead_status_entry_view", 'String'>
     readonly from_rm_user_id: FieldRef<"lead_status_entry_view", 'Int'>
     readonly rm_user_id: FieldRef<"lead_status_entry_view", 'Int'>
+    readonly from_status_id: FieldRef<"lead_status_entry_view", 'Int'>
     readonly from_status: FieldRef<"lead_status_entry_view", 'String'>
+    readonly from_status_color: FieldRef<"lead_status_entry_view", 'String'>
     readonly to_status: FieldRef<"lead_status_entry_view", 'String'>
+    readonly to_status_id: FieldRef<"lead_status_entry_view", 'Int'>
+    readonly to_status_color: FieldRef<"lead_status_entry_view", 'String'>
     readonly created_by_name: FieldRef<"lead_status_entry_view", 'String'>
     readonly created_at: FieldRef<"lead_status_entry_view", 'DateTime'>
     readonly remarks: FieldRef<"lead_status_entry_view", 'String'>
@@ -21909,8 +21961,12 @@ export namespace Prisma {
     user_name: 'user_name',
     from_rm_user_id: 'from_rm_user_id',
     rm_user_id: 'rm_user_id',
+    from_status_id: 'from_status_id',
     from_status: 'from_status',
+    from_status_color: 'from_status_color',
     to_status: 'to_status',
+    to_status_id: 'to_status_id',
+    to_status_color: 'to_status_color',
     created_by_name: 'created_by_name',
     created_at: 'created_at',
     remarks: 'remarks',
@@ -22110,7 +22166,9 @@ export namespace Prisma {
     from_user_name: 'from_user_name',
     user_name: 'user_name',
     from_status: 'from_status',
+    from_status_color: 'from_status_color',
     to_status: 'to_status',
+    to_status_color: 'to_status_color',
     created_by_name: 'created_by_name',
     remarks: 'remarks',
     display_created_at: 'display_created_at'
@@ -23677,8 +23735,12 @@ export namespace Prisma {
     user_name?: StringFilter<"lead_status_entry_view"> | string
     from_rm_user_id?: IntFilter<"lead_status_entry_view"> | number
     rm_user_id?: IntFilter<"lead_status_entry_view"> | number
+    from_status_id?: IntFilter<"lead_status_entry_view"> | number
     from_status?: StringNullableFilter<"lead_status_entry_view"> | string | null
+    from_status_color?: StringFilter<"lead_status_entry_view"> | string
     to_status?: StringNullableFilter<"lead_status_entry_view"> | string | null
+    to_status_id?: IntFilter<"lead_status_entry_view"> | number
+    to_status_color?: StringFilter<"lead_status_entry_view"> | string
     created_by_name?: StringFilter<"lead_status_entry_view"> | string
     created_at?: DateTimeNullableFilter<"lead_status_entry_view"> | Date | string | null
     remarks?: StringNullableFilter<"lead_status_entry_view"> | string | null
@@ -23692,8 +23754,12 @@ export namespace Prisma {
     user_name?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
     from_status?: SortOrderInput | SortOrder
+    from_status_color?: SortOrder
     to_status?: SortOrderInput | SortOrder
+    to_status_id?: SortOrder
+    to_status_color?: SortOrder
     created_by_name?: SortOrder
     created_at?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
@@ -23708,8 +23774,12 @@ export namespace Prisma {
     user_name?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
     from_status?: SortOrderInput | SortOrder
+    from_status_color?: SortOrder
     to_status?: SortOrderInput | SortOrder
+    to_status_id?: SortOrder
+    to_status_color?: SortOrder
     created_by_name?: SortOrder
     created_at?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
@@ -23731,8 +23801,12 @@ export namespace Prisma {
     user_name?: StringWithAggregatesFilter<"lead_status_entry_view"> | string
     from_rm_user_id?: IntWithAggregatesFilter<"lead_status_entry_view"> | number
     rm_user_id?: IntWithAggregatesFilter<"lead_status_entry_view"> | number
+    from_status_id?: IntWithAggregatesFilter<"lead_status_entry_view"> | number
     from_status?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
+    from_status_color?: StringWithAggregatesFilter<"lead_status_entry_view"> | string
     to_status?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
+    to_status_id?: IntWithAggregatesFilter<"lead_status_entry_view"> | number
+    to_status_color?: StringWithAggregatesFilter<"lead_status_entry_view"> | string
     created_by_name?: StringWithAggregatesFilter<"lead_status_entry_view"> | string
     created_at?: DateTimeNullableWithAggregatesFilter<"lead_status_entry_view"> | Date | string | null
     remarks?: StringNullableWithAggregatesFilter<"lead_status_entry_view"> | string | null
@@ -26913,8 +26987,12 @@ export namespace Prisma {
     user_name?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
     from_status?: SortOrder
+    from_status_color?: SortOrder
     to_status?: SortOrder
+    to_status_id?: SortOrder
+    to_status_color?: SortOrder
     created_by_name?: SortOrder
     created_at?: SortOrder
     remarks?: SortOrder
@@ -26926,6 +27004,8 @@ export namespace Prisma {
     lead_id?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
+    to_status_id?: SortOrder
   }
 
   export type lead_status_entry_viewMaxOrderByAggregateInput = {
@@ -26935,8 +27015,12 @@ export namespace Prisma {
     user_name?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
     from_status?: SortOrder
+    from_status_color?: SortOrder
     to_status?: SortOrder
+    to_status_id?: SortOrder
+    to_status_color?: SortOrder
     created_by_name?: SortOrder
     created_at?: SortOrder
     remarks?: SortOrder
@@ -26950,8 +27034,12 @@ export namespace Prisma {
     user_name?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
     from_status?: SortOrder
+    from_status_color?: SortOrder
     to_status?: SortOrder
+    to_status_id?: SortOrder
+    to_status_color?: SortOrder
     created_by_name?: SortOrder
     created_at?: SortOrder
     remarks?: SortOrder
@@ -26963,6 +27051,8 @@ export namespace Prisma {
     lead_id?: SortOrder
     from_rm_user_id?: SortOrder
     rm_user_id?: SortOrder
+    from_status_id?: SortOrder
+    to_status_id?: SortOrder
   }
 
   export type leads_viewOrderByRelevanceInput = {

@@ -19,6 +19,7 @@
     flex-direction: row-reverse;
     gap: 10px;
 }
+
 .main-content .table a {
     color: #fff !important;
 }
@@ -26,21 +27,56 @@
 .text-new {
     color: #53ff7b !important;
 }
+
 .text-inprogress {
     color: #ffd453 !important;
 }
+
 .text-followup {
     color: #dbff58 !important;
 }
+
 .text-site-visit-fixed {
     color: #ff84e6 !important;
 }
+
 .text-site-visit-done {
     color: #00ffee !important;
 }
+
 .text-dead {
     color: #ff6e7c !important;
 }
+
 .text-closed {
     color: #c0c0c0 !important;
+}
+
+
+
+.scrollContainer {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 8px;
+
+    /* Hide scrollbar - Firefox */
+    scrollbar-width: none;
+
+    /* IE / Edge legacy */
+    -ms-overflow-style: none;
+}
+
+/* Hide scrollbar - Chrome / Safari */
+.scrollContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.whatsapp-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
 }

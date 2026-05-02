@@ -17,9 +17,10 @@ import LeadHistory from "./LeadHistory";
 import Link from "next/link";
 import "./Leads.scss";
 import { useRouter } from "next/navigation";
+import History from "./History";
 
 interface InputFormProps {
-  
+
   records?: {
     slug: any,
     lead_id: string,
@@ -112,7 +113,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       revenue: records.revenue,
     });
     console.log("Form populated with records:", records);
-    if(records.lead_status_id === 7) {
+    if (records.lead_status_id === 7) {
       console.log("Lead is closed, setting closeStatus to true");
       setCloseStatus(true);
     }
@@ -142,8 +143,8 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       if (!form.schedule_date && !["6", "7"].includes(form.lead_status_id)) {
         setErrors({ schedule_date: ["Schedule date is required for updating lead"] });
         return;
-      }      
-      
+      }
+
       if (form.lead_status_id === "7") {
         if (closeStatus && !form.closed_date) {
           setErrors({ closed_date: ["Closed date is required when lead status is Closed"] });
@@ -178,7 +179,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       } else if (response.success && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
         router.push("/leads");
       }
-       else if (response.success && typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
+      else if (response.success && typeof window !== "undefined" && process.env.NEXT_PUBLIC_REFRESH_PAGE === "yes") {
         window.location.href = "/leads";
       }
     } catch (err: any) {
@@ -253,6 +254,11 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         placeholder="9876543210"
                         readOnly={accessMenuRole(1) ? false : true}
                       />
+                      <span className="input-icon">
+                        <a href={`https://wa.me/91${form.mobile_no}`} target="_blank"  rel="noopener noreferrer">
+                          <i className="whatsapp-icon"></i>
+                        </a>
+                      </span>
                     </div>
                     {errors.mobile_no && (
                       <p className="text-danger">{errors.mobile_no[0]}</p>
@@ -498,7 +504,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       onClick={() => {
                         setCloseStatus(form.lead_status_id === "7");
                       }}
-                          
+
                     >
                       <LeadStatusList
                         name="lead_status_id"
@@ -581,6 +587,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                                 placeholder="Enter revenue"
                               />
 
+
                             </div>
                             {errors.revenue && (
                               <p className="text-danger">{errors.revenue[0]}</p>
@@ -601,7 +608,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                           <p className="text-danger">{errors.status_remarks[0]}</p>
                         )}
                       </div>
-                      <div className="col-sm-6 ol-6">
+                      {/* <div className="col-sm-6 ol-6">
                         <label htmlFor="send_email" className="form-label">Send Email</label>
                         <div className="form-check">
                           <input
@@ -616,19 +623,9 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                             Send email notification
                           </label>
                         </div>
-                      </div>
-                      <div className="col-sm-6 ol-6">
-                        <Link
-                          title="History"
-                          className="btn btn-warning"
-                          href="javascript:void(0)"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleLeadHistory(); // pass the specific data item here
-                          }}
-                        >
-                          Show History
-                        </Link>
+                      </div> */}
+                      <div className="col-sm-12 ol-6 scrollContainer" style={{ maxHeight: "100px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "20px" }}>
+                        <History lead_id={form.lead_id} overflow="no" />
                       </div>
                     </>
                   }

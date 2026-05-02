@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getUserSessionData } from "../utils/common";
 import { useState, useEffect } from "react";
 import Avatar from "./Avatar";
+import "./HeaderProfile.scss";
 
 const HeaderProfile = () => {
   const [sessionDataString, setSessionDataString] = useState<any>(null);
@@ -32,6 +33,9 @@ const HeaderProfile = () => {
     headerSidebarShow,
     handleCheckboxChange,
   } = useDigiContext();
+  const uname = sessionDataString?.user_name
+  ?.split(' ')[0]
+  ?.substring(0, 20);
   return (
     <div className="header-btn-box" ref={headerDropdownRef}>
       <div className="profile-btn-wrapper">
@@ -40,7 +44,8 @@ const HeaderProfile = () => {
           id="profileDropdown"
           onClick={toggleHeaderDropdown}
         >
-          <Avatar name={sessionDataString?.user_name?.toUpperCase()} size="30" />
+          <div><Avatar name={sessionDataString?.user_name?.toUpperCase()} size="30" /></div>
+          <div className="d-none d-lg-block">{uname}</div>
         </button>
         <ul
           className={`dropdown-menu ${headerDropdownShow ? "show" : ""}`}

@@ -7,7 +7,7 @@ import "../lead-manage/Leads.scss";
 import { useState, useEffect } from "react";
 
 
-export default function DueOverDueReportComponent() {
+export default function DeadLeadsReportComponent() {
   const [filters, setFilters] = useState({
     dueDate: "",
     rm_user_id: "",
@@ -26,7 +26,7 @@ export default function DueOverDueReportComponent() {
     setLoading(true);
     setError(null);
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/reports/due-overdue-report?`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/reports/dead-lead-report?`;
       if (filters.dueDate) {
         url += `&due_filter=${filters.dueDate}`;
         localStorage.setItem("lead_due_filter", filters.dueDate);
@@ -77,62 +77,17 @@ export default function DueOverDueReportComponent() {
             fontSize: "1rem", textAlign: "center",
             textDecoration: "underline"
           }}
-        >Due/Over Due Report</h2>
+        >
+          Dead Leads Report
+        </h2>
         <div className="card">
           {/* Filters */}
-          {/* <div className="card-body p-3">
-            <div className="row g-2 align-items-center mb-2">
-              <div className="col-md-1">
-                <select
-                  className="form-select"
-                  value={filters.dueDate}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setFilters({ ...filters, dueDate: value });
-                    fetchData({ ...filters, dueDate: value });
-                  }}>
-                  <option value="">All</option>
-                  <option value="1">Due</option>
-                  <option value="0">Over Due</option>
-                  <option value="2">Upcoming</option>
-                </select>
-              </div>
-              <div className="col-md-2">
-                <UserList form={form} setForm={setForm} doptionion="All" />
-                <input type="hidden"
-                  id="rm_user_id"
-                  name="rm_user_id"
-                  value={form.rm_user_id}
-                />
-              </div>
-              <div className="col-md-2">
-                <select
-                  id="lead_status_id"
-                  name="lead_status_id"
-                  className="form-select border-white"
-                  value={filters.lead_status_id}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setFilters({ ...filters, lead_status_id: value });
-                    fetchData({ ...filters, lead_status_id: value });
-                  }}
-                >
-                  <LeadStatusList
-                    name="lead_status_id"
-                    selected_options={form.lead_status_id}
-                    doptionion="All"
-                  />
-                </select>
-              </div>
-              <div className="col-md-1 ms-auto">
-                <select className="form-select" value={dataPerPage} onChange={(e) => setDataPerPage(Number(e.target.value))}>
-                  {[10, 25, 50, 100, 250, 500].map((count) => (
-                    <option key={count} value={count}>{count}</option>
-                  ))}
-                </select>
-              </div>
+          <div className="card-body p-3">
+            <div className="row g-2 align-items-center mb-2">            
+              
+              
             </div>
-          </div> */}
+          </div>
 
           {/* Table */}
           <div id="leadsDiv">
@@ -140,16 +95,12 @@ export default function DueOverDueReportComponent() {
               <table id="leadsTable" className="table table-hover table-striped">
                 <thead>
                   <tr>
-                    <th>Due Today</th>
-                    <th>Over Due</th>
-                    <th>Not Scheduled</th>
+                    <th>Dead Leads</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{dataList.dueCount}</td>
-                    <td>{dataList.overdueCount}</td>
-                    <td>{dataList.notscheduledCount}</td>
+                    <td>{dataList.deadLeadsCount}</td>
                   </tr>
                 </tbody>
               </table>

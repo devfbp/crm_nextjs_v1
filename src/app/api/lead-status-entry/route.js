@@ -21,7 +21,10 @@ export async function GET(request) {
 
     if (lead_view == 1 && lead_id) {
       let dataItems = await prisma.lead_status_entry_view.findMany({
-        where: { lead_id: lead_id }
+        where: { lead_id: lead_id },
+        orderBy: {
+          lead_entry_id: 'desc', // or created_at
+        },
       });
       return Response.json(dataItems);
     }

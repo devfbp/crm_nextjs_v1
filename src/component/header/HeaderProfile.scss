@@ -1,0 +1,11 @@
+.header-btn-box {
+    @media (min-width: 992px) {
+        width: 160px;
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    }
+}

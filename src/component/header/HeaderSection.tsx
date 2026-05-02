@@ -112,8 +112,8 @@ const HeaderSection = () => {
                     </select>
                   </div> */}
                   {/* <HeaderChat /> */}
-                  <HeaderNotification />
-                  <Calculator />
+                  {/* <HeaderNotification /> */}
+                  {/* <Calculator /> */}
                   <button
                     className="header-btn fullscreen-btn"
                     id="btnFullscreen"
@@ -140,18 +140,18 @@ const HeaderSection = () => {
                 </div>
               </div>
             </div>
-            <button
+            {/* <button
               className="header-btn header-collapse-group-btn d-lg-none"
               onClick={toggleMobileHeader}
             >
               <i className="fa-light fa-ellipsis-vertical"></i>
-            </button>
-            <button
+            </button> */}
+            {/* <button
               className="header-btn theme-settings-btn d-lg-none"
               onClick={openSettings}
             >
               <i className="fa-light fa-gear"></i>
-            </button>
+            </button> */}
             <HeaderProfile />
           </div>
         </div>

@@ -1,55 +1,136 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
-import PaginationSection from "../PaginationSection";
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
-import StatusName from "./StatusName";
-import ProjectName from "./ProjectName";
-import UserName from "./UserName";
-import EditAction from "../action/Edit";
-import DeleteAction from "../action/Delete";
+import React, { useEffect, useState } from "react";
 import "./Leads.scss";
-import Link from "next/link";
-import { tr } from "date-fns/locale";
 
+const History = (props) => {
+  const [records, setRecords] = useState(null);
 
-const LeadsTable = (props) => {
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL +
+          "/lead-status-entry?lead_view=1&lead_id=" +
+          props.lead_id
+      );
+      const result = await response.json();
+      setRecords(result);
+    };
+
+    fetchData();
+  }, [props.lead_id]);
+
   return (
-    <div className="col-12">
-      <div className="card">
-        <OverlayScrollbarsComponent>
-          <table
-            className="table table-dashed table-hover digi-dataTable leads-table table-striped"
-            id="leadsTable"
-          >
-            <thead>
-              <tr>
-                <th>Created User</th>
-                <th>Created Date</th>
-                <th>From Status</th>
-                <th>To Status</th>
-              </tr>
-            </thead>
+    <>
+      {/* Scroll Container */}
+      <div className="scrollContainer">
+        <ul className="timeline-wrapper timeline">
+          {records &&
+            records.map((item, index) => (
+              <li key={index} className="timeline-item">
+                <div className="timeline-dot" style={{ backgroundColor: "red" }}></div>
+                <div className="timeline-content">
+                  <div className="top-row">
+                    <div>
+                      <strong>User:</strong> {item.created_by_name}
+                    </div>
+                    <div>
+                      <strong>Date:</strong> {item.display_created_at}
+                    </div>
+                  </div>
 
-            <tbody>
-              {props?.records &&
-                props?.records?.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{item.user_name}</td>
-                      <td>{item.created_at}</td>
-                      <td>{item.from_status}</td>
-                      <td>{item.to_status}</td>
-                    </tr>
-                  );
-                })
-              }
-            </tbody>
-          </table>
-        </OverlayScrollbarsComponent>
+                  <div className="mid-row">
+                    <div>
+                      <strong>From:</strong> {item.from_user_name}
+                    </div>
+                    <div>
+                      <strong>To:</strong> {item.user_name}
+                    </div>
+                  </div>
+
+                  <div className="mid-row">
+                    <div>
+                      <strong>Status: </strong>
+                      <span className={`text-`+item.from_status_color}>{item.from_status}</span> →{" "}
+                      <span className={`text-`+item.to_status_color}>{item.to_status}</span>
+                    </div>
+                  </div>
+
+                  <div className="remarks">
+                    <strong>Remarks:</strong> {item.remarks || "N/A"}
+                  </div>
+                </div>
+              </li>
+            ))}
+        </ul>
       </div>
-    </div>
+
+      {/* Styles */}
+      <style jsx>{`
+        /* Scroll container (THIS is the actual scroll element) */
+        
+
+        /* Timeline base */
+        .timeline {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          position: relative;
+        }
+
+        /* vertical line */
+        .timeline::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 18px;
+          width: 2px;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-item {
+          position: relative;
+          padding-left: 50px;
+          margin-bottom: 20px;
+          color: #fff;
+        }
+
+        /* dot */
+        .timeline-dot {
+          position: absolute;
+          left: 10px;
+          top: 5px;
+          width: 16px;
+          height: 16px;
+          // background: #4caf50;
+          border-radius: 50%;
+          border: 3px solid #1e1e1e;
+        }
+
+        .timeline-content {
+          background: rgba(255, 255, 255, 0.05);
+          padding: 12px;
+          border-radius: 8px;
+        }
+
+        .top-row,
+        .mid-row {
+          display: flex;
+          justify-content: space-between;
+          font-size: 13px;
+          margin-bottom: 6px;
+        }
+
+        .remarks {
+          margin-top: 8px;
+          font-size: 13px;
+          color: #ddd;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          padding-top: 6px;
+        }
+      `}</style>
+    </>
   );
 };
 
-export default LeadsTable;
+export default History;

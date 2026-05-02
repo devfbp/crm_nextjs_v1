@@ -1,17 +1,19 @@
 import { no } from 'zod/v4/locales';
-import prisma from '../../../../lib/prisma';
-import { getSessionFromToken } from "../session";
+import prisma from '../../../../../lib/prisma';
+import { getSessionFromToken } from "../../session";
 
 export async function GET(request) {
   const token = getSessionFromToken();
   const bearer = request.headers.get("Authorization") || "";
   const authToken = bearer.replace("Bearer ", "").trim();
-//   if (authToken !== process.env.NEXT_PUBLIC_BEARER_TOKEN) {
-//     return new Response(
-//       JSON.stringify({ success: false, message: "Unauthorized" }),
-//         { status: 401, headers: { 'Content-Type': 'application/json' } }
-//     );
-//   }
+  // console.log("Received token:", authToken);
+  // console.log("Expected token:", process.env.NEXT_PUBLIC_BEARER_TOKEN);
+  if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER=="Yes") {
+    return new Response(
+      JSON.stringify({ success: false, message: "Unauthorized" }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
   try {
     const where = { flag: 0 };
     let lead_where = { flag: 0 };
@@ -22,22 +24,17 @@ export async function GET(request) {
     todayStart.setHours(0, 0, 0, 0);
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
-    // due and overdue counts
-    const dueCount = await prisma.lead.count({
+    
+    const deadLeadsCount = await prisma.lead_status_entry.count({
       where: {
         flag: 0,
-        schedule_date: { gte: todayStart, lte: todayEnd }
-      }
-    });
-    const overdueCount = await prisma.lead.count({
-      where: {
-        flag: 0,
-        schedule_date: { lt: todayStart }
+        created_at: { gte: todayStart, lte: todayEnd },
+        to_status_id: 6
       }
     });
     // console.log(lead_status_with_count);
     return new Response(
-      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count, dueCount, overdueCount, NumberofClosuresDone, LastBookingDate: LastBookingDate?.closed_date || null }),
+      JSON.stringify({ success: true, data: { deadLeadsCount } }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 

@@ -21,11 +21,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
+ * Prisma Client JS version: 6.19.3
  * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
+  client: "6.19.3",
   engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
@@ -366,8 +366,12 @@ exports.Prisma.Lead_status_entry_viewScalarFieldEnum = {
   user_name: 'user_name',
   from_rm_user_id: 'from_rm_user_id',
   rm_user_id: 'rm_user_id',
+  from_status_id: 'from_status_id',
   from_status: 'from_status',
+  from_status_color: 'from_status_color',
   to_status: 'to_status',
+  to_status_id: 'to_status_id',
+  to_status_color: 'to_status_color',
   created_by_name: 'created_by_name',
   created_at: 'created_at',
   remarks: 'remarks',
@@ -501,7 +505,9 @@ exports.Prisma.lead_status_entry_viewOrderByRelevanceFieldEnum = {
   from_user_name: 'from_user_name',
   user_name: 'user_name',
   from_status: 'from_status',
+  from_status_color: 'from_status_color',
   to_status: 'to_status',
+  to_status_color: 'to_status_color',
   created_by_name: 'created_by_name',
   remarks: 'remarks',
   display_created_at: 'display_created_at'

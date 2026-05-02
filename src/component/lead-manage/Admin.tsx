@@ -18,7 +18,16 @@ import LeadStatusList from "./LeadStatusList";
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
     rm_user_id: "",
-    lead_status_id: ""
+    lead_status_id: "",
+    suserer_id: "",
+  });
+  const [filters, setFilters] = useState({
+    search: "",
+    status: "",
+    user: "",
+    dueDate: "",
+    assigned_to: "",
+    lead_status_id: "",
   });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,14 +43,7 @@ const LeadsTable = (props: any) => {
   const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [userFilter, setUserFilter] = useState("");
-  const [filters, setFilters] = useState({
-    search: "",
-    status: "",
-    user: "",
-    dueDate: "",
-    assigned_to: "",
-  });
+  const [userFilter, setUserFilter] = useState("");  
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
   const { navQuickToggle } = useDigiContext();
   
@@ -195,6 +197,11 @@ const LeadsTable = (props: any) => {
     const savedDueFilter = localStorage.getItem("lead_due_filter") || "";
     const savedAssignedTo = localStorage.getItem("lead_assigned_to") || "";
     const savedLeadStatusId = localStorage.getItem("lead_status_id") || "";
+    setForm((prev) => ({
+      ...prev,
+      assigned_to: savedAssignedTo,
+      lead_status_id: savedLeadStatusId,
+    }));
     setFilters({
       ...filters,
       dueDate: savedDueFilter,
@@ -207,6 +214,7 @@ const LeadsTable = (props: any) => {
       lead_status_id: savedLeadStatusId,
     });
   }, []);
+
   
   return (
     <React.Fragment>
@@ -214,9 +222,9 @@ const LeadsTable = (props: any) => {
       <div className="col-12">
         <div className="card">
           {/* Filters */}
-          <div className="card-body p-3">
+          <div className="card-body p-1">
             <div className="row g-2 align-items-center mb-2">
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <input
                   type="text"
                   value={searchTerm}
@@ -226,7 +234,7 @@ const LeadsTable = (props: any) => {
                 />
               </div>
               
-              <div className="col-md-1">
+              <div className="col-md-2">
                 <select 
                   className="form-select" 
                   value={filters.dueDate}
@@ -235,20 +243,13 @@ const LeadsTable = (props: any) => {
                     setFilters({ ...filters, dueDate: value });
                     fetchData({ ...filters, dueDate: value });
                   }}>
-                  <option value="">All</option>
+                  <option value="">All </option>
                   <option value="1">Due</option>
                   <option value="0">Over Due</option>
                   <option value="2">Upcoming</option>
                 </select>
               </div>
-              <div className="col-md-2">
-                <UserList form={form} setForm={setForm} doptionion="All" />
-                <input type="hidden"
-                  id="rm_user_id"
-                  name="rm_user_id"
-                  value={form.rm_user_id}
-                />
-              </div>
+              
               <div className="col-md-2">
                 <select
                   id="lead_status_id"
@@ -264,9 +265,16 @@ const LeadsTable = (props: any) => {
                   <LeadStatusList
                     name="lead_status_id"
                     selected_options={form.lead_status_id}
-                    doptionion="All"
+                    doptionion="All Status"
                   />
                 </select>
+              </div>
+              <div className="col-md-2">
+                <UserList form={form} setForm={setForm} doptionion="All Users" />
+                <input type="hidden"
+                  id="rm_user_id"
+                  name="rm_user_id"
+                  value={form.rm_user_id}                />
               </div>
               <div className="col-md-1">
                 <button className="btn btn-sm btn-secondary" onClick={refreshfilters}>Reset</button>
@@ -339,19 +347,21 @@ const LeadsTable = (props: any) => {
                       }
                       
                       <td title={data.customer_name}>
-                        {data.customer_name.length > 15 ? data.customer_name.substr(0, 15) + '...' : data.customer_name}
+                        {data.customer_name.length > 10 ? data.customer_name.substr(0, 10) + '...' : data.customer_name}
                       </td>
                       <td>{data.mobile_no}</td>
                       <td title={data.project_name}>
-                        {data.project_name.length > 25 ? data.project_name.substr(0, 20) + '...' : data.project_name}
+                        {data.project_name.length > 10 ? data.project_name.substr(0, 10) + '...' : data.project_name}
                       </td>
                       <td title={data.assigned_to}>
-                        {data.assigned_to.length > 10 ? data.assigned_to.substr(0, 20) + '...' : data.assigned_to}
+                        {data.assigned_to.length > 10 ? data.assigned_to.substr(0, 10) + '...' : data.assigned_to}
                       </td>
                       {accessMenuRole(1) &&
-                        <td>{data.sub_source_name}</td>
+                        <td title={data.sub_source_name}>
+                          {data.sub_source_name.length > 10 ? data.sub_source_name.substr(0, 10) + '...' : data.sub_source_name}
+                        </td>
                       }
-                      <td>{data.status}</td>
+                      <td className={`text-${data.status_color ? data.status_color : 'secondary'}`}>{data.status}</td>
                       <td>
                         <div className="btn-box">
                           <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />

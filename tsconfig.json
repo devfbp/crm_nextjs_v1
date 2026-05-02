@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/component/role/Form.js", "src/component/error/NoAccess.js", "src/component/lead-manage/History.js", "src/component/cards/Pie_1.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/component/role/Form.js", "src/component/error/NoAccess.js", "src/component/lead-manage/History.tsx", "src/component/cards/Pie_1.js"],
   "exclude": ["node_modules"]
 }
