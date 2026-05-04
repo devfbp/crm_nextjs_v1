@@ -34,15 +34,32 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# crm_nextjs
-# crm_nextjs
-# crm_nextjs_v2
-# crm_nextjs_v2
-# crm_nextjs_v1
-# crm_nextjs_v1
-# crm_nextjs_v1
-# crm_nextjs-techy
-# crm_nextjs
-# crm_nextjs
-# crm_nextjs_v1
-# crm_nextjs_v1
+## Database & Migrations (Prisma)
+
+This project uses **Prisma** as an ORM. We follow a migration-based workflow to keep the database schema in sync across environments.
+
+### Workflow: Adding or Updating Fields
+
+1.  **Modify the Schema**: Edit `prisma/schema.prisma` to add or update your models/fields.
+2.  **Create & Apply Migration**: Run the following command to generate the SQL and update your local database:
+    ```bash
+    npx prisma migrate dev --name <describe_your_change>
+    ```
+3.  **Generate Client**: (Usually happens automatically with the command above) To manually regenerate the Prisma Client:
+    ```bash
+    npx prisma generate
+    ```
+
+### Essential Commands
+
+| Command | Description |
+| :--- | :--- |
+| `npx prisma migrate dev` | Create/apply migrations in development (tracks history). |
+| `npx prisma migrate status` | Check if your database schema is up to date. |
+| `npx prisma migrate deploy` | Apply pending migrations in production environments. |
+| `npx prisma studio` | Open a visual editor for your database data. |
+
+> [!WARNING]
+> **Do not use `npx prisma db push`** for schema changes. This ignores migration history and can lead to inconsistencies. Always use `migrate dev`.
+
+---

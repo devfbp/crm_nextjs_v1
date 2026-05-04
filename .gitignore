@@ -19,11 +19,10 @@
 # misc
 .DS_Store
 *.pem
-
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 # local env files
 .env
@@ -32,23 +31,14 @@ yarn-error.log*
 .env.prod
 .env.local
 
-prisma/*
-# .env*
-
-#env.txt
-#env2.txt
-#env3.txt
-
-# vercel
-.vercel
+# prisma
+/prisma/generated
+/src/generated/prisma
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
-
-/src/generated/prisma
-
+# project specific
+# /z_dbdump
 package-lock.json
-
