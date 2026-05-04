@@ -54,9 +54,14 @@ This project uses **Prisma** as an ORM. We follow a migration-based workflow to 
 
 | Command | Description |
 | :--- | :--- |
-| `npx prisma migrate dev` | Create/apply migrations in development (tracks history). |
+| `npx prisma db pull` | pulls schema from database and updates schema.prisma |
+| `npx prisma migrate dev --name init --create-only` | Create a baseline migration |
+| `npx prisma migrate resolve --applied <migration_folder_name>` | Mark it as already applied. |
+| `npx prisma migrate dev --name add-feature` | Create/apply migrations in development (tracks history). |
 | `npx prisma migrate status` | Check if your database schema is up to date. |
 | `npx prisma migrate deploy` | Apply pending migrations in production environments. |
+| `npx prisma migrate reset` | Reset database and apply all migrations |
+| `npx prisma generate` | Generate Prisma Client |
 | `npx prisma studio` | Open a visual editor for your database data. |
 
 > [!WARNING]
