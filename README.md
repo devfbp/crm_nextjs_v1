@@ -63,6 +63,8 @@ This project uses **Prisma** as an ORM. We follow a migration-based workflow to 
 | `npx prisma migrate reset` | Reset database and apply all migrations |
 | `npx prisma generate` | Generate Prisma Client |
 | `npx prisma studio` | Open a visual editor for your database data. |
+| `npx prisma format` | format the prisma schema. |
+| `npx prisma db seed` | run seed file. |
 
 > [!WARNING]
 > **Do not use `npx prisma db push`** for schema changes. This ignores migration history and can lead to inconsistencies. Always use `migrate dev`.

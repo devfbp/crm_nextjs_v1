@@ -43,6 +43,8 @@ interface InputFormProps {
     view_data: any,
     closed_date: any,
     revenue: any,
+    remind_at: any,
+    remind_notes: string,
   },
   setRecords?: (records: any) => void;
   editid: any;
@@ -71,6 +73,8 @@ const initialFormState = {
   view_data: null,
   closed_date: "",
   revenue: "",
+  remind_at: "",
+  remind_notes: "",
 };
 
 const InputForm: React.FC<InputFormProps> = ({ records }) => {
@@ -111,6 +115,8 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       view_data: records.view_data || null,
       closed_date: records.closed_date,
       revenue: records.revenue,
+      remind_at: records.remind_at,
+      remind_notes: records.remind_notes || "",
     });
     console.log("Form populated with records:", records);
     if (records.lead_status_id === 7) {
@@ -624,6 +630,45 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                           </label>
                         </div>
                       </div> */}
+                      <div className="col-md-6 pb-3">
+                        <label htmlFor="remind_at" className="form-label">
+                          Reminder Date & Time
+                        </label>
+                        <div className="input-group-with-icon">
+                          <DatePicker
+                            selected={form.remind_at ? new Date(form.remind_at) : null}
+                            onChange={(date) =>
+                              setForm({
+                                ...form,
+                                remind_at: date ? date.toISOString() : "",
+                              })
+                            }
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            timeCaption="time"
+                            dateFormat="dd-MM-yyyy h:mm aa"
+                            name="remind_at"
+                            id="remind_at"
+                            autoComplete="off"
+                            placeholderText="Click to select date & time"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-6 pb-3">
+                        <label htmlFor="remind_notes" className="form-label">
+                          Reminder Notes (Optional)
+                        </label>
+                        <textarea
+                          className="form-control"
+                          id="remind_notes"
+                          name="remind_notes"
+                          rows={3}
+                          value={form.remind_notes}
+                          onChange={(e) => setForm({ ...form, remind_notes: e.target.value })}
+                          placeholder="Specific notes for this reminder"
+                        ></textarea>
+                      </div>
                       <div className="col-sm-12 ol-6 scrollContainer" style={{ maxHeight: "100px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "20px" }}>
                         <History lead_id={form.lead_id} overflow="no" />
                       </div>

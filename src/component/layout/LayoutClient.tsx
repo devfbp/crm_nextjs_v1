@@ -53,6 +53,7 @@ const Layout = ({ children, session, encryptedString }: Props) => {
     "/pricing-table",
     "/pricing-table-2",
     "/under-construction",
+    "/docs",
   ];
   const withoutLayout = pagesWithoutLayout.find((item) => item === pathname);
   return withoutLayout ? (

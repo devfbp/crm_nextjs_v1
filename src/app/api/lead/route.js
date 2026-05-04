@@ -5,6 +5,57 @@ import { getSessionFromToken } from "../session";
 /*
 INSERT INTO `lead_file` (`lead_file_id`, `lead_file_name`, `file_path`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES (NULL, 'Manual', '/', NULL, NULL, NULL, NULL, '0', '0');
 */
+/**
+ * @swagger
+ * /lead:
+ *   get:
+ *     summary: Get leads
+ *     description: Retrieve a list of leads with various filters.
+ *     tags: [Leads]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         description: Lead ID to fetch a specific lead
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 100
+ *         description: Number of records to return
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *           default: modified_at
+ *         description: Field to sort by
+ *       - in: query
+ *         name: view
+ *         schema:
+ *           type: string
+ *         description: View type (e.g., "1" for filtered view)
+ *       - in: query
+ *         name: due_filter
+ *         schema:
+ *           type: string
+ *         description: Filter by due date ("0" for overdue, "1" for today, "2" for upcoming)
+ *       - in: query
+ *         name: assigned_to
+ *         schema:
+ *           type: integer
+ *         description: Filter by assigned user ID
+ *       - in: query
+ *         name: lead_status_id
+ *         schema:
+ *           type: integer
+ *         description: Filter by lead status ID
+ *     responses:
+ *       200:
+ *         description: A list of leads
+ *       500:
+ *         description: Internal server error
+ */
 export async function GET(request) {
   const token = getSessionFromToken();
   try {
@@ -19,13 +70,26 @@ export async function GET(request) {
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
-        orderBy: { modified_at: 'asc' }
+        orderBy: { modified_at: 'asc' },
+        include: {
+          lead_reminders: {
+            take: 1,
+            orderBy: { lead_reminder_id: 'desc' }
+          }
+        }
       });
       const dataItems2 = await prisma.leads_view.findMany({
         where: { lead_id: id },
         orderBy: { modified_at: 'asc' }
       });
       let finalData = dataItem;
+      if (dataItem.length > 0) {
+        const lead = dataItem[0];
+        if (lead.lead_reminders && lead.lead_reminders.length > 0) {
+          lead.remind_at = lead.lead_reminders[0].remind_at;
+          lead.remind_notes = lead.lead_reminders[0].message;
+        }
+      }
       if (dataItems2 && dataItems2.length > 0) {
         finalData[0].view_data = dataItems2[0];
       }
@@ -66,7 +130,7 @@ export async function GET(request) {
         vwhere.rm_user_id = token.user_id;
         const teamMembers = await prisma.user_team_member.findMany({
           where: {
-            leader_id: token.user_id,
+            lead_id: token.user_id,
             flag: 0
           },
           select: {
@@ -104,6 +168,63 @@ export async function GET(request) {
 }
 
 
+/**
+ * @swagger
+ * /lead:
+ *   post:
+ *     summary: Create a new lead
+ *     tags: [Leads]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - customer_name
+ *               - mobile_no
+ *               - project_id
+ *               - source_id
+ *               - sub_source_id
+ *               - rm_user_id
+ *               - lead_status_id
+ *             properties:
+ *               customer_name:
+ *                 type: string
+ *               mobile_no:
+ *                 type: string
+ *               email_id:
+ *                 type: string
+ *               alternate_no:
+ *                 type: string
+ *               whatsapp_no:
+ *                 type: string
+ *               alternate_email:
+ *                 type: string
+ *               project_id:
+ *                 type: integer
+ *               source_id:
+ *                 type: integer
+ *               sub_source_id:
+ *                 type: integer
+ *               rm_user_id:
+ *                 type: integer
+ *               lead_status_id:
+ *                 type: integer
+ *               remarks:
+ *                 type: string
+ *               remind_at:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Date and time for the reminder
+ *     responses:
+ *       200:
+ *         description: Lead created successfully
+ *       400:
+ *         description: Lead already exists
+ *       500:
+ *         description: Internal server error
+ */
 export async function POST(request) {
   const token = getSessionFromToken();
   try {
@@ -134,7 +255,8 @@ export async function POST(request) {
         rm_user_id: parseInt(req.rm_user_id),
         lead_status_id: parseInt(req.lead_status_id),
         lead_file_id: parseInt(1),
-        remarks: req.remarks
+        remarks: req.remarks,
+        status_remarks: req.status_remarks || null,
       }
     });
     if (newlead) {
@@ -150,6 +272,28 @@ export async function POST(request) {
           remarks: "New Lead Created"
         },
       });
+
+      if (req.remind_at) {
+        const reminderStatusName = process.env.REMINDER_STATUS_NAME || "PENDING";
+        const reminderStatus = await prisma.reminder_status.findUnique({
+          where: { name: reminderStatusName },
+        });
+
+        await prisma.lead_reminders.create({
+          data: {
+            lead_id: newlead?.lead_id,
+            user_id: parseInt(token?.user_id),
+            remind_at: new Date(req.remind_at),
+            message: req.remind_notes || req.remarks || null,
+            reminder_logs: {
+              create: {
+                reminder_status_id: reminderStatus?.reminder_status_id || 1,
+                created_at: new Date(),
+              },
+            },
+          },
+        });
+      }
     }
     return Response.json({ 
       success: true, 
@@ -162,6 +306,71 @@ export async function POST(request) {
   }
 }
 
+/**
+ * @swagger
+ * /lead:
+ *   put:
+ *     summary: Update an existing lead
+ *     tags: [Leads]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - slug
+ *             properties:
+ *               slug:
+ *                 type: integer
+ *                 description: The Lead ID (slug)
+ *               customer_name:
+ *                 type: string
+ *               mobile_no:
+ *                 type: string
+ *               email_id:
+ *                 type: string
+ *               alternate_no:
+ *                 type: string
+ *               whatsapp_no:
+ *                 type: string
+ *               alternate_email:
+ *                 type: string
+ *               project_id:
+ *                 type: integer
+ *               source_id:
+ *                 type: integer
+ *               sub_source_id:
+ *                 type: integer
+ *               rm_user_id:
+ *                 type: integer
+ *               lead_status_id:
+ *                 type: integer
+ *               remarks:
+ *                 type: string
+ *               schedule_date:
+ *                 type: string
+ *                 format: date
+ *               closed_date:
+ *                 type: string
+ *                 format: date-time
+ *               revenue:
+ *                 type: number
+ *               remind_at:
+ *                 type: string
+ *                 format: date-time
+ *               send_email:
+ *                 type: boolean
+ *               status_remarks:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Lead updated successfully
+ *       400:
+ *         description: Lead already exists with mobile number
+ *       500:
+ *         description: Internal server error
+ */
 export async function PUT(request) {
   const token = getSessionFromToken();
   try {
@@ -200,7 +409,9 @@ export async function PUT(request) {
         schedule_date: req?.schedule_date ? new Date(req?.schedule_date) : null , // use the parsed Date object
         modified_by: token?.user_id || null,
         closed_date: req?.closed_date ? new Date(req?.closed_date) : null, // use the parsed Date object
-        revenue: req?.revenue ? parseFloat(req?.revenue) : 0
+        revenue: req?.revenue ? parseFloat(req?.revenue) : 0,
+        status_remarks: req.status_remarks || null,
+
       }
     });
     if (updatedlead && beforeLeadData?.lead_status_id !== updatedlead.lead_status_id) {
@@ -216,6 +427,43 @@ export async function PUT(request) {
           remarks: req.status_remarks ? req.status_remarks : "Status Updated"
         },
       });
+    }
+    if (updatedlead && req.remind_at) {
+      const reminderStatusName = process.env.REMINDER_STATUS_NAME || "PENDING";
+      const reminderStatus = await prisma.reminder_status.findUnique({
+        where: { name: reminderStatusName },
+      });
+
+      const existingReminder = await prisma.lead_reminders.findFirst({
+        where: { lead_id: updatedlead.lead_id },
+        orderBy: { lead_reminder_id: "desc" },
+      });
+
+      if (existingReminder) {
+        await prisma.lead_reminders.update({
+          where: { lead_reminder_id: existingReminder.lead_reminder_id },
+          data: {
+            remind_at: new Date(req.remind_at),
+            message: req.remind_notes || req.remarks || existingReminder.message,
+            user_id: parseInt(token?.user_id),
+          },
+        });
+      } else {
+        await prisma.lead_reminders.create({
+          data: {
+            lead_id: updatedlead?.lead_id,
+            user_id: parseInt(token?.user_id),
+            remind_at: new Date(req.remind_at),
+            message: req.remind_notes || req.remarks || null,
+            reminder_logs: {
+              create: {
+                reminder_status_id: reminderStatus?.reminder_status_id || 1,
+                created_at: new Date(),
+              },
+            },
+          },
+        });
+      }
     }
     if (updatedlead && req.send_email) {
       // console.log("Sending email notification for lead update...");
@@ -264,6 +512,25 @@ export async function PUT(request) {
   }
 }
 
+/**
+ * @swagger
+ * /lead:
+ *   delete:
+ *     summary: Delete (flag) a lead
+ *     tags: [Leads]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Lead ID to delete
+ *     responses:
+ *       200:
+ *         description: Lead deleted successfully
+ *       500:
+ *         description: Internal server error
+ */
 export async function DELETE(request) {
   const token = getSessionFromToken();
   try {

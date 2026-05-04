@@ -1,6 +1,37 @@
 import prisma from '../../../../lib/prisma';
 import { getSessionFromToken } from "../session";
 
+/**
+ * @swagger
+ * /project:
+ *   get:
+ *     summary: Get projects
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: project_id
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of projects
+ */
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -41,6 +72,30 @@ export async function GET(request) {
 }
 
 
+/**
+ * @swagger
+ * /project:
+ *   post:
+ *     summary: Create a new project
+ *     tags: [Projects]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - project_name
+ *               - city_id
+ *             properties:
+ *               project_name:
+ *                 type: string
+ *               city_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Project created successfully
+ */
 export async function POST(request) {
   const token = getSessionFromToken();
   try {
@@ -60,6 +115,31 @@ export async function POST(request) {
   }
 }
 
+/**
+ * @swagger
+ * /project:
+ *   put:
+ *     summary: Update a project
+ *     tags: [Projects]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - slug
+ *             properties:
+ *               slug:
+ *                 type: integer
+ *               project_name:
+ *                 type: string
+ *               city_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Project updated successfully
+ */
 export async function PUT(request) {
   const token = getSessionFromToken();
   try {
@@ -83,6 +163,22 @@ export async function PUT(request) {
   }
 }
 
+/**
+ * @swagger
+ * /project:
+ *   delete:
+ *     summary: Delete a project
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Project deleted successfully
+ */
 export async function DELETE(request) {
   const token = getSessionFromToken();
   try {

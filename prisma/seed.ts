@@ -2,43 +2,31 @@ import { PrismaClient} from './generated/prisma/client';
 
 const prisma = new PrismaClient();
 
-const userData = [
-  {
-    name: "Alice",
-    email: "alice@prisma.io",
-    posts: {
-      create: [
-        {
-          title: "Join the Prisma Discord",
-          content: "https://pris.ly/discord",
-          published: true,
-        },
-        {
-          title: "Prisma on YouTube",
-          content: "https://pris.ly/youtube",
-        },
-      ],
-    },
-  },
-  {
-    name: "Bob",
-    email: "bob@prisma.io",
-    posts: {
-      create: [
-        {
-          title: "Follow Prisma on Twitter",
-          content: "https://www.twitter.com/prisma",
-          published: true,
-        },
-      ],
-    },
-  },
-];
+async function main() {
+  const statuses = [
+    { name: 'PENDING', is_active: true },
+    { name: 'SENT', is_active: true },
+    { name: 'DISMISSED', is_active: true },
+  ]
 
-export async function main() {
-  for (const u of userData) {
-    await prisma.user.create({ data: u });
+  for (const status of statuses) {
+    await prisma.reminder_status.upsert({
+      where: { name: status.name },
+      update: {
+        is_active: status.is_active,
+      },
+      create: status,
+    })
   }
+
+  console.log('✅ Reminder statuses seeded')
 }
 
-main();
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })

@@ -21,7 +21,7 @@ export default function Home(props: Props) {
         const fetchData = async () => {
             const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/lead?id=' + props.params.slug);
             const result = await response.json();
-            // console.log("Fetched Records:", result);
+            console.log("Fetched Records:", result[0]);
             setRecords(result[0]);
         };
         fetchData();
