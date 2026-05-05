@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import HeaderChat from "./HeaderChat";
 import HeaderNotification from "./HeaderNotification";
+import HeaderClock from "./HeaderClock";
 import Calculator from "./Calculator";
 import HeaderProfile from "./HeaderProfile";
 import { useDigiContext } from "@/context/DigiContext";
@@ -112,7 +113,8 @@ const HeaderSection = () => {
                     </select>
                   </div> */}
                   {/* <HeaderChat /> */}
-                  {/* <HeaderNotification /> */}
+                  <HeaderClock />
+                  <HeaderNotification />
                   {/* <Calculator /> */}
                   <button
                     className="header-btn fullscreen-btn"

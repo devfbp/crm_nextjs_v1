@@ -321,16 +321,19 @@ model reminder_status {
 }
 
 model lead_reminders {
-  lead_reminder_id Int             @id @default(autoincrement())
-  lead_id          Int
-  user_id          Int
-  remind_at        DateTime        @db.DateTime(0)
-  frequency_value  Int             @default(5)
-  limit            Int             @default(2)
-  message          String?         @db.VarChar(200)
-  lead             lead            @relation(fields: [lead_id], references: [lead_id], onUpdate: Restrict, map: "lead_reminders_fk_1")
-  user             user            @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "lead_reminders_fk_2")
-  reminder_logs    reminder_logs[]
+  lead_reminder_id   Int             @id @default(autoincrement())
+  lead_id            Int
+  user_id            Int
+  remind_at          DateTime        @db.DateTime(0)
+  frequency_value    Int             @default(5)
+  limit              Int             @default(2)
+  notification_count Int             @default(0)
+  last_notified_at   DateTime?       @db.DateTime(0)
+  is_acknowledged    Boolean         @default(false)
+  message            String?         @db.VarChar(200)
+  lead               lead            @relation(fields: [lead_id], references: [lead_id], onUpdate: Restrict, map: "lead_reminders_fk_1")
+  user               user            @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "lead_reminders_fk_2")
+  reminder_logs      reminder_logs[]
 }
 
 model reminder_logs {
