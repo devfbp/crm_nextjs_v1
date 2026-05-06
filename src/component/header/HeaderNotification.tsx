@@ -154,9 +154,10 @@ const HeaderNotification = () => {
           maxHeight: "480px",
           overflowY: "auto",
           borderRadius: "12px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-          background: "var(--bs-body-bg, #1a1d2e)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+          background: "var(--bs-body-bg)",
+          color: "var(--bs-body-color)",
+          border: "1px solid var(--bs-border-color)",
           zIndex: 1050,
         }}
       >
@@ -164,13 +165,13 @@ const HeaderNotification = () => {
         <div
           style={{
             padding: "14px 18px",
-            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            borderBottom: "1px solid var(--bs-border-color)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <span style={{ fontWeight: 600, fontSize: "14px" }}>
+          <span style={{ fontWeight: 600, fontSize: "14px", color: "var(--bs-body-color)" }}>
             <i
               className="fa-light fa-bell me-2"
               style={{ color: "#6c63ff" }}
@@ -199,7 +200,7 @@ const HeaderNotification = () => {
             style={{
               padding: "32px 18px",
               textAlign: "center",
-              color: "rgba(255,255,255,0.4)",
+              color: "var(--bs-secondary-color, #6c757d)",
               fontSize: "13px",
             }}
           >
@@ -219,7 +220,7 @@ const HeaderNotification = () => {
               key={notif.lead_reminder_id}
               style={{
                 padding: "14px 18px",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
+                borderBottom: "1px solid var(--bs-border-color)",
                 display: "flex",
                 gap: "12px",
                 alignItems: "flex-start",
@@ -259,6 +260,7 @@ const HeaderNotification = () => {
                   style={{
                     fontWeight: 600,
                     fontSize: "13px",
+                    color: "var(--bs-body-color)",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -269,7 +271,7 @@ const HeaderNotification = () => {
                 <div
                   style={{
                     fontSize: "12px",
-                    color: "rgba(255,255,255,0.55)",
+                    color: "var(--bs-secondary-color, #6c757d)",
                     marginTop: "2px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -294,11 +296,11 @@ const HeaderNotification = () => {
                   ></i>
                   {formatTime(notif.remind_at)}
                   <span
-                    style={{ color: "rgba(255,255,255,0.3)", margin: "0 4px" }}
+                    style={{ color: "var(--bs-secondary-color, #6c757d)", margin: "0 4px" }}
                   >
                     ·
                   </span>
-                  <span style={{ color: "rgba(255,255,255,0.35)" }}>
+                  <span style={{ color: "var(--bs-secondary-color, #6c757d)" }}>
                     {notif.notification_count}/{notif.limit}
                   </span>
                 </div>
@@ -335,8 +337,8 @@ const HeaderNotification = () => {
                 <button
                   style={{
                     fontSize: "11px",
-                    background: "rgba(255,255,255,0.06)",
-                    color: "rgba(255,255,255,0.5)",
+                    background: "var(--bs-tertiary-bg, rgba(0,0,0,0.06))",
+                    color: "var(--bs-secondary-color, #6c757d)",
                     border: "none",
                     borderRadius: "6px",
                     padding: "3px 8px",
@@ -357,14 +359,14 @@ const HeaderNotification = () => {
             style={{
               padding: "10px 18px",
               textAlign: "center",
-              borderTop: "1px solid rgba(255,255,255,0.06)",
+              borderTop: "1px solid var(--bs-border-color)",
             }}
           >
             <button
               style={{
                 background: "none",
                 border: "none",
-                color: "rgba(255,255,255,0.4)",
+                color: "var(--bs-secondary-color, #6c757d)",
                 fontSize: "12px",
                 cursor: "pointer",
               }}
