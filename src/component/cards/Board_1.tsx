@@ -37,7 +37,7 @@ const Board1 = () => {
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">
-              Total Leads in CRM
+              Total Active Leads in CRM
             </p>
             <h3 className="fw-normal">
               <CountUp end={totalLeads} />

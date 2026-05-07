@@ -23,7 +23,7 @@ const CrmDashboardCards = () => {
           </div>
           <div className="progress-box">
             <p className="d-flex justify-content-between mb-1">
-              Total Leads in CRM
+              Total Active Leads in CRM
             </p>
             <div className="progress">
               <div

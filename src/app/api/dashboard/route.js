@@ -6,7 +6,12 @@ export async function GET(request) {
   const token = getSessionFromToken();
   try {
     const where = { flag: 0 };
-    let lead_where = { flag: 0 };
+    let lead_where = {
+      flag: 0,
+      lead_status_id: {
+        notIn: [6, 7]
+      }
+    };
     if (token?.user_id && token?.role_id > 2) {
       lead_where.rm_user_id = token.user_id;
     }
@@ -58,8 +63,8 @@ export async function GET(request) {
     const totalLeadsToday = totalLeadsTodays.length;
 
     // Today's SVD (to_status_id = 5)
+
     let total_svd_where = {
-      created_at: { gte: startOfDay, lt: endOfDay },
       to_status_id: 5,
       flag: 0
     }
@@ -74,6 +79,22 @@ export async function GET(request) {
       }
     });
     const svd = svds.length;
+
+    let total_closures_where = {
+      to_status_id: 7,
+      flag: 0
+    }
+    if (token?.user_id && token?.role_id > 2) {
+      total_closures_where.rm_user_id = token.user_id;
+    }
+    const closures = await prisma.lead_status_entry.groupBy({
+      by: ['lead_id'],
+      where: total_closures_where,
+      _count: {
+        lead_id: true
+      }
+    });
+    const NumberofClosuresDone = closures.length;
 
     // Fetch all lead statuses
     const lead_status = await prisma.lead_status.findMany({ where });
@@ -94,7 +115,7 @@ export async function GET(request) {
       };
     });
 
-    const NumberofClosuresDone = lead_status_with_count.find(s => s.lead_status_id === 7)?.leadcount || 0;
+    
 
     const NumberofDaysLastBookingDone = 0;
 

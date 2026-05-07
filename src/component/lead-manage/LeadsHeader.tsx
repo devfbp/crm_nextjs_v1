@@ -6,7 +6,7 @@ import Link from "next/link";
 import { LEADS_MENU_ID } from "@/data/constants";
 import { useEffect, useState } from "react";
 import { accessMenuCheck } from "@/component/utils/common";
-
+import { accessMenuRole } from "../utils/common";
 const LeadsHeader = (props: any) => {
   const { dropdown, headerRef, toggleDropdown } = useDigiContext();
   const [hasAccess, setHasAccess] = useState(false);
@@ -31,7 +31,7 @@ const LeadsHeader = (props: any) => {
       <h2>{title}</h2>
       <div className="btn-box d-flex gap-2">
         
-        {hasAccess && props?.type === 1 &&
+        {accessMenuRole(1) &&
           <>
             <Link href="/leads/new" className="btn btn-sm btn-primary">
               Add New
