@@ -215,6 +215,15 @@ const LeadsTable = (props: any) => {
     });
   }, []);
 
+  useEffect(() => {
+    
+    if (form.rm_user_id!=="" && form.rm_user_id!=localStorage.getItem("lead_assigned_to")) {
+      console.log("user:", form.rm_user_id, "user:", filters.assigned_to);
+      setFilters((prev) => ({ ...prev, assigned_to: form.rm_user_id }));
+      fetchData({ ...filters, assigned_to: form.rm_user_id });
+    }
+  }, [form.rm_user_id]);
+
   
   return (
     <React.Fragment>
