@@ -73,7 +73,6 @@ model user {
   flag               Int                @default(0)
   user_city          user_city[]
   user_team_member   user_team_member[]
-  lead_reminders     lead_reminders[]
 }
 
 model state {
@@ -118,31 +117,29 @@ model lead_status {
 }
 
 model lead {
-  lead_id         Int              @id @default(autoincrement())
-  customer_name   String?          @db.VarChar(200)
-  mobile_no       String?          @db.VarChar(200)
-  email_id        String?          @db.VarChar(200)
-  alternate_no    String?          @db.VarChar(200)
-  whatsapp_no     String?          @db.VarChar(200)
-  alternate_email String?          @db.VarChar(200)
-  status_remarks  String?          @db.VarChar(500)
+  lead_id         Int       @id @default(autoincrement())
+  customer_name   String?   @db.VarChar(200)
+  mobile_no       String?   @db.VarChar(200)
+  email_id        String?   @db.VarChar(200)
+  alternate_no    String?   @db.VarChar(200)
+  whatsapp_no     String?   @db.VarChar(200)
+  alternate_email String?   @db.VarChar(200)
   project_id      Int?
-  source_id       Int              @default(0)
-  sub_source_id   Int              @default(0)
+  source_id       Int       @default(0)
+  sub_source_id   Int       @default(0)
   rm_user_id      Int
-  schedule_date   DateTime?        @db.Date
-  lead_file_id    Int?             @default(1)
+  schedule_date   DateTime? @db.Date
+  lead_file_id    Int?      @default(1)
   lead_status_id  Int
-  remarks         String?          @db.Text
-  closed_date     DateTime?        @db.DateTime(0)
-  revenue         Float            @default(0.00) @db.Float
-  created_at      DateTime?        @db.DateTime(0)
+  remarks         String?   @db.Text
+  closed_date     DateTime? @db.DateTime(0)
+  revenue         Float     @default(0.00) @db.Float
+  created_at      DateTime? @db.DateTime(0)
   created_by      Int?
-  modified_at     DateTime?        @db.DateTime(0)
+  modified_at     DateTime? @db.DateTime(0)
   modified_by     Int?
-  company_id      Int              @default(0)
-  flag            Int              @default(0)
-  lead_reminders  lead_reminders[]
+  company_id      Int       @default(0)
+  flag            Int       @default(0)
 }
 
 model lead_status_entry {
@@ -277,6 +274,38 @@ model website_leads {
   flag            Int       @default(0)
 }
 
+model lead_reminders {
+  lead_reminder_id   Int       @id @default(autoincrement())
+  user_id            Int
+  remind_at          DateTime  @db.DateTime(0)
+  frequency_value    Int       @default(5)
+  limit              Int       @default(2)
+  message            String?   @db.VarChar(200)
+  lead_id            Int
+  notification_count Int       @default(0)
+  last_notified_at   DateTime? @db.DateTime(0)
+  is_acknowledged    Boolean   @default(false)
+
+  @@index([lead_id], map: "lead_reminders_fk_1")
+  @@index([user_id], map: "lead_reminders_fk_2")
+}
+
+model reminder_logs {
+  reminder_log_id    Int       @id @default(autoincrement())
+  lead_reminder_id   Int
+  reminder_status_id Int
+  created_at         DateTime? @db.DateTime(0)
+
+  @@index([reminder_status_id], map: "remainder_logs_fk_1")
+  @@index([lead_reminder_id], map: "remainder_logs_fk_2")
+}
+
+model reminder_status {
+  reminder_status_id Int      @id @default(autoincrement())
+  name               String?  @unique @db.VarChar(200)
+  is_active          Boolean? @default(true)
+}
+
 view lead_status_entry_view {
   lead_entry_id      Int       @default(0)
   lead_id            Int       @default(0)
@@ -311,36 +340,4 @@ view leads_view {
   status_color    String    @default("success") @db.VarChar(200)
   schedule_date   DateTime? @db.Date
   flag            Int       @default(0)
-}
-
-model reminder_status {
-  reminder_status_id Int             @id @default(autoincrement())
-  name               String?         @unique @db.VarChar(200)
-  is_active          Boolean?        @default(true)
-  reminder_logs      reminder_logs[]
-}
-
-model lead_reminders {
-  lead_reminder_id   Int             @id @default(autoincrement())
-  lead_id            Int
-  user_id            Int
-  remind_at          DateTime        @db.DateTime(0)
-  frequency_value    Int             @default(5)
-  limit              Int             @default(2)
-  notification_count Int             @default(0)
-  last_notified_at   DateTime?       @db.DateTime(0)
-  is_acknowledged    Boolean         @default(false)
-  message            String?         @db.VarChar(200)
-  lead               lead            @relation(fields: [lead_id], references: [lead_id], onUpdate: Restrict, map: "lead_reminders_fk_1")
-  user               user            @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "lead_reminders_fk_2")
-  reminder_logs      reminder_logs[]
-}
-
-model reminder_logs {
-  reminder_log_id    Int             @id @default(autoincrement())
-  lead_reminder_id   Int
-  reminder_status_id Int
-  reminder_status    reminder_status @relation(fields: [reminder_status_id], references: [reminder_status_id], onUpdate: Restrict, map: "remainder_logs_fk_1")
-  lead_reminders     lead_reminders  @relation(fields: [lead_reminder_id], references: [lead_reminder_id], onUpdate: Restrict, map: "remainder_logs_fk_2")
-  created_at         DateTime?       @db.DateTime(0)
 }
