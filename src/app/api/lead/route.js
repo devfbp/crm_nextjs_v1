@@ -220,7 +220,7 @@ export async function PUT(request) {
         revenue: req?.revenue ? parseFloat(req?.revenue) : 0
       }
     });
-    if (updatedlead && beforeLeadData?.lead_status_id !== updatedlead.lead_status_id) {
+    if (updatedlead) {
       await prisma.lead_status_entry.create({
         data: {
           lead_id: updatedlead?.lead_id,
