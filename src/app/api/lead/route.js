@@ -19,13 +19,26 @@ export async function GET(request) {
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
-        orderBy: { modified_at: 'asc' }
+        orderBy: { modified_at: 'asc' },
+        include: {
+          lead_reminders: {
+            take: 1,
+            orderBy: { lead_reminder_id: 'desc' }
+          }
+        }
       });
       const dataItems2 = await prisma.leads_view.findMany({
         where: { lead_id: id },
         orderBy: { modified_at: 'asc' }
       });
       let finalData = dataItem;
+      if (dataItem.length > 0) {
+        const lead = dataItem[0];
+        if (lead.lead_reminders && lead.lead_reminders.length > 0) {
+          lead.remind_at = lead.lead_reminders[0].remind_at;
+          lead.remind_notes = lead.lead_reminders[0].message;
+        }
+      }
       if (dataItems2 && dataItems2.length > 0) {
         finalData[0].view_data = dataItems2[0];
       }
@@ -151,7 +164,8 @@ export async function POST(request) {
         rm_user_id: parseInt(req.rm_user_id),
         lead_status_id: parseInt(req.lead_status_id),
         lead_file_id: parseInt(1),
-        remarks: req.remarks
+        remarks: req.remarks,
+        status_remarks: req.status_remarks || null,
       }
     });
     if (newlead) {
@@ -167,6 +181,28 @@ export async function POST(request) {
           remarks: "New Lead Created"
         },
       });
+
+      if (req.remind_at) {
+        const reminderStatusName = process.env.REMINDER_STATUS_NAME || "PENDING";
+        const reminderStatus = await prisma.reminder_status.findUnique({
+          where: { name: reminderStatusName },
+        });
+
+        await prisma.lead_reminders.create({
+          data: {
+            lead_id: newlead?.lead_id,
+            user_id: parseInt(token?.user_id),
+            remind_at: new Date(req.remind_at),
+            message: req.remind_notes || req.remarks || null,
+            reminder_logs: {
+              create: {
+                reminder_status_id: reminderStatus?.reminder_status_id || 1,
+                created_at: new Date(),
+              },
+            },
+          },
+        });
+      }
     }
     return Response.json({
       success: true,
@@ -217,7 +253,8 @@ export async function PUT(request) {
         schedule_date: req?.schedule_date ? new Date(req?.schedule_date) : null, // use the parsed Date object
         modified_by: token?.user_id || null,
         closed_date: req?.closed_date ? new Date(req?.closed_date) : null, // use the parsed Date object
-        revenue: req?.revenue ? parseFloat(req?.revenue) : 0
+        revenue: req?.revenue ? parseFloat(req?.revenue) : 0,
+        status_remarks: req.status_remarks || null,
       }
     });
     if (updatedlead && beforeLeadData?.lead_status_id !== updatedlead.lead_status_id) {
@@ -233,6 +270,45 @@ export async function PUT(request) {
           remarks: req.status_remarks ? req.status_remarks : "Status Updated"
         },
       });
+    }
+    if (updatedlead && req.remind_at) {
+      const reminderStatusName = process.env.REMINDER_STATUS_NAME || "PENDING";
+      const reminderStatus = await prisma.reminder_status.findUnique({
+        where: { name: reminderStatusName },
+      });
+
+      const existingReminder = await prisma.lead_reminders.findFirst({
+        where: { lead_id: updatedlead.lead_id },
+        orderBy: { lead_reminder_id: "desc" },
+      });
+
+      if (existingReminder) {
+        await prisma.lead_reminders.update({
+          where: { lead_reminder_id: existingReminder.lead_reminder_id },
+          data: {
+            remind_at: new Date(req.remind_at),
+            message: req.remind_notes || req.remarks || existingReminder.message,
+            user_id: parseInt(token?.user_id),
+            is_acknowledged: false,
+            notification_count: 0,
+          },
+        });
+      } else {
+        await prisma.lead_reminders.create({
+          data: {
+            lead_id: updatedlead?.lead_id,
+            user_id: parseInt(token?.user_id),
+            remind_at: new Date(req.remind_at),
+            message: req.remind_notes || req.remarks || null,
+            reminder_logs: {
+              create: {
+                reminder_status_id: reminderStatus?.reminder_status_id || 1,
+                created_at: new Date(),
+              },
+            },
+          },
+        });
+      }
     }
     if (updatedlead && req.send_email) {
       // console.log("Sending email notification for lead update...");

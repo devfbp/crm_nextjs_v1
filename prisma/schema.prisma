@@ -73,6 +73,7 @@ model user {
   flag               Int                @default(0)
   user_city          user_city[]
   user_team_member   user_team_member[]
+  lead_reminders     lead_reminders[]
 }
 
 model state {
@@ -140,6 +141,7 @@ model lead {
   modified_by     Int?
   company_id      Int       @default(0)
   flag            Int       @default(0)
+  lead_reminders  lead_reminders[]
 }
 
 model lead_status_entry {
