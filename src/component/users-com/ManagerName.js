@@ -1,20 +1,22 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 
-export default function StateList(props) {
+export default function ManagerName(props) {
     const [data, setData] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user?id=' + props.role_id);
+            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user?id=' + props.user_id);
             const result = await response.json();
             setData(result);
         };
         fetchData();
     }, []);
     //console.log(data);
-    return data.length > 0 ? (
-        <React.Fragment>            
-              {data[0].role_name}
+    return data.name ? (
+        <React.Fragment>
+            <div title={data.name}>            
+              {data.name.length > 10 ? data.name.substring(0, 10) + "..." : data.name}
+            </div>
         </React.Fragment>
     ) : (
         <React.Fragment>

@@ -7,10 +7,12 @@ import RoleName from "./RoleName";
 import EditAction from "../action/Edit";
 import DeleteAction from "../action/Delete";
 import RoleList from "./RoleList";
+import ManagerName from "./ManagerName";
+import "../lead-manage/Leads.scss";
 
 const ScrollDataTableSection = (props: any) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage] = useState(10);
+  const [dataPerPage] = useState(100);
   const [dataList, setDataList] = useState<Array<any>>([]);
 
   // Column Filters
@@ -139,11 +141,7 @@ const ScrollDataTableSection = (props: any) => {
 
           <OverlayScrollbarsComponent>
             <div style={{ maxHeight: "300px" }}>
-              <Table
-                hover
-                id="componentDataTable"
-                className="table table-dashed table-hover digi-dataTable attendance-table table-striped"
-              >
+              <table id="leadsTable" className="table table-hover table-striped">
                 <thead>
                   <tr>
                     <th
@@ -164,7 +162,7 @@ const ScrollDataTableSection = (props: any) => {
                     >
                       Phone
                     </th>
-                    <th>Role</th>
+                    <th>Reporting To</th>
                     <th>Active</th>
                     <th>Action</th>
                   </tr>
@@ -174,12 +172,12 @@ const ScrollDataTableSection = (props: any) => {
                   {currentData.length > 0 ? (
                     currentData.map((item) => (
                       <tr key={item.id}>
-                        <td>{item.name}</td>
+                        <td style={{ fontSize: "14px" }}>{item.name}<br />
+                        <i style={{ fontSize: "12px" }}><RoleName role_id={item.role_id} id={item.role_id} /></i>
+                        </td>
                         <td>{item.email}</td>
                         <td>{item.phone_no}</td>
-                        <td>
-                          <RoleName role_id={item.role_id} />
-                        </td>
+                        <td><ManagerName user_id={item.reporting_to_id} id={item.reporting_to_id} /></td>
                         <td style={{ textTransform: "capitalize", color: item.active === 0 ? "white" : "red" }}>
                           {item.active === 0 ? "Active" : "Deactive"}
                         </td>
@@ -211,7 +209,7 @@ const ScrollDataTableSection = (props: any) => {
                     </tr>
                   )}
                 </tbody>
-              </Table>
+              </table>
             </div>
           </OverlayScrollbarsComponent>
 

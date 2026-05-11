@@ -7,6 +7,13 @@ INSERT INTO `lead_file` (`lead_file_id`, `lead_file_name`, `file_path`, `created
 */
 export async function GET(request) {
   const token = getSessionFromToken();
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
+  const dashboardQry = null;
   try {
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
@@ -16,6 +23,10 @@ export async function GET(request) {
     let due_filter = searchParams.get('due_filter');
     let assigned_to = searchParams.get('assigned_to');
     let lead_status_id = searchParams.get('lead_status_id');
+    let dd_callsDoneToday = searchParams.get('dd_callsDoneToday');
+    let dd_totalLeadsToday = searchParams.get('dd_totalLeadsToday');
+    let dd_svd = searchParams.get('dd_svd');
+    let dd_closure = searchParams.get('dd_closure');
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
@@ -34,13 +45,8 @@ export async function GET(request) {
     if (view == "1") {
       let vwhere = { flag: 0, status_id: { notIn: [6, 7] } };
       if (due_filter) {
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
 
-        const todayEnd = new Date();
-        todayEnd.setHours(23, 59, 59, 999);
-
-        if(due_filter === "1") {
+        if (due_filter === "1") {
           // EXACT today
           vwhere.OR = [
             {
@@ -64,7 +70,7 @@ export async function GET(request) {
                 lt: todayStart,
               },
             },
-            {schedule_date: null }
+            { schedule_date: null }
           ];
         } else if (due_filter === "2") {
           //UPCOMING (after today)
@@ -76,9 +82,93 @@ export async function GET(request) {
       if (assigned_to) {
         vwhere.rm_user_id = parseInt(assigned_to);
       }
-      if (lead_status_id) {
+      /** DATADASHBOARD QUERY********************** */
+      if (dd_callsDoneToday === "true") {
+        vwhere = {};
+        // Today's calls done (to_status_id = 3)
+        let calls_where = {
+          created_at: { gte: todayStart, lt: todayEnd },
+          to_status_id: { not: 1 },
+          flag: 0
+        }
+        if (token?.user_id && token?.role_id > 2) {
+          calls_where.rm_user_id = token.user_id;
+        }
+        const callsDoneTodays = await prisma.lead_status_entry.groupBy({
+          by: ['lead_id'],
+          where: calls_where,
+          _count: {
+            lead_id: true
+          }
+        });
+        const callsDoneToday = callsDoneTodays.map(item => item.lead_id);
+        vwhere.lead_id = { in: callsDoneToday };
+        // console.log(callsDoneTodays.length);
+      } if (dd_totalLeadsToday === "true") {
+        vwhere = {};
+        let total_leads_where = {
+          created_at: { gte: todayStart, lt: todayEnd },
+          to_status_id: 1,
+          flag: 0
+        }
+        if (token?.user_id && token?.role_id > 2) {
+          total_leads_where.rm_user_id = token.user_id;
+        }
+        const totalLeadsTodays = await prisma.lead_status_entry.groupBy({
+          by: ['lead_id'],
+          where: total_leads_where,
+          _count: {
+            lead_id: true
+          }
+        });
+
+        const totalLeadsToday = totalLeadsTodays.map(item => item.lead_id);
+        vwhere.lead_id = { in: totalLeadsToday };
+        // console.log(totalLeadsTodays.length);
+      } if (dd_svd === "true") {
+        vwhere = {};
+        let total_svd_where = {
+          to_status_id: 5,
+          flag: 0
+        }
+        if (token?.user_id && token?.role_id > 2) {
+          total_svd_where.rm_user_id = token.user_id;
+        }
+        const svds = await prisma.lead_status_entry.groupBy({
+          by: ['lead_id'],
+          where: total_svd_where,
+          _count: {
+            lead_id: true
+          }
+        });
+
+        const svdid = svds.map(item => item.lead_id);
+        vwhere.lead_id = { in: svdid };
+        // console.log(totalLeadsTodays.length);
+      } if (dd_closure === "true") {
+        vwhere = {};
+        let total_closures_where = {
+          to_status_id: 7,
+          flag: 0
+        }
+        if (token?.user_id && token?.role_id > 2) {
+          total_closures_where.rm_user_id = token.user_id;
+        }
+        const closures = await prisma.lead_status_entry.groupBy({
+          by: ['lead_id'],
+          where: total_closures_where,
+          _count: {
+            lead_id: true
+          }
+        });
+
+        const closuresid = closures.map(item => item.lead_id);
+        vwhere.lead_id = { in: closuresid };
+        // console.log(totalLeadsTodays.length);
+      } else if (lead_status_id) {
         vwhere.status_id = parseInt(lead_status_id);
       }
+      /** DATADASHBOARD END QUERY********************** */
       if (token?.user_id && token?.role_id > 2 && !assigned_to) {
         vwhere.rm_user_id = token.user_id;
         const teamMembers = await prisma.user_team_member.findMany({

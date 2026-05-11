@@ -39,7 +39,9 @@ const Board1 = () => {
             <p className="d-flex justify-content-between mb-2">
               Total Active Leads in CRM
             </p>
-            <h3 className="fw-normal">
+            <h3 className="fw-normal" 
+              onClick={() => { window.location.href = '/leads'; }} 
+              style={{ cursor: 'pointer' }}>
               <CountUp end={totalLeads} />
             </h3>
             <p className="text-muted">
@@ -59,7 +61,12 @@ const Board1 = () => {
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">Total Calls Done Today</p>
-            <h3 className="fw-normal">
+            <h3 className="fw-normal" 
+              onClick={() => { 
+                localStorage.setItem("dd_callsDoneToday", "true");
+                window.location.href = '/leads';
+              }} 
+              style={{ cursor: 'pointer' }}>
               <CountUp end={callsDoneToday} />
             </h3>
             <p className="text-muted">
@@ -79,7 +86,13 @@ const Board1 = () => {
         <div className="dashboard-top-box dashboard-top-box-2 rounded border-0 panel-bg">
           <div className="left">
             <p className="d-flex justify-content-between mb-2">Today Total Leads</p>
-            <h3 className="fw-normal">
+            <h3 className="fw-normal"
+              onClick={() => { 
+                localStorage.setItem("dd_totalLeadsToday", "true");
+                window.location.href = '/leads';
+              }} 
+              style={{ cursor: 'pointer' }}
+              >
               <CountUp end={totalLeadsToday} />
             </h3>
             <p className="text-muted">
@@ -101,7 +114,13 @@ const Board1 = () => {
             <p className="d-flex justify-content-between mb-2">
               SVD
             </p>
-            <h3 className="fw-normal">
+            <h3 className="fw-normal"
+              onClick={() => { 
+                localStorage.setItem("dd_svd", "true");
+                window.location.href = '/leads';
+              }}
+              style={{ cursor: 'pointer' }}
+            >
               <CountUp end={svd} />
             </h3>
             <p className="text-muted">
@@ -123,7 +142,13 @@ const Board1 = () => {
             <p className="d-flex justify-content-between mb-2">
               Number of Closures done
             </p>
-            <h3 className="fw-normal">
+            <h3 className="fw-normal"
+              onClick={() => { 
+                localStorage.setItem("dd_closure", "true");
+                window.location.href = '/leads';
+              }}
+              style={{ cursor: 'pointer' }}
+            >
               <CountUp end={NumberofClosuresDone} />
             </h3>
             <p className="text-muted">

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 
-export default function StateList(props) {
+export default function RoleName(props) {
     const [data, setData] = useState([]);
     useEffect(() => {
         const fetchData = async () => {

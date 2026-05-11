@@ -23,18 +23,18 @@ export async function POST(request) {
     });
     const acknowledgedStatusId = acknowledgedStatus?.reminder_status_id || 3;
 
-    await prisma.lead_reminders.update({
-      where: { lead_reminder_id: parseInt(lead_reminder_id) },
-      data: {
-        is_acknowledged: true,
-        reminder_logs: {
-          create: {
-            reminder_status_id: acknowledgedStatusId,
-            created_at: new Date(),
-          },
-        },
-      },
-    });
+    // await prisma.lead_reminders.update({
+    //   where: { lead_reminder_id: parseInt(lead_reminder_id) },
+    //   data: {
+    //     is_acknowledged: true,
+    //     reminder_logs: {
+    //       create: {
+    //         reminder_status_id: acknowledgedStatusId,
+    //         created_at: new Date(),
+    //       },
+    //     },
+    //   },
+    // });
 
     return Response.json({ success: true, message: 'Reminder acknowledged.' });
   } catch (error) {

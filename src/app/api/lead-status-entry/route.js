@@ -8,6 +8,7 @@ export async function GET(request) {
     const lead_status_id = parseInt(searchParams.get('lead_status_id'));
     const lead_id = parseInt(searchParams.get('lead_id'));
     const lead_view = parseInt(searchParams.get('lead_view'));
+    const history_count = parseInt(searchParams.get('history_count'));
     if (id) {
       const dataItem = await prisma.lead_status_entry.findUnique({
         where: { lead_status_id: id },
@@ -17,6 +18,15 @@ export async function GET(request) {
     var where = { flag: 0 }
     if (lead_status_id) {
       where.lead_status_id = lead_status_id;
+    }
+    if(history_count == 1 && lead_id) {
+      let dataItems = await prisma.lead_status_entry_view.findMany({
+        where: { lead_id: lead_id },
+        orderBy: {
+          lead_entry_id: 'desc', // or created_at
+        },
+      });
+      return Response.json({ history_count: dataItems.length });
     }
 
     if (lead_view == 1 && lead_id) {

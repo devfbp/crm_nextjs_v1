@@ -2,8 +2,8 @@ import prisma from '../../../../lib/prisma';
 import bcrypt from 'bcrypt';
 import { getSessionFromToken } from "../session";
 
-const GM_ROLE_IDS = [2, 3, 4, 5, 6, 7, 8, 1];
-const RM_ROLE_IDS = [2, 3, 4, 5];
+const GM_ROLE_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const RM_ROLE_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export async function GET(request) {
   const token = getSessionFromToken();
