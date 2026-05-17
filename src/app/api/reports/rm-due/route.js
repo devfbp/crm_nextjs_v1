@@ -3,9 +3,11 @@ import prisma from '../../../../../lib/prisma';
 import { getSessionFromToken } from "../../session";
 
 export async function GET(request) {
+  const { searchParams } = new URL(request.url);
   const token = getSessionFromToken();
   const bearer = request.headers.get("Authorization") || "";
   const authToken = bearer.replace("Bearer ", "").trim();
+  let assigned_to = searchParams.get('assigned_to');
   // console.log("Received token:", authToken);
   // console.log("Expected token:", process.env.NEXT_PUBLIC_BEARER_TOKEN);
   if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER=="Yes") {
@@ -16,25 +18,29 @@ export async function GET(request) {
   }
   try {
     const where = { flag: 0 };
-    let lead_where = { flag: 0 };
-    if (token?.user_id && token?.role_id > 2) {
-      lead_where.rm_user_id = token.user_id;
-    }
+   
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
-    
-    const deadLeadsCount = await prisma.lead_status_entry.count({
-      where: {
-        flag: 0,
-        // created_at: { gte: todayStart, lte: todayEnd },
-        to_status_id: 6
+
+    let lead_where = {};
+    lead_where.schedule_date = { gte: todayStart, lte: todayEnd };
+    // lead_where.to_status_id = 1;
+    if (assigned_to) {
+      lead_where.rm_user_id = parseInt(assigned_to);
+    }
+    const leadAssignedDay = await prisma.leads_view.groupBy({
+      by: ['rm_user_id','assigned_to'],
+      where: lead_where,
+      _count: {
+        lead_id: true
       }
-    });
-    // console.log(lead_status_with_count);
+    });  
+
+    
     return new Response(
-      JSON.stringify({ success: true, data: { deadLeadsCount } }),
+      JSON.stringify({ success: true, data: leadAssignedDay }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 

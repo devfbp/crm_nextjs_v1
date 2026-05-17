@@ -154,8 +154,22 @@ export async function GET(request) {
       }
     });
     // console.log(lead_status_with_count);
+    let revenue_where = {
+      flag: 0,
+      lead_status_id: 7
+    }
+    if (token?.user_id && token?.role_id > 2) {
+      revenue_where.rm_user_id = token.user_id;
+    }
+    const revenueAmount = await prisma.lead.aggregate({
+      _sum: {
+        revenue: true
+      },
+      where: revenue_where
+    });
+
     return new Response(
-      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count, dueCount, overdueCount, NumberofClosuresDone, LastBookingDate: LastBookingDate?.closed_date || null }),
+      JSON.stringify({ totalLeads, callsDoneToday, totalLeadsToday, svd, lead_status: lead_status_with_count, dueCount, overdueCount, NumberofClosuresDone, LastBookingDate: LastBookingDate?.closed_date || null, TotalRevenue: revenueAmount._sum.revenue || 0 }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 

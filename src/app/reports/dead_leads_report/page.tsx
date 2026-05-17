@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import RmDeadLeads from "../../../component/dead_leads_report/rm_deadleads";
 import DeadLeadsReportComponent from "../../../component/dead_leads_report/report";
 
 const pageTitle = "Dead Leads Report";
@@ -10,6 +11,9 @@ export const metadata: Metadata = {
 
 export default function DeadLeadsReport() {
   return (
-    <DeadLeadsReportComponent />
+    <>
+      <DeadLeadsReportComponent />
+      <RmDeadLeads />
+    </>
   );
 }

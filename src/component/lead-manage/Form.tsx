@@ -534,7 +534,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                             onChange={(date) =>
                               setForm({
                                 ...form,
-                                schedule_date: date ? date.toISOString().split("T")[0] : "", // store as string YYYY-MM-DD
+                                schedule_date: date ? date.toISOString() : "", // store as string YYYY-MM-DD
                               })
                             }
                             dateFormat="dd-MM-yyyy"
@@ -558,7 +558,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                                 onChange={(date) =>
                                   setForm({
                                     ...form,
-                                    closed_date: date ? date.toISOString().split("T")[0] : "",
+                                    closed_date: date ? date.toISOString() : "",
                                   })
                                 }
                                 dateFormat="dd-MM-yyyy"

@@ -14,7 +14,6 @@ import { accessMenuCheck } from "@/component/utils/common";
 import "./Leads.scss";
 import UserList from "./UserList2";
 import LeadStatusList from "./LeadStatusList";
-import HistoryCount from "./HistoryCount";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
@@ -32,7 +31,7 @@ const LeadsTable = (props: any) => {
   });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(300);
+  const [dataPerPage, setDataPerPage] = useState(250);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -69,18 +68,6 @@ const LeadsTable = (props: any) => {
       if (filters.lead_status_id && filters.lead_status_id > 0) {
         url += `&lead_status_id=${filters.lead_status_id}`;
         localStorage.setItem("lead_status_id", filters.lead_status_id);
-      }
-      if (localStorage.getItem("dd_callsDoneToday") === "true" ) {
-        url += `&dd_callsDoneToday=true`;
-      }
-      if (localStorage.getItem("dd_totalLeadsToday") === "true" ) {
-        url += `&dd_totalLeadsToday=true`;
-      }
-      if (localStorage.getItem("dd_svd") === "true" ) {
-        url += `&dd_svd=true`;
-      }
-      if (localStorage.getItem("dd_closure") === "true" ) {
-        url += `&dd_closure=true`;
       }
       // alert(url);
       const response = await fetch(url);
@@ -200,10 +187,6 @@ const LeadsTable = (props: any) => {
     localStorage.removeItem("lead_assigned_to");
     localStorage.removeItem("lead_status_id");
     localStorage.removeItem("lead_search");
-    localStorage.removeItem("dd_callsDoneToday");
-    localStorage.removeItem("dd_totalLeadsToday");
-    localStorage.removeItem("dd_svd");
-    localStorage.removeItem("dd_closure");
     if (typeof window !== "undefined") {
       window.location.reload();
     }
@@ -283,8 +266,12 @@ const LeadsTable = (props: any) => {
                   className="form-select border-white"
                   value={filters.lead_status_id}
                   onChange={(e) => { 
-                    const value = e.target.value; 
-                    setFilters({ ...filters, lead_status_id: value });
+                    const value = e.target.value;
+                    if(value !== "" && value !== "0"){
+                      setFilters({ ...filters, lead_status_id: value });                      
+                    } else {
+                      setFilters({ ...filters, lead_status_id: "" });  
+                    }
                     fetchData({ ...filters, lead_status_id: value });
                   }}
                 >
@@ -373,8 +360,7 @@ const LeadsTable = (props: any) => {
                       }
                       
                       <td title={data.customer_name}>
-                        {data.customer_name.length > 10 ? data.customer_name.substr(0, 10) + '...' : data.customer_name}                       
-                        
+                        {data.customer_name.length > 10 ? data.customer_name.substr(0, 10) + '...' : data.customer_name}
                       </td>
                       <td>{data.mobile_no}</td>
                       <td title={data.project_name}>
@@ -395,15 +381,14 @@ const LeadsTable = (props: any) => {
                           
                             <Link
                               title="History"
-                              className="btn btn-sm btn-icon btn-secondary"
+                              className="btn btn-sm btn-icon btn-warning"
                               href="javascript:void(0)"
                               onClick={(e) => {
                                 e.preventDefault();
                                 handleLeadHistory(data); // pass the specific data item here
                               }}
                             >
-                              {/* <i className="fa-light fa-history text-white"></i> */}
-                              <HistoryCount lead_id={data.lead_id} id={data.lead_id} />
+                              <i className="fa-light fa-history text-white"></i>
                             </Link>
                           <DeleteAction id={data.lead_id} page="lead" setRefresh="" menu_id={7} iconclass={false} reload={true} />
                         </div>
