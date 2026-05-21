@@ -16,8 +16,10 @@ export async function GET(request) {
   const dashboardQry = null;
   try {
     const { searchParams } = new URL(request.url);
+    
     const id = parseInt(searchParams.get('id'));
     let limit = parseInt(searchParams.get('limit')) || 100;
+    let page = parseInt(searchParams.get('page')) || 1;
     let orderBy = searchParams.get('orderBy') || 'modified_at';
     let view = searchParams.get('view');
     let due_filter = searchParams.get('due_filter');
@@ -27,6 +29,7 @@ export async function GET(request) {
     let dd_totalLeadsToday = searchParams.get('dd_totalLeadsToday');
     let dd_svd = searchParams.get('dd_svd');
     let dd_closure = searchParams.get('dd_closure');
+    let search = searchParams.get('search') || "";
     if (id) {
       const dataItem = await prisma.lead.findMany({
         where: { lead_id: id },
@@ -44,6 +47,21 @@ export async function GET(request) {
     }
     if (view == "1") {
       let vwhere = { flag: 0, status_id: { notIn: [6, 7] } };
+      if (search) {
+        vwhere.OR = [
+          { customer_name: { contains: search} },
+          { mobile_no: { contains: search } },
+          // { email_id: { contains: search, mode: 'insensitive' } },
+          // { alternate_no: { contains: search, mode: 'insensitive' } },
+          // { whatsapp_no: { contains: search, mode: 'insensitive' } },
+          // { alternate_email: { contains: search, mode: 'insensitive' } },
+          // { project_name: { contains: search, mode: 'insensitive' } },
+          // { source_name: { contains: search, mode: 'insensitive' } },
+          // { sub_source_name: { contains: search, mode: 'insensitive' } },
+          // { rm_user_name: { contains: search, mode: 'insensitive' } },
+          // { status_name: { contains: search, mode: 'insensitive' } },
+        ];
+      }
       if (due_filter) {
 
         if (due_filter === "1") {
@@ -188,10 +206,14 @@ export async function GET(request) {
       // console.log(token.user_id);
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,
-        take: 10000,
+        take: limit,
+        skip: (page - 1) * limit,
         orderBy: { modified_at: 'asc' }
       });
-      return Response.json(dataItems);
+      const totalCount = await prisma.leads_view.count({
+        where: vwhere
+      });
+      return Response.json({data: dataItems, dashboard: dashboardQry, total: totalCount});
     }
 
     const dataItems = await prisma.lead.findMany({
@@ -203,7 +225,12 @@ export async function GET(request) {
         [orderBy]: 'desc'
       }
     });
-    return Response.json(dataItems);
+    const totalCount = await prisma.lead.count({
+      where: {
+        flag: 0
+      }
+    });
+    return Response.json({data: dataItems, dashboard: dashboardQry, total: totalCount});
   } catch (error) {
     console.error('Error fetching leads:', error);
     return Response.json({ success: false, message: error.message }, { status: 500 });
@@ -315,7 +342,7 @@ export async function PUT(request) {
         data: {
           lead_id: updatedlead?.lead_id,
           created_by: token?.user_id ?? null,
-          created_at: new Date(),
+          // created_at: new Date().toISOString(),
           from_status_id: beforeLeadData?.lead_status_id ?? 0,
           to_status_id: updatedlead.lead_status_id,
           from_rm_user_id: beforeLeadData?.rm_user_id ?? null,

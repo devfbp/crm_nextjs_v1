@@ -1,21 +1,26 @@
 "use client";
 import { Alert, Spinner } from "react-bootstrap";
 import UserList from "../lead-manage/UserList2";
-import PaginationSection from "../PaginationSection";
 import "../lead-manage/Leads.scss";
+import DatePicker from "react-datepicker";
 import { useState, useEffect, useMemo } from "react";
 
 export default function LeadsAssignedDay() {
   const [filters, setFilters] = useState({
-    dueDate: "",
-    assigned_to: "",
-    lead_status_id: "",
-    search: "",
-  });
-
-  const [form, setForm] = useState({
+    from_date: "",
     rm_user_id: "",
+    to_date: "",
   });
+  const [form, setForm] = useState({
+    from_date: "",
+    rm_user_id: "",
+    to_date: "",
+  });
+  const refreshfilters = () => {
+    if (typeof window !== "undefined") {
+      window.location.reload();
+    }
+  }
 
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(250);
@@ -57,12 +62,16 @@ export default function LeadsAssignedDay() {
     setError(null);
     try {
       let url = `${process.env.NEXT_PUBLIC_API_URL}/reports/leads-assigned-day?`;
-
-
-      if (filters.assigned_to) {
-        url += `&assigned_to=${filters.assigned_to}`;
+      if (filters.from_date && filters.to_date) {
+        url += `&from_date=${filters.from_date}`;
       }
-
+      if (filters.to_date) {
+        url += `&to_date=${filters.to_date}`;
+      }
+      if (filters.rm_user_id) {
+        url += `&rm_user_id=${filters.rm_user_id}`;
+        localStorage.setItem("lead_assigned_to", filters.assigned_to);
+      }
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -87,64 +96,68 @@ export default function LeadsAssignedDay() {
     }
   };
 
-  // Apply filter when form changes
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      assigned_to: form.rm_user_id,
-    }));
-    setCurrentPage(1);
-  }, [form.rm_user_id]);
+
 
   useEffect(() => {
     fetchData(filters);
   }, [filters]);
 
   return (
-    <div className="col-12">
+    <div className="col-10">
       <h2 className="mb-3 text-center text-white text-decoration-underline">
-        No of Leads Assigned Today
+        No of Leads Assigned
       </h2>
-
       <div className="card">
         {/* Filters */}
         <div className="card-body p-3">
-          <div className="row g-2 align-items-center">
-
-            {/* User Filter */}
-            <div className="col-md-3">
+          <div className="row g-2 align-items-center mb-2">
+            <div className="col-md-4">
               <UserList form={form} setForm={setForm} doptionion="All" />
-            </div>
-
-            {/* Search */}
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search RM Name..."
-                value={filters.search}
-                onChange={(e) =>
-                  setFilters({ ...filters, search: e.target.value })
-                }
+              <input type="hidden"
+                id="rm_user_id"
+                name="rm_user_id"
+                value={form.rm_user_id}
               />
             </div>
-
-            {/* Per Page */}
-            <div className="col-md-2 ms-auto">
-              <select
-                className="form-select"
-                value={dataPerPage}
-                onChange={(e) => {
-                  setDataPerPage(Number(e.target.value));
-                  setCurrentPage(1);
-                }}
-              >
-                {[10, 25, 50, 100, 250].map((count) => (
-                  <option key={count} value={count}>
-                    {count}
-                  </option>
-                ))}
-              </select>
+            <div className="col-md-2">
+              <DatePicker
+                selected={form.from_date ? new Date(form.from_date) : null}
+                onChange={(date) =>
+                  setForm({
+                    ...form,
+                    from_date: date ? date.toISOString() : "",
+                  })
+                }
+                dateFormat="dd-MM-yyyy"
+                name="from_date"
+                id="from_date"
+                autoComplete="off"
+                placeholderText="From Date"
+                className="form-control form-control-sm"
+              />
+            </div>
+            <div className="col-md-2">
+              <DatePicker
+                selected={form.to_date ? new Date(form.to_date) : null}
+                onChange={(date) =>
+                  setForm({
+                    ...form,
+                    to_date: date ? date.toISOString() : "",
+                  })
+                }
+                dateFormat="dd-MM-yyyy"
+                name="to_date"
+                id="to_date"
+                autoComplete="off"
+                placeholderText="To Date"
+                className="form-control form-control-sm"
+              />
+            </div>
+            <div className="col-md-2 d-flex gap-2">
+              <button className="btn btn-sm btn-primary" onClick={() => setFilters(form)}>
+                Search
+              </button>
+              <button className="btn btn-sm btn-secondary" onClick={refreshfilters}>Reset</button>
             </div>
           </div>
         </div>
@@ -156,8 +169,10 @@ export default function LeadsAssignedDay() {
               <thead>
                 <tr>
                   <th>RM Name</th>
-                  <th className="text-center">
-                    No of Leads Assigned Today
+                  <th>
+                    <div className="text-right">
+                      No of Leads Assigned Today
+                    </div>
                   </th>
                 </tr>
               </thead>
@@ -179,8 +194,10 @@ export default function LeadsAssignedDay() {
                   dataList.map((item) => (
                     <tr key={item.rm_user_id}>
                       <td>{item.user_name || "N/A"}</td>
-                      <td className="text-center">
-                        {item._count?.lead_id || 0}
+                      <td>
+                        <div className="text-right pr-3">
+                          {item._count?.lead_id || 0}
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -195,7 +212,6 @@ export default function LeadsAssignedDay() {
             </table>
           </div>
         </div>
-
         {/* Pagination */}
         {/* <PaginationSection
           currentPage={currentPage}

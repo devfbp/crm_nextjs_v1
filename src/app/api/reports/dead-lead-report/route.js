@@ -6,8 +6,9 @@ export async function GET(request) {
   const token = getSessionFromToken();
   const bearer = request.headers.get("Authorization") || "";
   const authToken = bearer.replace("Bearer ", "").trim();
-  // console.log("Received token:", authToken);
-  // console.log("Expected token:", process.env.NEXT_PUBLIC_BEARER_TOKEN);
+  const rm_user_id = request.nextUrl.searchParams.get("rm_user_id");
+  const from_date = request.nextUrl.searchParams.get("from_date");
+  const to_date = request.nextUrl.searchParams.get("to_date");
   if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER=="Yes") {
     return new Response(
       JSON.stringify({ success: false, message: "Unauthorized" }),
@@ -15,22 +16,27 @@ export async function GET(request) {
     );
   }
   try {
-    const where = { flag: 0 };
-    let lead_where = { flag: 0 };
-    if (token?.user_id && token?.role_id > 2) {
-      lead_where.rm_user_id = token.user_id;
-    }
-    const todayStart = new Date();
+    var todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
-    const todayEnd = new Date();
+    var todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
+    if (from_date) {
+      todayStart.setTime(new Date(from_date).getTime());
+    }
+    if (to_date) {
+      todayEnd.setTime(new Date(to_date).getTime());
+    }
+
+    var where = { flag: 0, status_id: 6 };
+    if (from_date && to_date) {
+      where.created_at = { gte: todayStart, lte: todayEnd };
+    }
+    if (rm_user_id) {
+      where.rm_user_id = parseInt(rm_user_id);
+    }
     
-    const deadLeadsCount = await prisma.lead_status_entry.count({
-      where: {
-        flag: 0,
-        // created_at: { gte: todayStart, lte: todayEnd },
-        to_status_id: 6
-      }
+    const deadLeadsCount = await prisma.leads_view.count({
+      where: where
     });
     // console.log(lead_status_with_count);
     return new Response(

@@ -13,7 +13,7 @@ const LeadHistory = ({ show, handleClose, slug }: any) => {
             </Modal.Header>
 
             <Modal.Body>
-                <History lead_id={slug?.lead_id} />
+                <History lead_id={slug?.lead_id} remarks={slug?.remarks} />
             </Modal.Body>
         </Modal>
     );

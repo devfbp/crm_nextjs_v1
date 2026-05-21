@@ -670,7 +670,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         ></textarea>
                       </div>
                       <div className="col-sm-12 ol-6 scrollContainer" style={{ maxHeight: "100px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "20px" }}>
-                        <History lead_id={form.lead_id} overflow="no" />
+                        <History lead_id={form.lead_id} overflow="no" remarks={form.remarks} />
                       </div>
                     </>
                   }

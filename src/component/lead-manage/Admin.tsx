@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import PaginationSection from "../PaginationSection";
+import PaginationSection from "../PaginationSectionMain";
 import { toast } from "react-toastify";
 import EditAction from "../action/Edit";
 import DeleteAction from "../action/Delete";
@@ -32,7 +32,7 @@ const LeadsTable = (props: any) => {
   });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(300);
+  const [dataPerPage, setDataPerPage] = useState(100);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -44,24 +44,35 @@ const LeadsTable = (props: any) => {
   const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [userFilter, setUserFilter] = useState("");  
+  const [userFilter, setUserFilter] = useState("");
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
   const { navQuickToggle } = useDigiContext();
-  
+  const [totalRecords, setTotalRecords] = useState(0);
+  const pageSizeOptions = [10, 50, 100, 250, 500, 1000];
 
   useEffect(() => {
     setEditAccess(accessMenuCheck(7, 3));
   }, [navQuickToggle, navQuickToggleValue]);
 
-  const fetchData = async (filters: any) => {
+  const fetchData = async (filters: any, pageNumber: number, dataPerPage: number) => {
     setLoading(true);
     setError(null);
     try {
       let url = `${process.env.NEXT_PUBLIC_API_URL}lead?view=1`;
+      url += `&page=${pageNumber}&limit=${dataPerPage}`;
+
+      localStorage.setItem("lead_page", pageNumber.toString());
+      localStorage.setItem("lead_limit", dataPerPage.toString());
       if (filters.dueDate) {
         url += `&due_filter=${filters.dueDate}`;
         localStorage.setItem("lead_due_filter", filters.dueDate);
       }
+
+      if (filters.search) {
+        url += `&search=${filters.search}`;
+        localStorage.setItem("lead_search", filters.search);
+      }
+
       if (filters.assigned_to) {
         url += `&assigned_to=${filters.assigned_to}`;
         localStorage.setItem("lead_assigned_to", filters.assigned_to);
@@ -70,22 +81,26 @@ const LeadsTable = (props: any) => {
         url += `&lead_status_id=${filters.lead_status_id}`;
         localStorage.setItem("lead_status_id", filters.lead_status_id);
       }
-      if (localStorage.getItem("dd_callsDoneToday") === "true" ) {
+      if (localStorage.getItem("dd_callsDoneToday") === "true") {
         url += `&dd_callsDoneToday=true`;
       }
-      if (localStorage.getItem("dd_totalLeadsToday") === "true" ) {
+      if (localStorage.getItem("dd_totalLeadsToday") === "true") {
         url += `&dd_totalLeadsToday=true`;
       }
-      if (localStorage.getItem("dd_svd") === "true" ) {
+      if (localStorage.getItem("dd_svd") === "true") {
         url += `&dd_svd=true`;
       }
-      if (localStorage.getItem("dd_closure") === "true" ) {
+      if (localStorage.getItem("dd_closure") === "true") {
         url += `&dd_closure=true`;
       }
       // alert(url);
+      if (loading) return;
       const response = await fetch(url);
       const result = await response.json();
-      setDataList(result.map((r: any) => ({ ...r, selected: false })));
+      const loaddata = result.data || result;
+      setDataList(loaddata.map((r: any) => ({ ...r, selected: false })));
+      setTotalRecords(result.total);
+
     } catch (error) {
       console.error(error);
       setError("Error fetching data");
@@ -95,8 +110,7 @@ const LeadsTable = (props: any) => {
   };
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    localStorage.setItem("lead_search", e.target.value);
-    setCurrentPage(1);
+    fetchData({ ...filters, search: e.target.value }, currentPage, dataPerPage);
   };
   const filteredData = useMemo(() => {
     return dataList.filter((d) => {
@@ -111,29 +125,16 @@ const LeadsTable = (props: any) => {
     });
   }, [dataList, searchTerm, statusFilter, userFilter]);
 
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentDataSlice = filteredData.slice(indexOfFirstData, indexOfLastData);
-  const totalPages = Math.ceil(filteredData.length / dataPerPage);
+  const totalPages = Math.ceil(totalRecords / dataPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const sortColumn = (key: string) => {
-    let direction: "asc" | "desc" = "asc";
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    fetchData(filters, pageNumber, dataPerPage);
   };
 
-  const sortedData = useMemo(() => {
-    if (!sortConfig) return currentDataSlice;
-    return [...currentDataSlice].sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-  }, [currentDataSlice, sortConfig]);
+  const sortColumn = (key: string) => {
+    console.log("Sorting by:", key);
+  };
 
   const handleSelectAll = (checked: boolean) => {
     setDataList((prev) => prev.map((row) => ({ ...row, selected: checked })));
@@ -142,10 +143,7 @@ const LeadsTable = (props: any) => {
     setDataList((prev) => prev.map((row) => (row.lead_id === id ? { ...row, selected: checked } : row)));
   };
 
-  const uniqueStatuses = Array.from(new Set(dataList.map((d) => d.lead_status_id)));
-  const uniqueUsers = Array.from(new Set(dataList.map((d) => d.rm_user_id)));
-
-  const handleBulkUpdate = async (value:any) => {
+  const handleBulkUpdate = async (value: any) => {
     const selectedLeads = dataList.filter((d) => d.selected);
 
     if (selectedLeads.length === 0) {
@@ -204,6 +202,8 @@ const LeadsTable = (props: any) => {
     localStorage.removeItem("dd_totalLeadsToday");
     localStorage.removeItem("dd_svd");
     localStorage.removeItem("dd_closure");
+    localStorage.removeItem("lead_page");
+    localStorage.removeItem("lead_limit");
     if (typeof window !== "undefined") {
       window.location.reload();
     }
@@ -214,6 +214,8 @@ const LeadsTable = (props: any) => {
     const savedDueFilter = localStorage.getItem("lead_due_filter") || "";
     const savedAssignedTo = localStorage.getItem("lead_assigned_to") || "";
     const savedLeadStatusId = localStorage.getItem("lead_status_id") || "";
+    const savedPage = localStorage.getItem("lead_page") || "1";
+    const savedLimit = localStorage.getItem("lead_limit") || "100";
     setForm((prev) => ({
       ...prev,
       assigned_to: savedAssignedTo,
@@ -224,27 +226,32 @@ const LeadsTable = (props: any) => {
       dueDate: savedDueFilter,
       assigned_to: savedAssignedTo,
       lead_status_id: savedLeadStatusId,
-    }); 
+      search: savedSearch,
+    });
     fetchData({
       dueDate: savedDueFilter,
       assigned_to: savedAssignedTo,
       lead_status_id: savedLeadStatusId,
-    });
+      search: savedSearch,
+    }, parseInt(savedPage), parseInt(savedLimit));
   }, []);
 
   useEffect(() => {
-    
-    if (form.rm_user_id!=="" && form.rm_user_id!=localStorage.getItem("lead_assigned_to")) {
+
+    if (form.rm_user_id !== "" && form.rm_user_id != localStorage.getItem("lead_assigned_to")) {
       console.log("user:", form.rm_user_id, "user:", filters.assigned_to);
       setFilters((prev) => ({ ...prev, assigned_to: form.rm_user_id }));
-      fetchData({ ...filters, assigned_to: form.rm_user_id });
+      fetchData({ ...filters, assigned_to: form.rm_user_id }, currentPage, dataPerPage);
     }
   }, [form.rm_user_id]);
 
-  
+  useEffect(() => {
+    // fetchData(filters, currentPage, dataPerPage);
+  }, [currentPage, dataPerPage]);
+
   return (
     <React.Fragment>
-    
+
       <div className="col-12">
         <div className="card">
           {/* Filters */}
@@ -259,15 +266,15 @@ const LeadsTable = (props: any) => {
                   className="form-control"
                 />
               </div>
-              
+
               <div className="col-md-2">
-                <select 
-                  className="form-select" 
+                <select
+                  className="form-select"
                   value={filters.dueDate}
-                  onChange={(e) => { 
-                    const value = e.target.value; 
+                  onChange={(e) => {
+                    const value = e.target.value;
                     setFilters({ ...filters, dueDate: value });
-                    fetchData({ ...filters, dueDate: value });
+                    fetchData({ ...filters, dueDate: value }, currentPage, dataPerPage);
                   }}>
                   <option value="">All </option>
                   <option value="1">Due</option>
@@ -275,17 +282,17 @@ const LeadsTable = (props: any) => {
                   <option value="2">Upcoming</option>
                 </select>
               </div>
-              
+
               <div className="col-md-2">
                 <select
                   id="lead_status_id"
                   name="lead_status_id"
                   className="form-select border-white"
                   value={filters.lead_status_id}
-                  onChange={(e) => { 
-                    const value = e.target.value; 
+                  onChange={(e) => {
+                    const value = e.target.value;
                     setFilters({ ...filters, lead_status_id: value });
-                    fetchData({ ...filters, lead_status_id: value });
+                    fetchData({ ...filters, lead_status_id: value }, currentPage, dataPerPage);
                   }}
                 >
                   <LeadStatusList
@@ -300,7 +307,7 @@ const LeadsTable = (props: any) => {
                 <input type="hidden"
                   id="rm_user_id"
                   name="rm_user_id"
-                  value={form.rm_user_id}                />
+                  value={form.rm_user_id} />
               </div>
               <div className="col-md-1">
                 <button className="btn btn-sm btn-secondary" onClick={refreshfilters}>Reset</button>
@@ -321,9 +328,22 @@ const LeadsTable = (props: any) => {
                 </div>
               }
               <div className="col-md-1 ms-auto">
-                <select className="form-select" value={dataPerPage} onChange={(e) => setDataPerPage(Number(e.target.value))}>
-                  {[10, 25, 50, 100, 250, 500].map((count) => (
-                    <option key={count} value={count}>{count}</option>
+                <select
+                  className="form-select"
+                  value={dataPerPage}
+                  onChange={(e) => {
+                    const limit = Number(e.target.value);
+
+                    setDataPerPage(limit);
+                    setCurrentPage(1);
+
+                    fetchData(filters, 1, limit);
+                  }}
+                >
+                  {pageSizeOptions.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -337,9 +357,11 @@ const LeadsTable = (props: any) => {
             totalPages={totalPages}
             paginate={paginate}
             pageNumbers={pageNumbers}
-            indexOfFirstData={indexOfFirstData}
-            indexOfLastData={indexOfLastData}
+            indexOfFirstData={(currentPage - 1) * dataPerPage}
+            indexOfLastData={currentPage * dataPerPage}
             dataList={filteredData}
+            totalRecords={totalRecords}
+            dataPerPage={dataPerPage}
           />
           <div id="leadsDiv">
             <div className="table-wrapper">
@@ -365,16 +387,16 @@ const LeadsTable = (props: any) => {
                 <tbody>
                   {loading && <tr><td colSpan={8} className="text-center"><Spinner animation="border" /></td></tr>}
                   {error && <tr><td colSpan={8}><Alert variant="danger">{error}</Alert></td></tr>}
-                  {!loading && sortedData.length === 0 && <tr><td colSpan={8} className="text-center">No records found</td></tr>}
-                  {!loading && sortedData.map((data) => (
+                  {!loading && dataList.length === 0 && <tr><td colSpan={8} className="text-center">No records found</td></tr>}
+                  {!loading && dataList.map((data) => (
                     <tr key={data.lead_id}>
                       {accessMenuRole(1) &&
                         <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
                       }
-                      
+
                       <td title={data.customer_name}>
-                        {data.customer_name.length > 10 ? data.customer_name.substr(0, 10) + '...' : data.customer_name}                       
-                        
+                        {data.customer_name.length > 10 ? data.customer_name.substr(0, 10) + '...' : data.customer_name}
+
                       </td>
                       <td>{data.mobile_no}</td>
                       <td title={data.project_name}>
@@ -392,19 +414,19 @@ const LeadsTable = (props: any) => {
                       <td>
                         <div className="btn-box">
                           <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />
-                          
-                            <Link
-                              title="History"
-                              className="btn btn-sm btn-icon btn-secondary"
-                              href="javascript:void(0)"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleLeadHistory(data); // pass the specific data item here
-                              }}
-                            >
-                              {/* <i className="fa-light fa-history text-white"></i> */}
-                              <HistoryCount lead_id={data.lead_id} id={data.lead_id} />
-                            </Link>
+
+                          <Link
+                            title="History"
+                            className="btn btn-sm btn-icon btn-secondary"
+                            href="javascript:void(0)"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleLeadHistory(data); // pass the specific data item here
+                            }}
+                          >
+                            {/* <i className="fa-light fa-history text-white"></i> */}
+                            <HistoryCount lead_id={data.lead_id} id={data.lead_id} />
+                          </Link>
                           <DeleteAction id={data.lead_id} page="lead" setRefresh="" menu_id={7} iconclass={false} reload={true} />
                         </div>
                       </td>
@@ -415,7 +437,7 @@ const LeadsTable = (props: any) => {
             </div>
           </div>
           {/* Pagination */}
-          
+
         </div>
       </div >
       <BulkUpdateModal

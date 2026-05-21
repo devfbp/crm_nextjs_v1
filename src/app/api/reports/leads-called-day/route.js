@@ -7,38 +7,47 @@ export async function GET(request) {
   const token = getSessionFromToken();
   const bearer = request.headers.get("Authorization") || "";
   const authToken = bearer.replace("Bearer ", "").trim();
-  let assigned_to = searchParams.get('assigned_to');
-  // console.log("Received token:", authToken);
-  // console.log("Expected token:", process.env.NEXT_PUBLIC_BEARER_TOKEN);
-  if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER=="Yes") {
+  const rm_user_id = request.nextUrl.searchParams.get("rm_user_id");
+  const from_date = request.nextUrl.searchParams.get("from_date");
+  const to_date = request.nextUrl.searchParams.get("to_date");
+  if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER == "Yes") {
     return new Response(
       JSON.stringify({ success: false, message: "Unauthorized" }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
+      { status: 401, headers: { 'Content-Type': 'application/json' } }
     );
   }
   try {
-    const where = { flag: 0 };
-   
-    const todayStart = new Date();
+    var todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
-    const todayEnd = new Date();
+    var todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
+    if (from_date) {
+      todayStart.setTime(new Date(from_date).getTime());
+    }
+    if (to_date) {
+      todayEnd.setTime(new Date(to_date).getTime());
+    }
 
     let lead_where = {};
     lead_where.created_at = { gte: todayStart, lte: todayEnd };
-    lead_where.to_status_id = {not: 1};    
-    if (assigned_to) {
-      lead_where.rm_user_id = parseInt(assigned_to);
+    lead_where.to_status_id = { not: 1 };
+    if (rm_user_id) {
+      lead_where.rm_user_id = parseInt(rm_user_id);
     }
     const callsDoneTodays = await prisma.lead_status_entry_view.groupBy({
-      by: ['rm_user_id','user_name'],
+      by: ['rm_user_id', 'user_name'],
       where: lead_where,
       _count: {
         lead_id: true
+      },
+      orderBy: {
+        _count: {
+          lead_id: 'desc'
+        }
       }
-    });  
+    });
 
-    
+
     return new Response(
       JSON.stringify({ success: true, data: callsDoneTodays }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }

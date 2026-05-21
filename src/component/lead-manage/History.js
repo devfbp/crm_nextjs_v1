@@ -6,6 +6,7 @@ const History = (props) => {
   const [records, setRecords] = useState(null);
 
   useEffect(() => {
+    console.log("Props in History component:", props);
     const fetchData = async () => {
       const response = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
@@ -62,6 +63,11 @@ const History = (props) => {
               </li>
             ))}
         </ul>
+        {props.remarks && (
+          <div className="remarks" style={{ marginTop: "20px", borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}>
+            <strong>Lead Remarks:</strong> {props.remarks}
+          </div>
+        )}
       </div>
 
       {/* Styles */}

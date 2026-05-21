@@ -1,28 +1,21 @@
 "use client";
 import { Alert, Spinner } from "react-bootstrap";
-import UserList from "../lead-manage/UserList2";
-import PaginationSection from "../PaginationSection";
 import "../lead-manage/Leads.scss";
 import { useState, useEffect, useMemo } from "react";
 
-export default function RmDeadLeads() {
-  const [filters, setFilters] = useState({
-    dueDate: "",
-    assigned_to: "",
-    lead_status_id: "",
-    search: "",
-  });
-
-  const [form, setForm] = useState({
+export default function RmDeadLeads(props) {
+  const filters = props.filters || {
+    from_date: "",
     rm_user_id: "",
-  });
+    to_date: "",
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(500);
   const [dataList, setDataList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [totalLeads, ] = useState(0);
+  const [totalLeads,] = useState(0);
 
   // Apply Filters Locally
   const filteredData = useMemo(() => {
@@ -58,12 +51,16 @@ export default function RmDeadLeads() {
     setError(null);
     try {
       let url = `${process.env.NEXT_PUBLIC_API_URL}/reports/rm-deadlead?`;
-
-
-      if (filters.assigned_to) {
-        url += `&assigned_to=${filters.assigned_to}`;
+      if (filters.from_date && filters.to_date) {
+        url += `&from_date=${filters.from_date}`;
       }
-
+      if (filters.to_date) {
+        url += `&to_date=${filters.to_date}`;
+      }
+      if (filters.rm_user_id) {
+        url += `&rm_user_id=${filters.rm_user_id}`;
+        localStorage.setItem("lead_assigned_to", filters.assigned_to);
+      }
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -88,15 +85,7 @@ export default function RmDeadLeads() {
     }
   };
 
-  // Apply filter when form changes
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      assigned_to: form.rm_user_id,
-    }));
-    setCurrentPage(1);
-  }, [form.rm_user_id]);
-
+  
   useEffect(() => {
     fetchData(filters);
   }, [filters]);
@@ -104,7 +93,7 @@ export default function RmDeadLeads() {
   return (
     <>
       <div className="card">
-        {/* Filters */}       
+        {/* Filters */}
 
         {/* Table */}
         <div id="leadsDiv">
@@ -113,8 +102,10 @@ export default function RmDeadLeads() {
               <thead>
                 <tr>
                   <th>RM Name</th>
-                  <th className="text-center">
-                    No of Dead Leads
+                  <th>
+                    <div style={{ textAlign: 'right', paddingRight: '10px' }}>
+                      No of Dead Leads
+                    </div>
                   </th>
                 </tr>
               </thead>
