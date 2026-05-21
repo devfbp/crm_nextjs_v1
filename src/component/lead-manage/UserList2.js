@@ -68,7 +68,7 @@ export default function List({ form, setForm, doptionion }) {
       loadOptions={loadOptions}
       value={selectedrm_user}
       onChange={handleChange}
-      placeholder={doptionion || "Select RM User"}
+      placeholder={doptionion + '-RM' || "Select RM User"}
       classNamePrefix="async_select"
     />
   );

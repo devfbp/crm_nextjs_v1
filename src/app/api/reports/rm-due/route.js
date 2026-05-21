@@ -7,9 +7,10 @@ export async function GET(request) {
   const token = getSessionFromToken();
   const bearer = request.headers.get("Authorization") || "";
   const authToken = bearer.replace("Bearer ", "").trim();
-  let assigned_to = searchParams.get('assigned_to');
-  // console.log("Received token:", authToken);
-  // console.log("Expected token:", process.env.NEXT_PUBLIC_BEARER_TOKEN);
+  const rm_user_id = searchParams.get("rm_user_id");
+  const from_date = searchParams.get("from_date");
+  const to_date = searchParams.get("to_date");  
+  
   if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER=="Yes") {
     return new Response(
       JSON.stringify({ success: false, message: "Unauthorized" }),
@@ -17,25 +18,35 @@ export async function GET(request) {
     );
   }
   try {
-    const where = { flag: 0 };
-   
-    const todayStart = new Date();
+    var todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
-    const todayEnd = new Date();
+    var todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
+    if (from_date) {
+      todayStart.setTime(new Date(from_date).getTime());
+    }
+    if (to_date) {
+      todayEnd.setTime(new Date(to_date).getTime());
+    }
+    
 
-    let lead_where = {};
+    let lead_where = {flag: 0};
     lead_where.schedule_date = { gte: todayStart, lte: todayEnd };
     // lead_where.to_status_id = 1;
-    if (assigned_to) {
-      lead_where.rm_user_id = parseInt(assigned_to);
+    if (rm_user_id) {
+      lead_where.rm_user_id = parseInt(rm_user_id);
     }
     const leadAssignedDay = await prisma.leads_view.groupBy({
       by: ['rm_user_id','assigned_to'],
       where: lead_where,
       _count: {
         lead_id: true
-      }
+      },
+      orderBy: {
+        _count: {
+          lead_id: 'desc',
+        },
+      },
     });  
 
     

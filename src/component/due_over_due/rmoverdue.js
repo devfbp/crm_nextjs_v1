@@ -5,13 +5,12 @@ import PaginationSection from "../PaginationSection";
 import "../lead-manage/Leads.scss";
 import { useState, useEffect, useMemo } from "react";
 
-export default function RmDue() {
-  const [filters, setFilters] = useState({
-    dueDate: "",
-    assigned_to: "",
-    lead_status_id: "",
-    search: "",
-  });
+export default function RmDue(props) {
+  const filters = props.filters || {
+    from_date: "",
+    rm_user_id: "",
+    to_date: "",
+  };
 
   const [form, setForm] = useState({
     rm_user_id: "",
@@ -57,12 +56,16 @@ export default function RmDue() {
     setError(null);
     try {
       let url = `${process.env.NEXT_PUBLIC_API_URL}/reports/rm-overdue?`;
-
-
-      if (filters.assigned_to) {
-        url += `&assigned_to=${filters.assigned_to}`;
+      if (filters.from_date && filters.to_date) {
+        url += `&from_date=${filters.from_date}`;
       }
-
+      if (filters.to_date) {
+        url += `&to_date=${filters.to_date}`;
+      }
+      if (filters.rm_user_id) {
+        url += `&rm_user_id=${filters.rm_user_id}`;
+        localStorage.setItem("lead_assigned_to", filters.assigned_to);
+      }
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -87,14 +90,6 @@ export default function RmDue() {
     }
   };
 
-  // Apply filter when form changes
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      assigned_to: form.rm_user_id,
-    }));
-    setCurrentPage(1);
-  }, [form.rm_user_id]);
 
   useEffect(() => {
     fetchData(filters);
@@ -103,7 +98,7 @@ export default function RmDue() {
   return (
     <>
       <div className="card">
-        {/* Filters */}       
+        {/* Filters */}
 
         {/* Table */}
         <div id="leadsDiv">
@@ -112,8 +107,10 @@ export default function RmDue() {
               <thead>
                 <tr>
                   <th>RM Name</th>
-                  <th className="text-center">
-                    No of OverDue Leads
+                  <th>
+                    <div className="text-right">
+                      No of OverDue Leads
+                    </div>
                   </th>
                 </tr>
               </thead>
@@ -136,7 +133,7 @@ export default function RmDue() {
                     <tr key={item.rm_user_id}>
                       <td>{item.assigned_to || "N/A"}</td>
                       <td>
-                        <div style={{ textAlign: 'right', paddingRight: '10px' }}>
+                        <div className="text-right pr-2">
                           {item._count?.lead_id || 0}
                         </div>
                       </td>
