@@ -1,29 +1,44 @@
 import LayoutClient from "./LayoutClient";
 import jwt from "jsonwebtoken";
-
 import Cryptr from "cryptr";
 import { cookies } from "next/headers";
+
 export default function LayoutServer({ children }) {
-    var session = null;
-    var encryptedString = "";
+    let session = null;
+    let encryptedString = "";
+
     const cookieStore = cookies();
-    // console.log("cookieStore",cookieStore);
     const token = cookieStore.get('token')?.value;
-    // console.log("token in session", token);
+
     if (token) {
         try {
-            const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
-            if (typeof decoded === 'string') {
-                session = null;
-            } else {
+            const decoded = jwt.verify(
+                token,
+                process.env.JWT_SECRET
+            );
+
+            if (typeof decoded !== 'string') {
                 session = decoded;
-                const cryptr = new Cryptr(process.env.NEXT_PUBLIC_JWT_SECRET);
-                encryptedString = cryptr.encrypt(session);
+
+                const cryptr = new Cryptr(
+                    process.env.JWT_SECRET
+                );
+
+                encryptedString = cryptr.encrypt(
+                    JSON.stringify(session)
+                );
             }
+
         } catch (error) {
             console.error("Invalid token:", error);
-            cookieStore.delete('token');
         }
     }
-    return <LayoutClient session={session} children={children} encryptedString={encryptedString} />;
+
+    return (
+        <LayoutClient
+            session={session}
+            children={children}
+            encryptedString={encryptedString}
+        />
+    );
 }

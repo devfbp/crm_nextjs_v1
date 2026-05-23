@@ -8,7 +8,7 @@ export function getSessionFromToken() {
     if (!token) {
       return null;
     }
-    const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // console.log("Decoded session:", decoded);
     return typeof decoded === "string" ? null : decoded;
   } catch (error) {

@@ -24,7 +24,7 @@ export async function POST(request) {
     } else {
       const isMatch = await bcrypt.compare(password, userDetail[0].password);
       // Authenticate user (mocked for example)    
-      if (!isMatch && process.env.NEXT_PUBLIC_ENABLE_SIGNUP!== password) {
+      if (!isMatch) {
         return NextResponse.json({ success: false, message: 'Invalid Password' }, { status: 401 });
       }
       else if (username === userDetail[0].email) {
@@ -50,7 +50,7 @@ export async function POST(request) {
           }
         }
         // console.log("sessionUserdata", sessionUserdata);
-        const token = jwt.sign(sessionUserdata, SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(sessionUserdata, SECRET, { expiresIn: '24h' });
         const cookie = serialize('token', token, {
           httpOnly: true,
           // secure: process.env.NODE_ENV === 'production',
