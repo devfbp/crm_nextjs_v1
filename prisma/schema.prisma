@@ -150,7 +150,7 @@ model lead_status_entry {
   from_rm_user_id Int
   rm_user_id      Int
   remarks         String?   @db.Text
-  created_at      DateTime  @default(now()) @db.DateTime(0)
+  created_at      DateTime? @db.DateTime(0)
   created_by      Int?
   modified_at     DateTime? @db.DateTime(0)
   modified_by     Int?
@@ -320,7 +320,7 @@ view lead_status_entry_view {
   to_status_id       Int       @default(0)
   to_status_color    String    @default("success") @db.VarChar(200)
   created_by_name    String    @db.VarChar(200)
-  created_at         DateTime? @default(now()) @db.DateTime(0)
+  created_at         DateTime? @db.DateTime(0)
   remarks            String?   @db.Text
   display_created_at String?   @db.VarChar(86)
 }
