@@ -57,7 +57,7 @@ export async function POST(request) {
           secure: false,
           sameSite: 'strict',
           path: '/',
-          maxAge: 360 * 60 // 1 hour
+          maxAge: 60 * 60 * 24 // 1 hour
         });
         // console.log("cookie", cookie);
         return new NextResponse(JSON.stringify({ success: true, token: token }), {
