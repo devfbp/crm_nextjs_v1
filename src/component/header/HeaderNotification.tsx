@@ -50,45 +50,7 @@ const HeaderNotification = () => {
     }
   }, []);
 
-  // Connect to SSE stream
-  useEffect(() => {
-    const es = new EventSource("/api/notifications/stream");
-    eventSourceRef.current = es;
-
-    es.onmessage = (event) => {
-      try {
-        const data: ReminderNotification = JSON.parse(event.data);
-        setNotifications((prev) => {
-          // Avoid duplicates
-          const exists = prev.some(
-            (n) => n.lead_reminder_id === data.lead_reminder_id,
-          );
-          if (exists) return prev;
-          return [data, ...prev];
-        });
-        // Also show a toast popup
-        toast.info(`🔔 Reminder: ${data.customer_name} — ${data.message}`, {
-          position: "top-right",
-          autoClose: 8000,
-          onClick: () => acknowledge(data.lead_reminder_id),
-        });
-      } catch {
-        // heartbeat comments — ignore
-      }
-    };
-
-    es.onerror = () => {
-      // Reconnect silently
-      es.close();
-      setTimeout(() => {
-        eventSourceRef.current = new EventSource("/api/notifications/stream");
-      }, 3000);
-    };
-
-    return () => {
-      es.close();
-    };
-  }, [acknowledge]);
+  
 
   // Close dropdown on outside click
   useEffect(() => {

@@ -274,38 +274,6 @@ model website_leads {
   flag            Int       @default(0)
 }
 
-model lead_reminders {
-  lead_reminder_id   Int       @id @default(autoincrement())
-  user_id            Int
-  remind_at          DateTime  @db.DateTime(0)
-  frequency_value    Int       @default(5)
-  limit              Int       @default(2)
-  message            String?   @db.VarChar(200)
-  lead_id            Int
-  notification_count Int       @default(0)
-  last_notified_at   DateTime? @db.DateTime(0)
-  is_acknowledged    Boolean   @default(false)
-
-  @@index([lead_id], map: "lead_reminders_fk_1")
-  @@index([user_id], map: "lead_reminders_fk_2")
-}
-
-model reminder_logs {
-  reminder_log_id    Int       @id @default(autoincrement())
-  lead_reminder_id   Int
-  reminder_status_id Int
-  created_at         DateTime? @db.DateTime(0)
-
-  @@index([reminder_status_id], map: "remainder_logs_fk_1")
-  @@index([lead_reminder_id], map: "remainder_logs_fk_2")
-}
-
-model reminder_status {
-  reminder_status_id Int      @id @default(autoincrement())
-  name               String?  @unique @db.VarChar(200)
-  is_active          Boolean? @default(true)
-}
-
 view lead_status_entry_view {
   lead_entry_id      Int       @default(0)
   lead_id            Int       @default(0)
