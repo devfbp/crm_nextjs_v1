@@ -9,18 +9,6 @@ async function main() {
     { name: 'ACKNOWLEDGED', is_active: true },
     { name: 'DISMISSED', is_active: true },
   ]
-
-  for (const status of statuses) {
-    await prisma.reminder_status.upsert({
-      where: { name: status.name },
-      update: {
-        is_active: status.is_active,
-      },
-      create: status,
-    })
-  }
-
-  console.log('✅ Reminder statuses seeded')
 }
 
 main()

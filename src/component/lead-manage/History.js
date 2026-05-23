@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "./Leads.scss";
+import { showDateTime } from "../utils/common-client";
 
 const History = (props) => {
   const [records, setRecords] = useState(null);
@@ -35,7 +36,8 @@ const History = (props) => {
                       <strong>User:</strong> {item.created_by_name}
                     </div>
                     <div>
-                      <strong>Date:</strong> {item.display_created_at}
+                      <strong>Date:</strong>{" "}
+                        {showDateTime(item.created_at)}
                     </div>
                   </div>
 

@@ -29,17 +29,12 @@ export async function GET(request) {
     todayEnd.setHours(23, 59, 59, 999); 
     
     let lead_where = {};
-    // lead_where.schedule_date = { gte: todayStart, lte: todayEnd };
     lead_where.status_id = 6;
     lead_where.flag = 0;
+    lead_where.modified_at = { gte: todayStart, lte: todayEnd };
     if (rm_user_id) {
       lead_where.rm_user_id = parseInt(rm_user_id);
-    }
-    
-    if (from_date && to_date) {
-      lead_where.created_at = { gte: todayStart, lte: todayEnd };
-    }
-    
+    }    
     const leadAssignedDay = await prisma.leads_view.groupBy({
       by: ['rm_user_id', 'assigned_to'],
       where: lead_where,

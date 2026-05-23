@@ -33,18 +33,18 @@ export function getUserSessionData() {
     }
     return null;
 }
-export function displayDate (isoDate) {
-  if (!isoDate) return "";
-  const date = new Date(isoDate);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+export function displayDate(isoDate) {
+    if (!isoDate) return "";
+    const date = new Date(isoDate);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
 };
 
-export function parseDate (ddmmyyyy) {
-  const [day, month, year] = ddmmyyyy.split("-");
-  return `${year}-${month}-${day}`;
+export function parseDate(ddmmyyyy) {
+    const [day, month, year] = ddmmyyyy.split("-");
+    return `${year}-${month}-${day}`;
 };
 
 export function confrimAlert() {
@@ -102,4 +102,10 @@ export async function projectName(props) {
         return '';
     }
     return data[0].project_name;
+}
+export function showDateTime(isoDate) {
+    if (!isoDate) return "";
+    return new Date(isoDate).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+    })
 }

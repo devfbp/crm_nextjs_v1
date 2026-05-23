@@ -26,11 +26,10 @@ export async function GET(request) {
     }
     todayStart.setHours(0, 0, 0, 0);    
     todayEnd.setHours(23, 59, 59, 999);
-
+    console.log("todayStart", todayStart);
+    console.log("todayEnd", todayEnd);
     var where = { flag: 0, status_id: 6 };
-    if (from_date && to_date) {
-      where.created_at = { gte: todayStart, lte: todayEnd };
-    }
+    where.modified_at = { gte: todayStart, lte: todayEnd };
     if (rm_user_id) {
       where.rm_user_id = parseInt(rm_user_id);
     }

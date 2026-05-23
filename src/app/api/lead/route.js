@@ -342,7 +342,7 @@ export async function PUT(request) {
         data: {
           lead_id: updatedlead?.lead_id,
           created_by: token?.user_id ?? null,
-          // created_at: new Date().toISOString(),
+          created_at: new Date(),
           from_status_id: beforeLeadData?.lead_status_id ?? 0,
           to_status_id: updatedlead.lead_status_id,
           from_rm_user_id: beforeLeadData?.rm_user_id ?? null,
