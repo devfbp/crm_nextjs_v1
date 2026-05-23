@@ -9,15 +9,20 @@ export default function LayoutServer({ children }) {
     const cookieStore = cookies();
     // console.log("cookieStore",cookieStore);
     const token = cookieStore.get('token')?.value;
-    // console.log("token in session", token);    
+    // console.log("token in session", token);
     if (token) {
-        const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
-        if (typeof decoded === 'string') {
-            session = null;
-        } else {
-            session = decoded;
-            const cryptr = new Cryptr(process.env.NEXT_PUBLIC_JWT_SECRET);
-            encryptedString = cryptr.encrypt(session);
+        try {
+            const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
+            if (typeof decoded === 'string') {
+                session = null;
+            } else {
+                session = decoded;
+                const cryptr = new Cryptr(process.env.NEXT_PUBLIC_JWT_SECRET);
+                encryptedString = cryptr.encrypt(session);
+            }
+        } catch (error) {
+            console.error("Invalid token:", error);
+            cookieStore.delete('token');
         }
     }
     return <LayoutClient session={session} children={children} encryptedString={encryptedString} />;
