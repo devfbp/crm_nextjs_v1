@@ -18,15 +18,15 @@ export async function GET(request) {
   }
   try {
     var todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
     var todayEnd = new Date();
-    todayEnd.setHours(23, 59, 59, 999);
     if (from_date) {
-      todayStart.setTime(new Date(from_date).getTime());
+      todayStart = new Date(from_date);
     }
     if (to_date) {
-      todayEnd.setTime(new Date(to_date).getTime());
+      todayEnd = new Date(to_date);
     }
+    todayStart.setHours(0, 0, 0, 0);    
+    todayEnd.setHours(23, 59, 59, 999);
     
     let lead_where = {};
     lead_where.created_at = { gte: todayStart, lte: todayEnd };
