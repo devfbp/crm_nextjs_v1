@@ -1,4 +1,8 @@
-// app/posts/[id]/loading.tsx
+"use client";
+import Loader from "@/component/Loader";
+
 export default function Loading() {
-  return <p>Loading ...</p>;
+  return (
+    <Loader />
+  );
 }

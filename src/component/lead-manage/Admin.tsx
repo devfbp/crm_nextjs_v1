@@ -15,6 +15,7 @@ import "./Leads.scss";
 import UserList from "./UserList2";
 import LeadStatusList from "./LeadStatusList";
 import HistoryCount from "./HistoryCount";
+import Loader from "../Loader";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
@@ -385,7 +386,7 @@ const LeadsTable = (props: any) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {loading && <tr><td colSpan={8} className="text-center"><Spinner animation="border" /></td></tr>}
+                  {loading && <tr><td colSpan={8} className="text-center"><Loader /></td></tr>}
                   {error && <tr><td colSpan={8}><Alert variant="danger">{error}</Alert></td></tr>}
                   {!loading && dataList.length === 0 && <tr><td colSpan={8} className="text-center">No records found</td></tr>}
                   {!loading && dataList.map((data) => (

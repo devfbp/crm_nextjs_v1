@@ -4,7 +4,7 @@ import UserList from "../lead-manage/UserList2";
 import DatePicker from "react-datepicker";
 import "../lead-manage/Leads.scss";
 import { useState, useEffect, useMemo } from "react";
-
+import Loader from "@/component/Loader";
 export default function LeadsCallingDoneDay() {
   const [filters, setFilters] = useState({
     from_date: "",
@@ -181,7 +181,7 @@ export default function LeadsCallingDoneDay() {
                 {loading ? (
                   <tr>
                     <td colSpan="2" className="text-center">
-                      <Spinner animation="border" />
+                      <Loader />
                     </td>
                   </tr>
                 ) : error ? (

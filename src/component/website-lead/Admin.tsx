@@ -1,5 +1,5 @@
 "use client";
-
+import Loader from "@/component/Loader";
 import React, { useEffect, useState, useMemo } from "react";
 import { Table, Spinner, Alert } from "react-bootstrap";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
@@ -70,7 +70,7 @@ const ScrollDataTableSection: React.FC = () => {
           {/* Loading */}
           {loading && (
             <div className="text-center py-4">
-              <Spinner animation="border" />
+              <Loader />
             </div>
           )}
 

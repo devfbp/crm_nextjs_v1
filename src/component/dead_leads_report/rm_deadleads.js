@@ -2,7 +2,7 @@
 import { Alert, Spinner } from "react-bootstrap";
 import "../lead-manage/Leads.scss";
 import { useState, useEffect, useMemo } from "react";
-
+import Loader from "@/component/Loader";
 export default function RmDeadLeads(props) {
   const filters = props.filters || {
     from_date: "",
@@ -114,7 +114,7 @@ export default function RmDeadLeads(props) {
                 {loading ? (
                   <tr>
                     <td colSpan="2" className="text-center">
-                      <Spinner animation="border" />
+                      <Loader />
                     </td>
                   </tr>
                 ) : error ? (
