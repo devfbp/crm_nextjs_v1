@@ -8,10 +8,10 @@ INSERT INTO `lead_file` (`lead_file_id`, `lead_file_name`, `file_path`, `created
 export async function GET(request) {
   const token = getSessionFromToken();
   const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // todayStart.setHours(0, 0, 0, 0);
 
   const todayEnd = new Date();
-  todayEnd.setHours(23, 59, 59, 999);
+  // todayEnd.setHours(23, 59, 59, 999);
 
   const dashboardQry = null;
   try {
