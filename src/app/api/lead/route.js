@@ -16,7 +16,7 @@ export async function GET(request) {
   const dashboardQry = null;
   try {
     const { searchParams } = new URL(request.url);
-    
+
     const id = parseInt(searchParams.get('id'));
     let limit = parseInt(searchParams.get('limit')) || 100;
     let page = parseInt(searchParams.get('page')) || 1;
@@ -47,26 +47,20 @@ export async function GET(request) {
     }
     if (view == "1") {
       let vwhere = { flag: 0, status_id: { notIn: [6, 7] } };
+      vwhere = {
+        AND: []
+      };
       if (search) {
-        vwhere.OR = [
-          { customer_name: { contains: search} },
-          { mobile_no: { contains: search } },
-          // { email_id: { contains: search, mode: 'insensitive' } },
-          // { alternate_no: { contains: search, mode: 'insensitive' } },
-          // { whatsapp_no: { contains: search, mode: 'insensitive' } },
-          // { alternate_email: { contains: search, mode: 'insensitive' } },
-          // { project_name: { contains: search, mode: 'insensitive' } },
-          // { source_name: { contains: search, mode: 'insensitive' } },
-          // { sub_source_name: { contains: search, mode: 'insensitive' } },
-          // { rm_user_name: { contains: search, mode: 'insensitive' } },
-          // { status_name: { contains: search, mode: 'insensitive' } },
-        ];
+        vwhere.AND.push({
+          OR: [
+            { customer_name: { contains: search } },
+            { mobile_no: { contains: search } }
+          ]
+        });
       }
-      if (due_filter) {
-
-        if (due_filter === "1") {
-          // EXACT today
-          vwhere.OR = [
+      if (due_filter === "1") {
+        vwhere.AND.push({
+          OR: [
             {
               schedule_date: {
                 gte: todayStart,
@@ -79,23 +73,29 @@ export async function GET(request) {
                 lte: todayEnd,
               },
             },
-          ];
-        } else if (due_filter === "0") {
-          //OVERDUE (before today)
-          vwhere.OR = [
+          ]
+        });
+      }
+
+      if (due_filter === "0") {
+        vwhere.AND.push({
+          OR: [
             {
               schedule_date: {
                 lt: todayStart,
               },
             },
             { schedule_date: null }
-          ];
-        } else if (due_filter === "2") {
-          //UPCOMING (after today)
-          vwhere.schedule_date = {
+          ]
+        });
+      }
+
+      if (due_filter === "2") {
+        vwhere.AND.push({
+          schedule_date: {
             gt: todayEnd,
-          };
-        }
+          }
+        });
       }
       if (assigned_to) {
         vwhere.rm_user_id = parseInt(assigned_to);
@@ -204,6 +204,7 @@ export async function GET(request) {
         }
       }
       // console.log(token.user_id);
+      console.log("vwhere:", JSON.stringify(vwhere));
       const dataItems = await prisma.leads_view.findMany({
         where: vwhere,
         take: limit,
@@ -213,7 +214,7 @@ export async function GET(request) {
       const totalCount = await prisma.leads_view.count({
         where: vwhere
       });
-      return Response.json({data: dataItems, dashboard: dashboardQry, total: totalCount});
+      return Response.json({ data: dataItems, dashboard: dashboardQry, total: totalCount });
     }
 
     const dataItems = await prisma.lead.findMany({
@@ -230,7 +231,7 @@ export async function GET(request) {
         flag: 0
       }
     });
-    return Response.json({data: dataItems, dashboard: dashboardQry, total: totalCount});
+    return Response.json({ data: dataItems, dashboard: dashboardQry, total: totalCount });
   } catch (error) {
     console.error('Error fetching leads:', error);
     return Response.json({ success: false, message: error.message }, { status: 500 });

@@ -72,7 +72,11 @@ const LeadsTable = (props: any) => {
       if (filters.search) {
         url += `&search=${filters.search}`;
         localStorage.setItem("lead_search", filters.search);
+      } else if(searchTerm) {
+        url += `&search=${searchTerm}`;
+        localStorage.setItem("lead_search", filters.search);
       }
+      
 
       if (filters.assigned_to) {
         url += `&assigned_to=${filters.assigned_to}`;
@@ -95,6 +99,7 @@ const LeadsTable = (props: any) => {
         url += `&dd_closure=true`;
       }
       // alert(url);
+      console.log("Fetching data with URL:", url);
       if (loading) return;
       const response = await fetch(url);
       const result = await response.json();
@@ -262,7 +267,13 @@ const LeadsTable = (props: any) => {
                 <input
                   type="text"
                   value={searchTerm}
-                  onChange={handleSearchChange}
+                  onChange={
+                    (e) => {
+                      const value = e.target.value;
+                      setSearchTerm(value);
+                      fetchData({ ...filters, search: value }, currentPage, dataPerPage);
+                    }
+                  }
                   placeholder="Search Leads..."
                   className="form-control"
                 />
