@@ -46,10 +46,12 @@ export async function GET(request) {
       return Response.json(finalData);
     }
     if (view == "1") {
-      let vwhere = { flag: 0, status_id: { notIn: [6, 7] } };
-      vwhere = {
+      let vwhere = {
         AND: []
       };
+
+      vwhere.AND.push({ flag: 0 });
+      vwhere.AND.push({ status_id: { notIn: [6, 7] } });
       if (search) {
         vwhere.AND.push({
           OR: [
