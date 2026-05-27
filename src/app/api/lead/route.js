@@ -51,7 +51,11 @@ export async function GET(request) {
       };
 
       vwhere.AND.push({ flag: 0 });
-      vwhere.AND.push({ status_id: { notIn: [6, 7] } });
+      if(lead_status_id){
+        vwhere.AND.push({ status_id: parseInt(lead_status_id) });
+      } else {
+        vwhere.AND.push({ status_id: { notIn: [6, 7] } });
+      }
       if (search) {
         vwhere.AND.push({
           OR: [
