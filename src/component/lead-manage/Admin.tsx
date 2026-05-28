@@ -16,7 +16,7 @@ import UserList from "./UserList2";
 import LeadStatusList from "./LeadStatusList";
 import HistoryCount from "./HistoryCount";
 import Loader from "../Loader";
-import { showDate } from "../utils/common-client";
+import { showDateNa } from "../utils/common-client";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
@@ -426,7 +426,7 @@ const LeadsTable = (props: any) => {
                       }
                       <td className={`text-${data.status_color ? data.status_color : 'secondary'}`}>
                         {data.status}
-                         <div>{showDate(data.schedule_date)}</div>
+                         <div>{showDateNa(data.schedule_date)}</div>
                       </td>
                       <td>
                         <div className="btn-box">

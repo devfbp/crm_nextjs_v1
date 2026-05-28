@@ -9,7 +9,7 @@ import ProjectList from "./ProjectList2";
 import SourceList from "./SourceList2";
 import { leadSchema } from "../../../lib/validation";
 import DatePicker from "react-datepicker";
-import { form_submit_call, displayDate, parseDate } from "../utils/common-client";
+import { form_submit_call, displayDate, parseDate, showDate } from "../utils/common-client";
 // import "react-datepicker/dist/react-datepicker.css";
 import LastLeadEntry from "./LastLeadEntry";
 import { accessMenuRole } from "../utils/common";
@@ -18,6 +18,7 @@ import Link from "next/link";
 import "./Leads.scss";
 import { useRouter } from "next/navigation";
 import History from "./History";
+import { showDateVal } from "../utils/common-client";
 
 interface InputFormProps {
 
@@ -530,11 +531,11 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         </label>
                         <div className="input-group-with-icon">
                           <DatePicker
-                            selected={form.schedule_date ? new Date(form.schedule_date) : null} // convert string to Date
+                            selected={showDateVal(form.schedule_date) ? new Date(form.schedule_date) : null} // convert string to Date
                             onChange={(date) =>
                               setForm({
                                 ...form,
-                                schedule_date: date ? date.toISOString() : "", // store as string YYYY-MM-DD
+                                schedule_date: date ? date: "", // store as string YYYY-MM-DD
                               })
                             }
                             dateFormat="dd-MM-yyyy"

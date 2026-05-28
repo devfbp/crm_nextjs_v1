@@ -109,10 +109,15 @@ export function showDateTime(isoDate) {
         timeZone: "Asia/Kolkata",
     })
 }
-export function showDate(isoDate) {
-    if (!isoDate) return "N/A";
-
-    return new Date(isoDate).toLocaleDateString("en-IN", {
+export function showDateVal(isoDate) {
+    if (!isoDate) return "";
+    return new Date(isoDate).toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata",
-    });
+    }).split(",")[0];
+}
+export function showDateNa(isoDate) {
+    if (!isoDate) return "N/A";
+    return new Date(isoDate).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+    }).split(",")[0];
 }
