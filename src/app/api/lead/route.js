@@ -65,6 +65,8 @@ export async function GET(request) {
         });
       }
       if (due_filter === "1") {
+        todayStart.setHours(0, 0, 0, 0);
+        todayEnd.setHours(23, 59, 59, 999);
         vwhere.AND.push({
           OR: [
             {
@@ -81,9 +83,11 @@ export async function GET(request) {
             },
           ]
         });
+        vwhere.AND.push({ status_id: { notIn: [6, 7] } });
       }
 
       if (due_filter === "0") {
+        todayStart.setHours(0, 0, 0, 0);
         vwhere.AND.push({
           OR: [
             {
@@ -94,6 +98,7 @@ export async function GET(request) {
             { schedule_date: null }
           ]
         });
+        vwhere.AND.push({ status_id: { notIn: [6, 7] } });
       }
 
       if (due_filter === "2") {
@@ -102,6 +107,7 @@ export async function GET(request) {
             gt: todayEnd,
           }
         });
+        vwhere.AND.push({ status_id: { notIn: [6, 7] } });
       }
       if (assigned_to) {
         vwhere.rm_user_id = parseInt(assigned_to);
@@ -262,6 +268,7 @@ export async function POST(request) {
     const newlead = await prisma.lead.create({
       data: {
         created_at: new Date(),
+        schedule_date: new Date(),
         created_by: token?.user_id || null,
         customer_name: req.customer_name,
         mobile_no: req.mobile_no,

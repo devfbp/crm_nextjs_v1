@@ -16,6 +16,7 @@ import UserList from "./UserList2";
 import LeadStatusList from "./LeadStatusList";
 import HistoryCount from "./HistoryCount";
 import Loader from "../Loader";
+import { showDate } from "../utils/common-client";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
@@ -392,7 +393,7 @@ const LeadsTable = (props: any) => {
                     {accessMenuRole(1) &&
                       <th onClick={() => sortColumn("sub_source_name")}>Source</th>
                     }
-                    <th onClick={() => sortColumn("status")}>Status</th>
+                    <th onClick={() => sortColumn("status")}>Status<div>Schedule Date</div></th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -416,13 +417,17 @@ const LeadsTable = (props: any) => {
                       </td>
                       <td title={data.assigned_to}>
                         {data.assigned_to.length > 10 ? data.assigned_to.substr(0, 10) + '...' : data.assigned_to}
+                       
                       </td>
                       {accessMenuRole(1) &&
                         <td title={data.sub_source_name}>
                           {data.sub_source_name.length > 10 ? data.sub_source_name.substr(0, 10) + '...' : data.sub_source_name}
                         </td>
                       }
-                      <td className={`text-${data.status_color ? data.status_color : 'secondary'}`}>{data.status}</td>
+                      <td className={`text-${data.status_color ? data.status_color : 'secondary'}`}>
+                        {data.status}
+                         <div>{showDate(data.schedule_date)}</div>
+                      </td>
                       <td>
                         <div className="btn-box">
                           <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />

@@ -132,6 +132,7 @@ export async function POST(request) {
         const lead_data = await prisma.lead.create({
           data: {
             created_at: new Date(),
+            schedule_date: new Date(),
             customer_name: row.customer_name,
             mobile_no: String(row.mobile_no ?? ""),
             email_id: row.email_id ?? null,
