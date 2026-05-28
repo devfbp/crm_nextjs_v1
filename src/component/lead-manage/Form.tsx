@@ -531,11 +531,17 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         </label>
                         <div className="input-group-with-icon">
                           <DatePicker
-                            selected={showDateVal(form.schedule_date)   ? new Date(form.schedule_date) : null} // convert string to Date
+                            selected={
+                              showDateVal(form.schedule_date)
+                                ? new Date(form.schedule_date)
+                                : null
+                            }
                             onChange={(date) =>
                               setForm({
                                 ...form,
-                                schedule_date: date ? date.toISOString() : "", // store as string YYYY-MM-DD
+                                schedule_date: date
+                                  ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+                                  : "",
                               })
                             }
                             dateFormat="dd-MM-yyyy"

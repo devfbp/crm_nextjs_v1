@@ -329,6 +329,7 @@ export async function PUT(request) {
     const beforeLeadData = await prisma.lead.findUnique({
       where: { lead_id: id }
     });
+    console.log("Schedule Date:", new Date(req?.schedule_date));
     const updatedlead = await prisma.lead.update({
       where: { lead_id: id },
       data: {
