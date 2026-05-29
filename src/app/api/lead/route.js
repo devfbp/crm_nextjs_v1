@@ -51,7 +51,7 @@ export async function GET(request) {
       };
 
       vwhere.AND.push({ flag: 0 });
-      if(lead_status_id){
+      if (lead_status_id) {
         vwhere.AND.push({ status_id: parseInt(lead_status_id) });
       } else {
         vwhere.AND.push({ status_id: { notIn: [6, 7] } });
@@ -76,11 +76,16 @@ export async function GET(request) {
               },
             },
             {
-              created_at: {
-                gte: todayStart,
-                lte: todayEnd,
-              },
-            },
+              AND: [
+                { schedule_date: null },
+                {
+                  created_at: {
+                    gte: todayStart,
+                    lte: todayEnd,
+                  },
+                },
+              ]
+            }
           ]
         });
         vwhere.AND.push({ status_id: { notIn: [6, 7] } });
