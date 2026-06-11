@@ -132,7 +132,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
     e.preventDefault();
 
     const validation = leadSchema.safeParse({
-      customer_name: form.customer_name,
+      // customer_name: form.customer_name,
       mobile_no: form.mobile_no,
       project_id: form.project_id,
       source_id: form.source_id,
@@ -140,6 +140,11 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       rm_user_id: form.rm_user_id,
       lead_status_id: form.lead_status_id
     });
+
+    if(form.customer_name.trim() === "") {
+      setErrors({ customer_name: ["Customer name cannot be empty"] });
+      return;
+    }
 
     if (!validation.success) {
       setErrors(validation.error.flatten().fieldErrors);
