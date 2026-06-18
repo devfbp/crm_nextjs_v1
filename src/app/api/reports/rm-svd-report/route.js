@@ -29,7 +29,7 @@ export async function GET(request) {
     todayEnd.setHours(23, 59, 59, 999); 
     
     let lead_where = {};
-    lead_where.status_id = 6;
+    lead_where.status_id = 5;
     lead_where.flag = 0;
     lead_where.modified_at = { gte: todayStart, lte: todayEnd };
     if (token?.user_id && token?.role_id > 2 && !rm_user_id) {

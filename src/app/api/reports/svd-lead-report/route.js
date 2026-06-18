@@ -3,17 +3,16 @@ import prisma from '../../../../../lib/prisma';
 import { getSessionFromToken } from "../../session";
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
   const token = getSessionFromToken();
   const bearer = request.headers.get("Authorization") || "";
   const authToken = bearer.replace("Bearer ", "").trim();
   const rm_user_id = request.nextUrl.searchParams.get("rm_user_id");
   const from_date = request.nextUrl.searchParams.get("from_date");
   const to_date = request.nextUrl.searchParams.get("to_date");
-  if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER == "Yes") {
+  if (authToken != process.env.NEXT_PUBLIC_BEARER_TOKEN && process.env.NEXT_PUBLIC_BEARER=="Yes") {
     return new Response(
       JSON.stringify({ success: false, message: "Unauthorized" }),
-      { status: 401, headers: { 'Content-Type': 'application/json' } }
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
     );
   }
   try {
@@ -26,14 +25,13 @@ export async function GET(request) {
       todayEnd = new Date(to_date);
     }
     todayStart.setHours(0, 0, 0, 0);    
-    todayEnd.setHours(23, 59, 59, 999); 
-    
-    let lead_where = {};
-    lead_where.status_id = 6;
-    lead_where.flag = 0;
-    lead_where.modified_at = { gte: todayStart, lte: todayEnd };
+    todayEnd.setHours(23, 59, 59, 999);
+    console.log("todayStart", todayStart);
+    console.log("todayEnd", todayEnd);
+    var where = { flag: 0, status_id: 5 };
+    where.modified_at = { gte: todayStart, lte: todayEnd };
     if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
-      lead_where.rm_user_id = token.user_id;
+      where.rm_user_id = token.user_id;
       const teamMembers = await prisma.user_team_member.findMany({
         where: {
           leader_id: token.user_id,
@@ -45,27 +43,18 @@ export async function GET(request) {
       });
       if (teamMembers && teamMembers.length > 0) {
         const memberIds = teamMembers.map(member => member.member_id);
-        lead_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+        where.rm_user_id = { in: [token.user_id, ...memberIds] };
       }
     } else if (rm_user_id) {
-      lead_where.rm_user_id = parseInt(rm_user_id);
-    }    
-    const leadAssignedDay = await prisma.leads_view.groupBy({
-      by: ['rm_user_id', 'assigned_to'],
-      where: lead_where,
-      _count: {
-        lead_id: true
-      },
-      orderBy: {
-        _count: {
-          lead_id: 'desc'
-        }
-      }
+      where.rm_user_id = parseInt(rm_user_id);
+    }
+    
+    const deadLeadsCount = await prisma.leads_view.count({
+      where: where
     });
-
-
+    // console.log(lead_status_with_count);
     return new Response(
-      JSON.stringify({ success: true, data: leadAssignedDay }),
+      JSON.stringify({ success: true, data: { deadLeadsCount } }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 
