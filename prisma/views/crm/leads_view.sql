@@ -18,12 +18,12 @@ FROM
     (
       (
         (
-          `live_crm`.`lead` `l`
-          JOIN `live_crm`.`lead_status` `ls` ON((`l`.`lead_status_id` = `ls`.`lead_status_id`))
+          `crm`.`lead` `l`
+          JOIN `crm`.`lead_status` `ls` ON((`l`.`lead_status_id` = `ls`.`lead_status_id`))
         )
-        JOIN `live_crm`.`project` `p` ON((`l`.`project_id` = `p`.`project_id`))
+        JOIN `crm`.`project` `p` ON((`l`.`project_id` = `p`.`project_id`))
       )
-      JOIN `live_crm`.`user` `u` ON((`l`.`rm_user_id` = `u`.`user_id`))
+      JOIN `crm`.`user` `u` ON((`l`.`rm_user_id` = `u`.`user_id`))
     )
-    JOIN `live_crm`.`sub_source` `ss` ON((`l`.`sub_source_id` = `ss`.`sub_source_id`))
+    JOIN `crm`.`sub_source` `ss` ON((`l`.`sub_source_id` = `ss`.`sub_source_id`))
   )

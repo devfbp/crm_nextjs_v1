@@ -31,7 +31,22 @@ export async function GET(request) {
     let lead_where = {};
     lead_where.created_at = { gte: todayStart, lte: todayEnd };
     lead_where.to_status_id = { not: 1 };
-    if (rm_user_id) {
+    if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
+      lead_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        lead_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
+    } else if (rm_user_id) {
       lead_where.rm_user_id = parseInt(rm_user_id);
     }
     const callsDoneTodays = await prisma.lead_status_entry_view.groupBy({

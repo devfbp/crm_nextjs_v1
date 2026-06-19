@@ -32,9 +32,7 @@ export async function GET(request) {
     let lead_where = { flag: 0 };
     // lead_where.schedule_date = { gte: todayStart, lte: todayEnd };
     lead_where.status_id = { notIn: [6, 7] }; // Exclude New and Closed leads
-    if (rm_user_id) {
-      lead_where.rm_user_id = parseInt(rm_user_id);
-    }
+    
     if (from_date && to_date) {
       lead_where.schedule_date = { gte: todayStart, lte: todayEnd };
     } else {
@@ -46,6 +44,25 @@ export async function GET(request) {
         },
         { schedule_date: null }
       ];
+    }
+
+    if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
+      lead_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        lead_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
+    } else if (rm_user_id) {
+      lead_where.rm_user_id = parseInt(rm_user_id);
     }
     var leadAssignedDay = await prisma.leads_view.groupBy({
       by: ['rm_user_id', 'assigned_to'],
