@@ -126,6 +126,7 @@ const Reminder = ({ setReminderRecords }) => {
   //     )}
   //   </div>
   // );
+  return null; 
 };
 
 export default Reminder;
