@@ -186,7 +186,7 @@ const HeaderNotification = () => {
             No pending reminders
           </div>
         ) : (
-          reminderRecords && reminderRecords?.map((notif) => (
+          reminderRecords && reminderRecords.length > 0 && reminderRecords?.map((notif: any) => (
             <div
               key={notif.lead_id}
               style={{
