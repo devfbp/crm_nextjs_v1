@@ -30,7 +30,22 @@ export async function GET(request) {
     console.log("todayEnd", todayEnd);
     var where = { flag: 0, status_id: 6 };
     where.modified_at = { gte: todayStart, lte: todayEnd };
-    if (rm_user_id) {
+    if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
+      where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
+    } else if (rm_user_id) {
       where.rm_user_id = parseInt(rm_user_id);
     }
     

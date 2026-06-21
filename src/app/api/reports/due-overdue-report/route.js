@@ -30,7 +30,22 @@ export async function GET(request) {
     todayEnd.setHours(23, 59, 59, 999);    
 
     var duewhere = { flag: 0, schedule_date: { gte: todayStart, lte: todayEnd } };
-    if (rm_user_id) {
+     if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
+      duewhere.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        duewhere.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
+    } else if (rm_user_id) {
       duewhere.rm_user_id = parseInt(rm_user_id);
     }
 
@@ -47,12 +62,43 @@ export async function GET(request) {
         { schedule_date: null }
       ];
     }
-    if (rm_user_id) {
+     
+    if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
+      overduewhere.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        overduewhere.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
+    } else if (rm_user_id) {
       overduewhere.rm_user_id = parseInt(rm_user_id);
     }
 
     var notscheduledwhere = { flag: 0, schedule_date: null };
-    if (rm_user_id) {
+    if (token?.user_id && token?.role_id > 2 && !rm_user_id) {
+      notscheduledwhere.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        notscheduledwhere.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
+    } else if (rm_user_id) {
       notscheduledwhere.rm_user_id = parseInt(rm_user_id);
     }
     const dueCount = await prisma.lead.count({
