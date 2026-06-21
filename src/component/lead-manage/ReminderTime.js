@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { showDateTime } from "../utils/common-client";
 import withReactContent from "sweetalert2-react-content";
 
-const Reminder = ({ reminderRecords, setReminderRecords }) => {
+const Reminder = ({ setReminderRecords }) => {
   const [records, setRecords] = useState(null);
   const [startReminderCheck, setStartReminderCheck] = useState(false);
   // Stores already-triggered reminder IDs
