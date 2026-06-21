@@ -141,4 +141,4 @@ const History = (props) => {
   );
 };
 
-export default History;
+export default React.memo(History);

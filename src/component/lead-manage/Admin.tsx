@@ -73,11 +73,11 @@ const LeadsTable = (props: any) => {
       if (filters.search) {
         url += `&search=${filters.search}`;
         localStorage.setItem("lead_search", filters.search);
-      } else if(searchTerm) {
+      } else if (searchTerm) {
         url += `&search=${searchTerm}`;
         localStorage.setItem("lead_search", filters.search);
       }
-      
+
 
       if (filters.assigned_to) {
         url += `&assigned_to=${filters.assigned_to}`;
@@ -255,7 +255,12 @@ const LeadsTable = (props: any) => {
   useEffect(() => {
     // fetchData(filters, currentPage, dataPerPage);
   }, [currentPage, dataPerPage]);
-
+  const goEdit = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+    const leadId = e.currentTarget.getAttribute("data-lead-id");
+    if (editAccess && leadId) {
+      window.location.href = `/leads/${leadId}/edit`;
+    }
+  };
   return (
     <React.Fragment>
 
@@ -382,19 +387,20 @@ const LeadsTable = (props: any) => {
                 <thead>
                   <tr>
                     {accessMenuRole(1) &&
-                      <th>
-                        <input type="hidden" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
+                      <th style={{ width: "5px" }}>
+                        <input type="checkbox" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
                       </th>
                     }
-                    <th onClick={() => sortColumn("customer_name")}>Lead Name</th>
-                    <th onClick={() => sortColumn("mobile_no")}>Contact</th>
-                    <th onClick={() => sortColumn("project_name")}>Project</th>
-                    <th onClick={() => sortColumn("assigned_to")}>Assigned To</th>
+                    <th style={{ width: "250px" }} onClick={() => sortColumn("customer_name")}>Lead Name</th>
+                    <th style={{ width: "100px" }} onClick={() => sortColumn("mobile_no")}>Contact</th>
+                    <th style={{ width: "250px" }} onClick={() => sortColumn("project_name")}>Project</th>
+                    <th style={{ width: "120px" }}>Actions</th>
+                    <th style={{ width: "150px" }} onClick={() => sortColumn("status")}>Status<div>& Schedule Date</div></th>
+                    <th style={{ width: "120px" }} onClick={() => sortColumn("assigned_to")}>Assigned To <div>& Date</div> </th>
                     {accessMenuRole(1) &&
-                      <th onClick={() => sortColumn("sub_source_name")}>Source</th>
+                      <th style={{ width: "150px" }} onClick={() => sortColumn("sub_source_name")}>Source</th>
                     }
-                    <th onClick={() => sortColumn("status")}>Status<div>Schedule Date</div></th>
-                    <th>Actions</th>
+
                   </tr>
                 </thead>
                 <tbody>
@@ -403,30 +409,51 @@ const LeadsTable = (props: any) => {
                   {!loading && dataList.length === 0 && <tr><td colSpan={8} className="text-center">No records found</td></tr>}
                   {!loading && dataList.map((data) => (
                     <tr key={data.lead_id}>
+
                       {accessMenuRole(1) &&
                         <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
                       }
 
-                      <td title={data.customer_name}>
-                        {data.customer_name.length > 10 ? data.customer_name.substr(0, 10) + '...' : data.customer_name}
+                      <td title={data.customer_name}
+                        onClick={goEdit}
+                        data-lead-id={data.lead_id}
+                      >
+                        {(() => {
+                          const breakIndex = data.customer_name.indexOf(' ', 20);
 
+                          return breakIndex !== -1 ? (
+                            <>
+                              {data.customer_name.slice(0, breakIndex)}
+                              <br />
+                              {data.customer_name.slice(breakIndex + 1)}
+                            </>
+                          ) : (
+                            data.customer_name
+                          );
+                        })()}
                       </td>
-                      <td>{data.mobile_no}</td>
-                      <td title={data.project_name}>
-                        {data.project_name.length > 10 ? data.project_name.substr(0, 10) + '...' : data.project_name}
-                      </td>
-                      <td title={data.assigned_to}>
-                        {data.assigned_to.length > 10 ? data.assigned_to.substr(0, 10) + '...' : data.assigned_to}
-                       
-                      </td>
-                      {accessMenuRole(1) &&
-                        <td title={data.sub_source_name}>
-                          {data.sub_source_name.length > 10 ? data.sub_source_name.substr(0, 10) + '...' : data.sub_source_name}
-                        </td>
-                      }
-                      <td className={`text-${data.status_color ? data.status_color : 'secondary'}`}>
-                        {data.status}
-                         <div>{showDateNa(data.schedule_date)}</div>
+                      <td
+                        onClick={goEdit}
+                        data-lead-id={data.lead_id}
+                      >{data.mobile_no}</td>
+                      <td title={data.project_name}
+                        onClick={goEdit}
+                        data-lead-id={data.lead_id}
+                      >
+                        {data.project_name.length > 30 ? (
+                          <>
+                            {data.project_name.substring(
+                              0,
+                              data.project_name.indexOf(' ', 30)
+                            )}
+                            <br />
+                            {data.project_name.substring(
+                              data.project_name.indexOf(' ', 30) + 1
+                            )}
+                          </>
+                        ) : (
+                          data.project_name
+                        )}
                       </td>
                       <td>
                         <div className="btn-box">
@@ -447,6 +474,57 @@ const LeadsTable = (props: any) => {
                           <DeleteAction id={data.lead_id} page="lead" setRefresh="" menu_id={7} iconclass={false} reload={true} />
                         </div>
                       </td>
+                      <td
+                        onClick={goEdit}
+                        data-lead-id={data.lead_id}
+                        className={`text-${data.status_color ? data.status_color : 'secondary'}`}>
+                        {data.status}
+                        <div className="text-white">{showDateNa(data.schedule_date)}</div>
+                      </td>
+                      <td
+                        onClick={goEdit}
+                        data-lead-id={data.lead_id}
+                        title={data.assigned_to}>
+                        {data.assigned_to.length > 25 ? (
+                          <>
+                            {data.assigned_to.substring(
+                              0,
+                              data.assigned_to.indexOf(' ', 25)
+                            )}
+                            <br />
+                            {data.assigned_to.substring(
+                              data.assigned_to.indexOf(' ', 25) + 1
+                            )}
+                          </>
+                        ) : (
+                          data.assigned_to
+                        )}
+
+                        <div className="text-white">
+                          {data.modified_at
+                            ? showDateNa(data.modified_at)
+                            : showDateNa(data.created_at)}
+                        </div>
+                      </td>
+                      {accessMenuRole(1) &&
+                        <td title={data.sub_source_name}>
+                          {(() => {
+                            const breakIndex = data.sub_source_name.indexOf(' ', 10);
+
+                            return breakIndex !== -1 ? (
+                              <>
+                                {data.sub_source_name.slice(0, breakIndex)}
+                                <br />
+                                {data.sub_source_name.slice(breakIndex + 1)}
+                              </>
+                            ) : (
+                              data.sub_source_name
+                            );
+                          })()}
+                        </td>
+                      }
+
+
                     </tr>
                   ))}
                 </tbody>

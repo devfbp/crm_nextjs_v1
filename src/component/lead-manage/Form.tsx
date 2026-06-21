@@ -18,8 +18,6 @@ import Link from "next/link";
 import "./Leads.scss";
 import { useRouter } from "next/navigation";
 import History from "./History";
-import { showDateVal } from "../utils/common-client";
-
 interface InputFormProps {
 
   records?: {
@@ -46,6 +44,7 @@ interface InputFormProps {
     revenue: any,
     remind_at: any,
     remind_notes: string,
+    schedule_date_time: any
   },
   setRecords?: (records: any) => void;
   editid: any;
@@ -90,6 +89,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [selectedSourceId, setSelectedSourceId] = useState(null);
   const [closeStatus, setCloseStatus] = useState(false);
+  
   // Populate form when editing
   useEffect(() => {
     if (!records) return;
@@ -110,7 +110,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       lead_status_id: records.lead_status_id,
       lead_file_id: records.lead_file_id,
       remarks: records.remarks,
-      schedule_date: records.schedule_date,
+      schedule_date: records.schedule_date_time,
       status_remarks: records.status_remarks,
       send_email: false,
       view_data: records.view_data || null,
@@ -141,7 +141,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
       lead_status_id: form.lead_status_id
     });
 
-    if(form.customer_name.trim() === "") {
+    if (form.customer_name.trim() === "") {
       setErrors({ customer_name: ["Customer name cannot be empty"] });
       return;
     }
@@ -216,7 +216,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
         {/* Hidden ID for edit */}
         <input type="hidden" name="slug" value={form.slug} />
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 m-0">
             <div className="card">
               <div className="card-header">
                 Basic Information
@@ -267,7 +267,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         readOnly={accessMenuRole(1) ? false : true}
                       />
                       <span className="input-icon">
-                        <a href={`https://wa.me/91${form.mobile_no}`} target="_blank"  rel="noopener noreferrer">
+                        <a href={`https://wa.me/91${form.mobile_no}`} target="_blank" rel="noopener noreferrer">
                           <i className="whatsapp-icon"></i>
                         </a>
                       </span>
@@ -330,67 +330,16 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       <p className="text-danger">{errors.email_id[0]}</p>
                     )}
                   </div>
-                  {/* <div className="col-md-6 pb-3">
-                    <label htmlFor="alternate_email" className="form-label">
-                      Alternate Email
-                    </label>
-                    <div className="input-group-with-icon">
-                      <span className="input-icon">
-                        <i className="fa-light fa-envelope"></i>
-                      </span>
-                      <input
-                        type="email"
-                        id="alternate_email"
-                        name="alternate_email"
-                        className="form-control"
-                        value={form.alternate_email}
-                        onChange={(e) =>
-                          setForm({ ...form, alternate_email: e.target.value })
-                        }
-                        autoComplete="off"
-                        placeholder="test@gmail"
-                      />
-                    </div>
-                    {errors.alternate_email && (
-                      <p className="text-danger">{errors.alternate_email[0]}</p>
-                    )}
-                  </div> */}
-                  {/* <div className="col-md-3 pb-3">
-            <label htmlFor="whatsapp_no" className="form-label">
-              Whatsapp No
-            </label>
-            <div className="input-group-with-icon">
-              <span className="input-icon">
-                <i className="fa-regular  fa-phone"></i>
-              </span>
-              <input
-                type="number"
-                id="whatsapp_no"
-                name="whatsapp_no"
-                className="form-control"
-                value={form.whatsapp_no}
-                onChange={(e) =>
-                  setForm({ ...form, whatsapp_no: e.target.value })
-                }
-                autoComplete="off"
-                placeholder="9876543210"
-              />
-            </div>
-            {errors.whatsapp_no && (
-              <p className="text-danger">{errors.whatsapp_no[0]}</p>
-            )}
-          </div> */}
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="col-lg-4">
-            <div className="card">
-              <div className="card-header">
-                Project and Source Information
-              </div>
-              {accessMenuRole(1) ?
+          {submitConfig.action === 1 && accessMenuRole(1) ?
+            <div className="col-lg-6 m-0">
+              <div className="card">
+                <div className="card-header">
+                  Project and Source Information
+                </div>
                 <div className="card-body">
                   <div className="row">
                     <div className="col-md-12 pb-3">
@@ -454,38 +403,43 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                     </div>
                   </div>
                 </div>
-                :
+              </div>
+            </div> :
+            <>
+
+            </>
+          }
+          {submitConfig.action === 2 &&
+            <div className="col-lg-6 m-0">
+              <div className="card">
+                <div className="card-header">
+                  <div>Lead History</div>
+                </div>
                 <div className="card-body">
                   <div className="row">
-                    <div className="col-md-12 pb-3">
-                      <label htmlFor="project_id" className="form-label">
-                        Project
-                      </label>
-                      <input type="text"
-                        id="project_name"
-                        name="project_name"
-                        value={records?.view_data?.project_name || ""}
-                      />
+
+                    <>
+                      <div className="col-sm-12 col-6 scrollContainer" style={{ maxHeight: "200px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "20px" }}>
+
+                        <History lead_id={form.lead_id} overflow="no" remarks={form.remarks} />
+                      </div>
+                    </>
+                    <div>
+                      Project : {records?.view_data?.project_name}
                     </div>
                   </div>
                 </div>
-              }
+              </div>
             </div>
-          </div>
-          <div className="col-lg-8">
+          }
+
+          <div className="col-lg-6 m-0">
             <div className="card">
               <div className="card-header">
                 <div>Lead Status</div>
               </div>
-
               <div className="card-body">
                 <div className="row">
-
-                  {/* <div className="col-md-12 pb-3">
-                    {submitConfig.action === 2 &&
-                      <LastLeadEntry leadId={form.lead_id} />
-                    }
-                  </div> */}
                   <div className="col-md-6 pb-3">
                     <label htmlFor="rm_user_id" className="form-label">
                       RM
@@ -536,24 +490,24 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         </label>
                         <div className="input-group-with-icon">
                           <DatePicker
-                            selected={
-                              showDateVal(form.schedule_date)
-                                ? new Date(form.schedule_date)
-                                : null
-                            }
+                            selected={form.schedule_date? new Date(form.schedule_date):null}
                             onChange={(date) =>
                               setForm({
                                 ...form,
-                                schedule_date: date
-                                  ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-                                  : "",
+                                schedule_date: date ? date.toISOString() : "",
                               })
                             }
-                            dateFormat="dd-MM-yyyy"
+                            dateFormat="dd-MM-yyyy h:mm aa"
                             name="schedule_date"
                             id="schedule_date"
                             autoComplete="off"
                             placeholderText="Click to select a date"
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            timeCaption="time"
+                            minTime={new Date(0, 0, 0, 10, 30)}
+                            maxTime={new Date(0, 0, 0, 19, 30)}
                           />
                         </div>
                         {errors.schedule_date && (
@@ -626,64 +580,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                           <p className="text-danger">{errors.status_remarks[0]}</p>
                         )}
                       </div>
-                      {/* <div className="col-sm-6 ol-6">
-                        <label htmlFor="send_email" className="form-label">Send Email</label>
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="send_email"
-                            name="send_email"
-                            checked={form.send_email}
-                            onChange={(e) => setForm({ ...form, send_email: e.target.checked })}
-                          />
-                          <label className="form-check-label" htmlFor="send_email">
-                            Send email notification
-                          </label>
-                        </div>
-                      </div> */}
-                      <div className="col-md-6 pb-3">
-                        <label htmlFor="remind_at" className="form-label">
-                          Reminder Date & Time
-                        </label>
-                        <div className="input-group-with-icon">
-                          <DatePicker
-                            selected={form.remind_at ? new Date(form.remind_at) : null}
-                            onChange={(date) =>
-                              setForm({
-                                ...form,
-                                remind_at: date ? date.toISOString() : "",
-                              })
-                            }
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={15}
-                            timeCaption="time"
-                            dateFormat="dd-MM-yyyy h:mm aa"
-                            name="remind_at"
-                            id="remind_at"
-                            autoComplete="off"
-                            placeholderText="Click to select date & time"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6 pb-3">
-                        <label htmlFor="remind_notes" className="form-label">
-                          Reminder Notes (Optional)
-                        </label>
-                        <textarea
-                          className="form-control"
-                          id="remind_notes"
-                          name="remind_notes"
-                          rows={3}
-                          value={form.remind_notes}
-                          onChange={(e) => setForm({ ...form, remind_notes: e.target.value })}
-                          placeholder="Specific notes for this reminder"
-                        ></textarea>
-                      </div>
-                      <div className="col-sm-12 ol-6 scrollContainer" style={{ maxHeight: "100px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "20px" }}>
-                        <History lead_id={form.lead_id} overflow="no" remarks={form.remarks} />
-                      </div>
+
                     </>
                   }
                 </div>
@@ -700,12 +597,17 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       >
                         Reset
                       </button>
+                      <Link href={"/leads"} className="btn btn-sm btn-secondary">
+                        Back
+                      </Link>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+
         </div>
       </form >
       <LeadHistory

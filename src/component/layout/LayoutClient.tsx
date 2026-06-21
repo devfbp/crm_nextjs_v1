@@ -1,14 +1,11 @@
 "use client";
-import React from "react";
+
+import React, { useEffect } from "react";
 import HeaderSection from "../header/HeaderSection";
-import RightSidebar from "../sidebar/RightSidebar";
 import ProfileRightSidebar from "../sidebar/right-sidebar/ProfileRightSidebar";
-import RightSidebarButton from "../header/RightSidebarButton";
 import MainSidebar from "../sidebar/MainSidebar";
 import { useDigiContext } from "@/context/DigiContext";
-import { usePathname } from "next/navigation";
-import { useRouter } from 'next/navigation';
-import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
 type Props = {
@@ -16,21 +13,48 @@ type Props = {
   session: any;
   encryptedString?: any;
 };
-const Layout = ({ children, session, encryptedString }: Props) => {
-  const router = useRouter();
-  useEffect(() => {
-    //console.log("session in layout client", session);
-    if (!session?.user_id || !session?.role_id) {
-      // toast.error("Please login to continue.");
-      router.push('/login');
-    } else {
-      // toast.success("Login successfully.");
-    }
-  }, [session]);
 
-  Cookies.set('7hLIAH2Jk3hGd6s', JSON.stringify(session), { path: '/', expires: 1 });
-  const { rtlDirection, mainBackgroundImg, rootLayoutRef } = useDigiContext();
+const Layout = ({ children, session }: Props) => {
+  const router = useRouter();
   const pathname = usePathname();
+
+  const {
+    toggleNav,
+    currentNav,
+    rtlDirection,
+    mainBackgroundImg,
+    rootLayoutRef,
+  } = useDigiContext();
+
+  useEffect(() => {
+    if (!session?.user_id || !session?.role_id) {
+      router.push("/login");
+    }
+  }, [session, router]);
+
+  const smallnav = ["/leads","/leads/"];
+
+  useEffect(() => {
+    if (smallnav.includes(pathname)) {
+      toggleNav("small-nav");
+    } else {
+      toggleNav("default-nav");
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    console.log("Current Nav:", currentNav);
+  }, [currentNav]);
+
+  Cookies.set(
+    "7hLIAH2Jk3hGd6s",
+    JSON.stringify(session),
+    {
+      path: "/",
+      expires: 1,
+    }
+  );
+
   const pagesWithoutLayout = [
     "/login",
     "/login-2",
@@ -55,34 +79,35 @@ const Layout = ({ children, session, encryptedString }: Props) => {
     "/under-construction",
     "/docs",
   ];
-  const withoutLayout = pagesWithoutLayout.find((item) => item === pathname);
-  return withoutLayout ? (
-    <>{children}</>
-  ) :
+
+  const withoutLayout = pagesWithoutLayout.includes(pathname);
+
+  if (withoutLayout) {
+    return <>{children}</>;
+  }
+
+  return (
     <>
-      {session?.user_id && session?.role_id &&
-        <>
-          <div
-            className={`body-padding body-p-top`}
-            style={{
-              backgroundImage: `url(${mainBackgroundImg})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}
-            dir={`${rtlDirection ? "rtl" : ""}`}
-            id="RootLayout"
-            ref={rootLayoutRef}
-          >
-            <HeaderSection />
-            {/* <RightSidebar /> */}
-            <ProfileRightSidebar />
-            {/* <RightSidebarButton /> */}
-            <MainSidebar />
-            {children}
-          </div>
-        </>
-      }
+      {session?.user_id && session?.role_id && (
+        <div
+          className="body-padding body-p-top"
+          style={{
+            backgroundImage: `url(${mainBackgroundImg})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+          dir={rtlDirection ? "rtl" : "ltr"}
+          id="RootLayout"
+          ref={rootLayoutRef}
+        >
+          <HeaderSection />
+          <ProfileRightSidebar />
+          <MainSidebar />
+          {children}
+        </div>
+      )}
     </>
+  );
 };
 
 export default Layout;

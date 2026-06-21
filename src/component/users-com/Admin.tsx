@@ -33,9 +33,10 @@ const ScrollDataTableSection = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/user"
+        process.env.NEXT_PUBLIC_API_URL + "/user?view=1",
       );
       const result = await response.json();
+      console.log("Fetched Users:", result);
       setDataList(result);
     };
     fetchData();
@@ -173,11 +174,11 @@ const ScrollDataTableSection = (props: any) => {
                     currentData.map((item) => (
                       <tr key={item.id}>
                         <td style={{ fontSize: "14px" }}>{item.name}<br />
-                        <i style={{ fontSize: "12px" }}><RoleName role_id={item.role_id} id={item.role_id} /></i>
+                        <i style={{ fontSize: "12px" }}>{item.role_name}</i>
                         </td>
                         <td>{item.email}</td>
                         <td>{item.phone_no}</td>
-                        <td><ManagerName user_id={item.reporting_to_id} id={item.reporting_to_id} /></td>
+                        <td>{item.reporting_user_name}</td>
                         <td style={{ textTransform: "capitalize", color: item.active === 0 ? "white" : "red" }}>
                           {item.active === 0 ? "Active" : "Deactive"}
                         </td>

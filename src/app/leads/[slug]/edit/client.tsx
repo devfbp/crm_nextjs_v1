@@ -33,7 +33,7 @@ export default function Home(props: Props) {
                     <div className="row">
                         <div className="col-12">
                             <div className="panel">
-                                <LeadsHeader action={3} type={2} />
+                                {/* <LeadsHeader action={3} type={2} /> */}
                                 <div className="panel-body p-0">
                                     <Form records={records} setRecords={setRecords} editid={0} />
                                 </div>

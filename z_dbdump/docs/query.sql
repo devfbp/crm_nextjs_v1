@@ -54,6 +54,23 @@ JOIN `user` u2
 JOIN `user` u3
     ON le.`created_by` = u3.`user_id`;
 
+CREATE VIEW `user_view` AS
+SELECT 
+    u.`user_id` AS `user_id`,
+    u.`name` AS `name`,
+    u.`email` AS `email`,
+    u.`phone_no` AS `phone_no`,
+    u.`role_id` AS `role_id`,
+    r.`role_name` AS `role_name`,
+    g.`name` AS `general_manager_name`,
+    ru.`name` AS `reporting_user_name`,
+    u.`active` AS `active`,
+    u.`flag` AS `flag`
+FROM `user` AS u
+JOIN `role` AS r ON u.`role_id` = r.`role_id`
+JOIN `user` AS g ON u.`general_manager_id` = g.`user_id`
+JOIN `user` AS ru ON u.`reporting_to_id` = ru.`user_id`
+
 
 ################################# CLEANUP SCRIPT ############
 SET FOREIGN_KEY_CHECKS = 0;

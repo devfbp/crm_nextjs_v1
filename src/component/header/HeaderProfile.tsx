@@ -75,12 +75,12 @@ const HeaderProfile = () => {
             </div>
           </li>
           <li>
-            <Link className="dropdown-item" href="/profile">
+            {/* <Link className="dropdown-item" href="/profile">
               <span className="dropdown-icon">
                 <i className="fa-regular fa-circle-user"></i>
               </span>{" "}
               Profile
-            </Link>
+            </Link> */}
             <Link className="dropdown-item" href={`/user/${sessionDataString?.user_id}/change-password`}>
               <span className="dropdown-icon">
                 <i className="fa-regular fa-circle-user"></i>

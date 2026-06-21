@@ -352,6 +352,7 @@ export async function PUT(request) {
         lead_status_id: parseInt(req.lead_status_id),
         remarks: req.remarks,
         schedule_date: req?.schedule_date ? new Date(req?.schedule_date) : null, // use the parsed Date object
+        schedule_date_time: req?.schedule_date ? new Date(req?.schedule_date) : null,
         modified_by: token?.user_id || null,
         closed_date: req?.closed_date ? new Date(req?.closed_date) : null, // use the parsed Date object
         revenue: req?.revenue ? parseFloat(req?.revenue) : 0

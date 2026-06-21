@@ -2,7 +2,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-
+import ReminderTime from "../lead-manage/ReminderTime";
+import { showDateTime } from "../utils/../utils/common-client";
 interface ReminderNotification {
   lead_reminder_id: number;
   lead_id: number;
@@ -19,6 +20,7 @@ const HeaderNotification = () => {
   const [notifications, setNotifications] = useState<ReminderNotification[]>(
     [],
   );
+  const [reminderRecords, setReminderRecords] = useState([]);
   const eventSourceRef = useRef<EventSource | null>(null);
 
   const toggleNotification = () => setNotificationShow((prev) => !prev);
@@ -68,12 +70,19 @@ const HeaderNotification = () => {
 
   const unreadCount = notifications.length;
 
+  const goEdit = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+    const leadId = e.currentTarget.getAttribute("data-lead-id");
+    if (leadId) {
+      window.location.href = `/leads/${leadId}/edit`;
+    }
+  };
   return (
     <div
       className="header-btn"
       ref={notificationRef}
       style={{ position: "relative" }}
     >
+      <ReminderTime setReminderRecords={setReminderRecords} />
       <button
         className={`header-btn ${notificationShow ? "show" : ""}`}
         id="notificationDropdown"
@@ -82,7 +91,7 @@ const HeaderNotification = () => {
         title="Reminders"
       >
         <i className="fa-light fa-bell"></i>
-        {unreadCount > 0 && (
+        {reminderRecords.length > 0 && (
           <span
             className="badge bg-danger"
             style={{
@@ -100,7 +109,7 @@ const HeaderNotification = () => {
               animation: "pulse 1.5s infinite",
             }}
           >
-            {unreadCount > 9 ? "9+" : unreadCount}
+            {reminderRecords.length > 9 ? "9+" : reminderRecords.length}
           </span>
         )}
       </button>
@@ -140,7 +149,7 @@ const HeaderNotification = () => {
             ></i>
             Lead Reminders
           </span>
-          {unreadCount > 0 && (
+          {reminderRecords.length > 0 && (
             <span
               style={{
                 background: "linear-gradient(135deg, #6c63ff, #a855f7)",
@@ -151,13 +160,13 @@ const HeaderNotification = () => {
                 color: "#fff",
               }}
             >
-              {unreadCount} new
+              {reminderRecords.length} new
             </span>
           )}
         </div>
 
         {/* Notification List */}
-        {notifications.length === 0 ? (
+        {reminderRecords.length === 0 ? (
           <div
             style={{
               padding: "32px 18px",
@@ -177,9 +186,9 @@ const HeaderNotification = () => {
             No pending reminders
           </div>
         ) : (
-          notifications.map((notif) => (
+          reminderRecords && reminderRecords?.map((notif) => (
             <div
-              key={notif.lead_reminder_id}
+              key={notif.lead_id}
               style={{
                 padding: "14px 18px",
                 borderBottom: "1px solid var(--bs-border-color)",
@@ -240,7 +249,7 @@ const HeaderNotification = () => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {notif.message}
+                  {""}
                 </div>
                 <div
                   style={{
@@ -256,14 +265,14 @@ const HeaderNotification = () => {
                     className="fa-light fa-calendar-check"
                     style={{ fontSize: "10px" }}
                   ></i>
-                  {formatTime(notif.remind_at)}
+                  {showDateTime(notif.remind_at)}
                   <span
                     style={{ color: "var(--bs-secondary-color, #6c757d)", margin: "0 4px" }}
                   >
                     ·
                   </span>
                   <span style={{ color: "var(--bs-secondary-color, #6c757d)" }}>
-                    {notif.notification_count}/{notif.limit}
+                    {showDateTime(notif.schedule_date_time)}
                   </span>
                 </div>
               </div>
@@ -289,10 +298,6 @@ const HeaderNotification = () => {
                     display: "block",
                     textAlign: "center",
                   }}
-                  onClick={() => {
-                    setNotificationShow(false);
-                    acknowledge(notif.lead_reminder_id);
-                  }}
                 >
                   View
                 </Link>
@@ -308,7 +313,7 @@ const HeaderNotification = () => {
                   }}
                   onClick={() => acknowledge(notif.lead_reminder_id)}
                 >
-                  Dismiss
+                  
                 </button>
               </div>
             </div>

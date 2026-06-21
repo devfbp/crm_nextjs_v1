@@ -39,7 +39,7 @@ const initialFormState = {
 
 const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
   const formRef = useRef<HTMLFormElement>(null);
-
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [submitConfig, setSubmitConfig] = useState({
     action: 1, // 1 = add, 2 = edit
@@ -119,22 +119,39 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
     formRef.current?.reset();
   };
 
-  const resetPassword = () => {
-    const payload = {
-      method: "POST",
-      endpoint: "user/change-password",
-      action: 2,
-      data: { email: form.email },
-    };
-    form_submit_call(payload)
-      .then(() => {
-        toast.success("Password reset email sent");
-      })
-      .catch((err) => {
-        console.error("Reset password error:", err);
-        toast.error(err?.message || "Failed to reset password");
-      });
+  const resetPassword = async () => {
+  setLoading(true);
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/reset-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: form.slug,
+          email: form.email,
+          from: "admin",
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => null);
+      throw new Error(error?.message || "Failed to reset password");
+    }
+
+    toast.success("Password reset successfully");
+  } catch (err: any) {
+    console.error("Reset password error:", err);
+    toast.error(err?.message || "Failed to reset password");
+  } finally {
+    setLoading(false);
   }
+};
+    
 
   return (
     <React.Fragment>
@@ -362,9 +379,10 @@ const InputForm: React.FC<InputFormProps> = ({ records, editid }) => {
                       Change Password
                     </div>
                     {accessMenuRole(1) ?
-                    <a href={`/forgot-password?from=admin&email=${form.email}`} className="btn btn-secondary m-3">
-                      Reset Password
-                    </a>
+                    <button type="button" className="btn btn-secondary m-3" onClick={resetPassword}>
+                      {loading ? "Resetting..." : "Reset Password"}
+                    </button>
+                    
                     :
                     <div className="card-body">
                       <div className="col-md-12 pt-3">

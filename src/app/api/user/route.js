@@ -11,6 +11,7 @@ export async function GET(request) {
     const token = getSessionFromToken();
     const { searchParams } = new URL(request.url);
     const id = parseInt(searchParams.get('id'));
+    const view = parseInt(searchParams.get('view'));
     const gmid = parseInt(searchParams.get('gmid'));
     const rmid = parseInt(searchParams.get('rmid'));
     const cid = parseInt(searchParams.get('cid'));
@@ -21,6 +22,12 @@ export async function GET(request) {
     if (id) {
       const dataItem = await prisma.user.findUnique({
         where: { user_id: id },
+      });
+      return Response.json(dataItem);
+    }
+    if(view === 1) {
+      const dataItem = await prisma.user_view.findMany({
+        where: { flag: 0 }
       });
       return Response.json(dataItem);
     }

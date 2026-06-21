@@ -117,29 +117,30 @@ model lead_status {
 }
 
 model lead {
-  lead_id         Int       @id @default(autoincrement())
-  customer_name   String?   @db.VarChar(200)
-  mobile_no       String?   @db.VarChar(200)
-  email_id        String?   @db.VarChar(200)
-  alternate_no    String?   @db.VarChar(200)
-  whatsapp_no     String?   @db.VarChar(200)
-  alternate_email String?   @db.VarChar(200)
-  project_id      Int?
-  source_id       Int       @default(0)
-  sub_source_id   Int       @default(0)
-  rm_user_id      Int
-  schedule_date   DateTime? @db.Date
-  lead_file_id    Int?      @default(1)
-  lead_status_id  Int
-  remarks         String?   @db.Text
-  closed_date     DateTime? @db.DateTime(0)
-  revenue         Float     @default(0.00) @db.Float
-  created_at      DateTime? @db.DateTime(0)
-  created_by      Int?
-  modified_at     DateTime? @db.DateTime(0)
-  modified_by     Int?
-  company_id      Int       @default(0)
-  flag            Int       @default(0)
+  lead_id            Int       @id @default(autoincrement())
+  customer_name      String?   @db.VarChar(200)
+  mobile_no          String?   @db.VarChar(200)
+  email_id           String?   @db.VarChar(200)
+  alternate_no       String?   @db.VarChar(200)
+  whatsapp_no        String?   @db.VarChar(200)
+  alternate_email    String?   @db.VarChar(200)
+  project_id         Int?
+  source_id          Int       @default(0)
+  sub_source_id      Int       @default(0)
+  rm_user_id         Int
+  schedule_date      DateTime? @db.Date
+  schedule_date_time DateTime? @db.DateTime(0)
+  lead_file_id       Int?      @default(1)
+  lead_status_id     Int
+  remarks            String?   @db.Text
+  closed_date        DateTime? @db.DateTime(0)
+  revenue            Float     @default(0.00) @db.Float
+  created_at         DateTime? @db.DateTime(0)
+  created_by         Int?
+  modified_at        DateTime? @db.DateTime(0)
+  modified_by        Int?
+  company_id         Int       @default(0)
+  flag               Int       @default(0)
 }
 
 model lead_status_entry {
@@ -308,4 +309,17 @@ view leads_view {
   status_color    String    @default("success") @db.VarChar(200)
   schedule_date   DateTime? @db.Date
   flag            Int       @default(0)
+}
+
+view user_view {
+  user_id              Int    @default(0)
+  name                 String @db.VarChar(200)
+  email                String @db.VarChar(200)
+  phone_no             String @db.VarChar(200)
+  role_id              Int
+  role_name            String @db.VarChar(200)
+  general_manager_name String @db.VarChar(200)
+  reporting_user_name  String @db.VarChar(200)
+  active               Int    @default(0)
+  flag                 Int    @default(0)
 }
