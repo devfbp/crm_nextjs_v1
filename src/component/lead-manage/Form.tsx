@@ -330,11 +330,18 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                       <p className="text-danger">{errors.email_id[0]}</p>
                     )}
                   </div>
+                  {accessMenuRole(2) &&
+                  <div className="col-md-6 p-0">                    
+                                          
+                      Project : <strong>{records?.view_data?.project_name}</strong>
+                  </div>
+                  }
+                  
                 </div>
               </div>
             </div>
           </div>
-          {submitConfig.action === 1 && accessMenuRole(1) ?
+          {accessMenuRole(1) ?
             <div className="col-lg-6 m-0">
               <div className="card">
                 <div className="card-header">
@@ -406,6 +413,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
               </div>
             </div> :
             <>
+            
 
             </>
           }
@@ -424,9 +432,7 @@ const InputForm: React.FC<InputFormProps> = ({ records }) => {
                         <History lead_id={form.lead_id} overflow="no" remarks={form.remarks} />
                       </div>
                     </>
-                    <div>
-                      Project : {records?.view_data?.project_name}
-                    </div>
+                    
                   </div>
                 </div>
               </div>

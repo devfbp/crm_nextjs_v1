@@ -3,7 +3,7 @@ import React from "react";
 import CountUp from "react-countup";
 import { useState, useEffect } from "react";
 
-const Board1 = () => {
+const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void }) => {
   const [totalLeads, setTotalLeads] = useState(0);
   const [callsDoneToday, setCallsDoneToday] = useState(0);
   const [totalLeadsToday, setTotalLeadsToday] = useState(0);
@@ -14,7 +14,7 @@ const Board1 = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/dashboard');
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/dashboard?activeTab=' + props.activeTab);
         const data = await response.json();
         setTotalLeads(data.totalLeads);
         setCallsDoneToday(data.callsDoneToday);
@@ -29,7 +29,7 @@ const Board1 = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [props.activeTab]);
 
 
   return (

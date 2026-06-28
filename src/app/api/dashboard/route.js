@@ -4,6 +4,8 @@ import { getSessionFromToken } from "../session";
 
 export async function GET(request) {
   const token = getSessionFromToken();
+  const { searchParams } = new URL(request.url);    
+  const activeTab = request.nextUrl.searchParams.get('activeTab');
   try {
     const where = { flag: 0 };
     let lead_where = {
@@ -12,8 +14,23 @@ export async function GET(request) {
         notIn: [6, 7]
       }
     };
-    if (token?.user_id && token?.role_id > 2) {
+    if (activeTab==0 && token?.user_id && token?.role_id > 2) {
       lead_where.rm_user_id = token.user_id;
+    } else if (activeTab==1 ) {
+      lead_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        lead_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
     // Calculate start and end of today
     const startOfDay = new Date();
@@ -30,8 +47,23 @@ export async function GET(request) {
       to_status_id: {not: 1},
       flag: 0
     }
-    if (token?.user_id && token?.role_id > 2) {
+    if (activeTab==0 && token?.user_id && token?.role_id > 2) {
       calls_where.rm_user_id = token.user_id;
+    } else if (activeTab==1 ) {
+      calls_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        calls_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
     const callsDoneTodays = await prisma.lead_status_entry.groupBy({
       by: ['lead_id'],
@@ -49,8 +81,23 @@ export async function GET(request) {
       to_status_id: 1,
       flag: 0
     }
-    if (token?.user_id && token?.role_id > 2) {
+    if (activeTab==0 && token?.user_id && token?.role_id > 2) {
       total_leads_where.rm_user_id = token.user_id;
+    } else if (activeTab==1 ) {
+      total_leads_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        total_leads_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
     const totalLeadsTodays = await prisma.lead_status_entry.groupBy({
       by: ['lead_id'],
@@ -68,8 +115,23 @@ export async function GET(request) {
       to_status_id: 5,
       flag: 0
     }
-    if (token?.user_id && token?.role_id > 2) {
+    if (activeTab==0 && token?.user_id && token?.role_id > 2) {
       total_svd_where.rm_user_id = token.user_id;
+    } else if (activeTab==1 ) {
+      total_svd_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        total_svd_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
     const svds = await prisma.lead_status_entry.groupBy({
       by: ['lead_id'],
@@ -84,8 +146,23 @@ export async function GET(request) {
       to_status_id: 7,
       flag: 0
     }
-    if (token?.user_id && token?.role_id > 2) {
+    if (activeTab==0 && token?.user_id && token?.role_id > 2) {
       total_closures_where.rm_user_id = token.user_id;
+    } else if (activeTab==1 ) {
+      total_closures_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        total_closures_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
     const closures = await prisma.lead_status_entry.groupBy({
       by: ['lead_id'],
@@ -113,12 +190,9 @@ export async function GET(request) {
         ...status,
         leadcount: countObj?._count.to_status_id || 0
       };
-    });
-
-    
+    });    
 
     const NumberofDaysLastBookingDone = 0;
-
     const LastBookingDate = await prisma.lead.findFirst({
       where: {
         flag: 0,
@@ -158,8 +232,23 @@ export async function GET(request) {
       flag: 0,
       lead_status_id: 7
     }
-    if (token?.user_id && token?.role_id > 2) {
+    if (activeTab==0 && token?.user_id && token?.role_id > 2) {
       revenue_where.rm_user_id = token.user_id;
+    } else if (activeTab==1 ) {
+      revenue_where.rm_user_id = token.user_id;
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      if (teamMembers && teamMembers.length > 0) {
+        const memberIds = teamMembers.map(member => member.member_id);
+        revenue_where.rm_user_id = { in: [token.user_id, ...memberIds] };
+      }
     }
     const revenueAmount = await prisma.lead.aggregate({
       _sum: {

@@ -17,6 +17,16 @@ export default function RmDeadLeads(props) {
   const [error, setError] = useState(null);
   const [totalLeads,] = useState(0);
 
+  const [rmLeadArray, setRmLeadArray] = useState([]);
+  const handleViewLeads = (rm_user_id) => {
+    const leadIds = rmLeadArray[rm_user_id] || [];
+    const leadIdsString = leadIds.join(',');
+    localStorage.setItem("report_lead_ids", leadIdsString);
+    localStorage.setItem("report_view", "1");
+    const url = `/leads`;
+    window.location.href = url;
+  }
+
   // Apply Filters Locally
   const filteredData = useMemo(() => {
     return dataList.filter((d) => {
@@ -75,6 +85,7 @@ export default function RmDeadLeads(props) {
       if (response.ok) {
         // alert(JSON.stringify(result.data));
         setDataList(result.data || []);
+        setRmLeadArray(result.rmLeadArray || []);
       } else {
         throw new Error(result.message || "Failed");
       }
@@ -85,7 +96,7 @@ export default function RmDeadLeads(props) {
     }
   };
 
-  
+
   useEffect(() => {
     fetchData(filters);
   }, [filters]);
@@ -128,8 +139,14 @@ export default function RmDeadLeads(props) {
                     <tr key={item.rm_user_id}>
                       <td>{item.assigned_to || "N/A"}</td>
                       <td>
-                        <div style={{ textAlign: 'right', paddingRight: '10px' }}>
-                          {item._count?.lead_id || 0}
+                        <div className="text-right pr-2">
+                          {item._count?.lead_id <= 500 ?
+                            <a href="javascript:void(0)" onClick={() => handleViewLeads(item.rm_user_id)}>
+                              {item._count?.lead_id || 0}
+                            </a>
+                            :
+                            <>{item._count?.lead_id || 0}</>
+                          }
                         </div>
                       </td>
                     </tr>

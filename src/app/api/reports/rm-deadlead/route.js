@@ -61,11 +61,29 @@ export async function GET(request) {
           lead_id: 'desc'
         }
       }
+    });    
+    const leadLists = await prisma.leads_view.findMany({
+      select: {
+        rm_user_id: true,
+        assigned_to: true,
+        lead_id: true,
+        schedule_date: true
+      },
+      where: lead_where
     });
 
-
+    let rmLeadArray = [];
+    leadAssignedDay.forEach(item => {
+      const rmUserId = item.rm_user_id;
+      rmLeadArray[rmUserId] = [];
+      leadLists.forEach(lead => {
+        if (lead.rm_user_id === rmUserId) {          
+          rmLeadArray[rmUserId].push(lead.lead_id);
+        }
+      });
+    });
     return new Response(
-      JSON.stringify({ success: true, data: leadAssignedDay }),
+      JSON.stringify({ success: true, data: leadAssignedDay, rmLeadArray: rmLeadArray }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
 

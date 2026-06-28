@@ -60,51 +60,77 @@ const LeadsTable = (props: any) => {
     setLoading(true);
     setError(null);
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}lead?view=1`;
-      url += `&page=${pageNumber}&limit=${dataPerPage}`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}lead/view`;
 
       localStorage.setItem("lead_page", pageNumber.toString());
       localStorage.setItem("lead_limit", dataPerPage.toString());
+
+      const body: any = {
+        page: pageNumber,
+        limit: dataPerPage,
+        view: 1,
+      };
+
       if (filters.dueDate) {
-        url += `&due_filter=${filters.dueDate}`;
+        body.due_filter = filters.dueDate;
         localStorage.setItem("lead_due_filter", filters.dueDate);
       }
 
       if (filters.search) {
-        url += `&search=${filters.search}`;
+        body.search = filters.search;
         localStorage.setItem("lead_search", filters.search);
       } else if (searchTerm) {
-        url += `&search=${searchTerm}`;
-        localStorage.setItem("lead_search", filters.search);
+        body.search = searchTerm;
+        localStorage.setItem("lead_search", searchTerm);
       }
-
 
       if (filters.assigned_to) {
-        url += `&assigned_to=${filters.assigned_to}`;
+        body.assigned_to = filters.assigned_to;
         localStorage.setItem("lead_assigned_to", filters.assigned_to);
       }
+
       if (filters.lead_status_id && filters.lead_status_id > 0) {
-        url += `&lead_status_id=${filters.lead_status_id}`;
-        localStorage.setItem("lead_status_id", filters.lead_status_id);
+        body.lead_status_id = filters.lead_status_id;
+        localStorage.setItem("lead_status_id", filters.lead_status_id.toString());
       }
+
       if (localStorage.getItem("dd_callsDoneToday") === "true") {
-        url += `&dd_callsDoneToday=true`;
+        body.dd_callsDoneToday = true;
       }
+
       if (localStorage.getItem("dd_totalLeadsToday") === "true") {
-        url += `&dd_totalLeadsToday=true`;
+        body.dd_totalLeadsToday = true;
       }
+
       if (localStorage.getItem("dd_svd") === "true") {
-        url += `&dd_svd=true`;
+        body.dd_svd = true;
       }
+
       if (localStorage.getItem("dd_closure") === "true") {
-        url += `&dd_closure=true`;
+        body.dd_closure = true;
       }
-      // alert(url);
-      console.log("Fetching data with URL:", url);
+
+      if (localStorage.getItem("report_view") === "1") {
+        const lead_ids = localStorage.getItem("report_lead_ids");
+        if (lead_ids) {
+          body.report = 1;
+          body.lead_ids = lead_ids;
+        }
+      }
+
       if (loading) return;
-      const response = await fetch(url);
+      console.log("Fetching data with filters:", url, "-", body);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
       const result = await response.json();
       const loaddata = result.data || result;
+
       setDataList(loaddata.map((r: any) => ({ ...r, selected: false })));
       setTotalRecords(result.total);
 
@@ -211,6 +237,8 @@ const LeadsTable = (props: any) => {
     localStorage.removeItem("dd_closure");
     localStorage.removeItem("lead_page");
     localStorage.removeItem("lead_limit");
+    localStorage.removeItem("report_view");
+    localStorage.removeItem("report_lead_ids");
     if (typeof window !== "undefined") {
       window.location.reload();
     }
@@ -396,7 +424,9 @@ const LeadsTable = (props: any) => {
                     <th style={{ width: "250px" }} onClick={() => sortColumn("project_name")}>Project</th>
                     <th style={{ width: "120px" }}>Actions</th>
                     <th style={{ width: "150px" }} onClick={() => sortColumn("status")}>Status<div>& Schedule Date</div></th>
-                    <th style={{ width: "120px" }} onClick={() => sortColumn("assigned_to")}>Assigned To <div>& Date</div> </th>
+                    <th style={{ width: "120px" }} onClick={() => sortColumn("assigned_to")}>Assigned To </th>
+                    <th style={{ width: "120px" }} onClick={() => sortColumn("created_at")}>Created At </th>
+
                     {accessMenuRole(1) &&
                       <th style={{ width: "150px" }} onClick={() => sortColumn("sub_source_name")}>Source</th>
                     }
@@ -440,7 +470,7 @@ const LeadsTable = (props: any) => {
                         onClick={goEdit}
                         data-lead-id={data.lead_id}
                       >
-                        {data.project_name.length > 30 ? (
+                        {data.project_name?.length > 30 ? (
                           <>
                             {data.project_name.substring(
                               0,
@@ -485,7 +515,7 @@ const LeadsTable = (props: any) => {
                         onClick={goEdit}
                         data-lead-id={data.lead_id}
                         title={data.assigned_to}>
-                        {data.assigned_to.length > 25 ? (
+                        {data.assigned_to?.length > 25 ? (
                           <>
                             {data.assigned_to.substring(
                               0,
@@ -499,23 +529,24 @@ const LeadsTable = (props: any) => {
                         ) : (
                           data.assigned_to
                         )}
-
+                      </td>
+                      <td>
                         <div className="text-white">
-                          {data.modified_at
-                            ? showDateNa(data.modified_at)
-                            : showDateNa(data.created_at)}
+                          {data.created_at
+                            ? showDateNa(data.created_at)
+                            : ""}
                         </div>
                       </td>
                       {accessMenuRole(1) &&
                         <td title={data.sub_source_name}>
                           {(() => {
-                            const breakIndex = data.sub_source_name.indexOf(' ', 10);
+                            const breakIndex = data.sub_source_name?.indexOf(' ', 10);
 
                             return breakIndex !== -1 ? (
                               <>
-                                {data.sub_source_name.slice(0, breakIndex)}
+                                {data.sub_source_name?.slice(0, breakIndex)}
                                 <br />
-                                {data.sub_source_name.slice(breakIndex + 1)}
+                                {data.sub_source_name?.slice(breakIndex + 1)}
                               </>
                             ) : (
                               data.sub_source_name
