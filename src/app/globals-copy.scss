@@ -1,28 +1,28 @@
 .async_select__control {
-  border: 1px solid #6f7072 !important; // bootstrap border
+  border: 1px solid var(--table-border) !important; // bootstrap border
   border-radius: 0.375rem;
   padding: 0px !important;
   min-height: 38px;
   box-shadow: none;
-  background-color: #112143 !important;
-  color: #fff !important;
+  background-color: var(--table-bg) !important;
+  color: var(--table-text) !important;
 
   .async_select__placeholder {
-    color: #a9b4cc !important;
+    color: var(--table-sub-text) !important;
     font-size: small;
   }
 
   .async_select__input {
-    color: #a9b4cc !important;
+    color: var(--table-text) !important;
   }
 
   .async_select__input-container {
-    color: #a9b4cc !important;
+    color: var(--table-sub-text) !important;
     font-size: small;
   }
 
   .async_select__single-value {
-    color: #a9b4cc !important;
+    color: var(--table-text) !important;
     font-size: small;
   }
 }
@@ -33,29 +33,29 @@
 // }
 
 .async_select__menu {
-  background-color: #112143 !important;
-  border: 1px solid #0d6efd !important; // bootstrap border;
+  background-color: var(--table-bg) !important;
+  border: 1px solid var(--table-border) !important; // bootstrap border;
 }
 
 .async_select__option {
   padding: 8px 12px;
-  background-color: #112143 !important;
+  background-color: var(--table-bg) !important;
 }
 
 .async_select__option--is-focused {
-  background-color: #0d6efd !important;
+  background-color: var(--table-hover) !important;
   color: #fff !important
 }
 
 .async_select__option--is-selected {
-  background-color: #0d6efd;
+  background-color: var(--table-hover) !important;
 }
 .dropdown-menu {
-  background-color: #112143 !important;
-  border: 1px solid #0d6efd !important; // bootstrap border;
-  color: #a9b4cc !important;
+  background-color: var(--table-bg) !important;
+  border: 1px solid var(--table-border) !important; // bootstrap border;
+  color: var(--table-text) !important;
   a:hover{
-    background-color: #0d6efd !important;
+    background-color: var(--table-hover) !important;
     color: #fff !important;
   }
 }
