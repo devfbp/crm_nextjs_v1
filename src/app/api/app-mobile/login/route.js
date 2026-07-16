@@ -8,11 +8,8 @@ import { access } from 'fs';
 
 const SECRET = process.env.JWT_SECRET;
 
-export async function GET(request) {
-    return NextResponse.json({ success: false, message: "hai" }, { status: 500 });
-}
 export async function POST(request) {
-  // console.log('log api login');
+  console.log('log api login');
   try {
     const body = await request.json();
     const { username, password } = body;
