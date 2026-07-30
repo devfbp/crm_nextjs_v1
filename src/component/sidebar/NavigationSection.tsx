@@ -16,13 +16,15 @@ const NavigationSection = () => {
       <PagesPart />
       <ComponentsPart /> */}
 
-      {/* <li className="help-center">
-        <h3>Help Center</h3>
-        <p>We're an award-winning, forward thinking</p>
-        <Link href="#" className="btn btn-sm btn-light">
-          Go to Help Center
+      <li className="help-center">
+        <h3>App Download Center</h3>
+        <a href={`${process.env.NEXT_PUBLIC_BASE_URL}/mobile-app/apk/fbp-crm.apk`} className="btn btn-sm btn-light w-40">
+          Android
+        </a>
+         <Link href="#" className="btn btn-sm btn-light mt-2 w-40">
+          iOS
         </Link>
-      </li> */}
+      </li>
     </>
   );
 };
