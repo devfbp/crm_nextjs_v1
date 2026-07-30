@@ -74,6 +74,14 @@ const HeaderProfile = () => {
               </div> */}
             </div>
           </li>
+          <li>            
+            <Link className="dropdown-item" href={"/app-download-center"}>
+              <span className="dropdown-icon">
+                <i className="fa-regular fa-down"></i>
+              </span>{" "}
+              Download
+            </Link>
+          </li>
           <li>
             {/* <Link className="dropdown-item" href="/profile">
               <span className="dropdown-icon">
