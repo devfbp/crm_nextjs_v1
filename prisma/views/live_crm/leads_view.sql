@@ -5,6 +5,7 @@ SELECT
   `u`.`name` AS `assigned_to`,
   `ss`.`sub_source_name` AS `sub_source_name`,
   `l`.`mobile_no` AS `mobile_no`,
+  `p`.`project_id` AS `project_id`,
   `p`.`project_name` AS `project_name`,
   `ls`.`lead_status_name` AS `status`,
   `l`.`lead_status_id` AS `status_id`,

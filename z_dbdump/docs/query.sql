@@ -6,6 +6,7 @@ SELECT
     u.`name` AS `assigned_to`,
     ss.`sub_source_name`,
     l.`mobile_no` as `mobile_no`,
+    p.`project_id` as `project_id`,
     p.`project_name` as `project_name`,
     ls.`lead_status_name` AS `status`,
     l.`lead_status_id` AS `status_id`,

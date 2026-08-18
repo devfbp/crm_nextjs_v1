@@ -33,6 +33,9 @@ export async function POST(request) {
     let search = body.search || "";
     let report = body.report || "";
     let lead_ids = body.lead_ids || "";
+    let project_id = body.project_id || "";
+    let from_date = body.from_date || "";
+    let to_date = body.to_date || "";
 
     if (id) {
       const dataItem = await prisma.lead.findMany({
@@ -135,6 +138,37 @@ export async function POST(request) {
       if (assigned_to) {
         vwhere.rm_user_id = parseInt(assigned_to);
       }
+      if (project_id) {
+        vwhere.project_id = parseInt(project_id);
+      }
+      if (from_date && to_date) {
+        var from_date_v = new Date(from_date);
+        from_date_v.setHours(0, 0, 0, 0);
+
+        var to_date_v = new Date(to_date);
+        to_date_v.setHours(23, 59, 59, 999);
+
+        vwhere.created_at = {
+          gt: from_date_v,
+          lt: to_date_v,
+        };
+      } else if (from_date) {
+        var from_date_v = new Date(from_date);
+        from_date_v.setHours(0, 0, 0, 0);
+
+        vwhere.created_at = {
+          gt: from_date_v,
+        };
+      } else if (to_date) {
+        var to_date_v = new Date(to_date);
+        to_date_v.setHours(23, 59, 59, 999);
+
+        vwhere.created_at = {
+          lt: to_date_v,
+        };
+      }
+
+      console.log(vwhere)
       /** DATADASHBOARD QUERY********************** */
       if (dd_callsDoneToday === "true") {
         vwhere = {};

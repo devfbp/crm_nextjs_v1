@@ -17,12 +17,18 @@ import LeadStatusList from "./LeadStatusList";
 import HistoryCount from "./HistoryCount";
 import Loader from "../Loader";
 import { showDateNa } from "../utils/common-client";
+import ProjectList from "./ProjectList2";
+import DatePicker from "react-datepicker";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
     rm_user_id: "",
     lead_status_id: "",
     suserer_id: "",
+    project_id: "",
+    created_date: "",
+    from_date: "",
+    to_date: ""
   });
   const [filters, setFilters] = useState({
     search: "",
@@ -31,6 +37,10 @@ const LeadsTable = (props: any) => {
     dueDate: "",
     assigned_to: "",
     lead_status_id: "",
+    created_date: "",
+    project_id: "",
+    from_date: "",
+    to_date: ""
   });
   const [dataList, setDataList] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,6 +97,21 @@ const LeadsTable = (props: any) => {
       if (filters.assigned_to) {
         body.assigned_to = filters.assigned_to;
         localStorage.setItem("lead_assigned_to", filters.assigned_to);
+      }
+
+      if (filters.project_id) {
+        body.project_id = filters.project_id;
+        localStorage.setItem("project_id", filters.project_id);
+      }
+
+      if (filters.from_date) {
+        body.from_date = filters.from_date;
+        localStorage.setItem("from_date", filters.from_date);
+      }
+
+      if (filters.to_date) {
+        body.to_date = filters.to_date;
+        localStorage.setItem("to_date", filters.to_date);
       }
 
       if (filters.lead_status_id && filters.lead_status_id > 0) {
@@ -239,6 +264,9 @@ const LeadsTable = (props: any) => {
     localStorage.removeItem("lead_limit");
     localStorage.removeItem("report_view");
     localStorage.removeItem("report_lead_ids");
+    localStorage.removeItem("project_id");
+    localStorage.removeItem("from_date");
+    localStorage.removeItem("to_date");
     if (typeof window !== "undefined") {
       window.location.reload();
     }
@@ -279,6 +307,30 @@ const LeadsTable = (props: any) => {
       fetchData({ ...filters, assigned_to: form.rm_user_id }, currentPage, dataPerPage);
     }
   }, [form.rm_user_id]);
+
+  useEffect(() => {
+
+    if (form.project_id !== "" && form.project_id != localStorage.getItem("lead_assigned_to")) {
+      setFilters((prev) => ({ ...prev, project_id: form.project_id }));
+      fetchData({ ...filters, project_id: form.project_id }, currentPage, dataPerPage);
+    }
+  }, [form.project_id]);
+
+  useEffect(() => {
+
+    if (form.from_date !== "" && form.from_date != localStorage.getItem("from_date")) {
+      setFilters((prev) => ({ ...prev, from_date: form.from_date }));
+      fetchData({ ...filters, from_date: form.from_date }, currentPage, dataPerPage);
+    }
+  }, [form.from_date]);
+
+  useEffect(() => {
+
+    if (form.to_date !== "" && form.to_date != localStorage.getItem("lead_assigned_to")) {
+      setFilters((prev) => ({ ...prev, to_date: form.to_date }));
+      fetchData({ ...filters, to_date: form.to_date }, currentPage, dataPerPage);
+    }
+  }, [form.to_date]);
 
   useEffect(() => {
     // fetchData(filters, currentPage, dataPerPage);
@@ -355,8 +407,54 @@ const LeadsTable = (props: any) => {
                   name="rm_user_id"
                   value={form.rm_user_id} />
               </div>
-              <div className="col-md-1">
+
+              <div className="col-md-2">
+                <ProjectList form={form} setForm={setForm} />
+                <input type="hidden"
+                  id="project_id"
+                  name="project_id"
+                  value={form.project_id} />
+              </div>
+              <div className="col-md-2 ms-auto">
                 <button className="btn btn-sm btn-secondary" onClick={refreshfilters}>Reset</button>
+              </div>
+              <div className="col-md-2">
+                <div className="input-group-with-icon">
+                  <DatePicker
+                    selected={form.from_date ? new Date(form.from_date) : null}
+                    onChange={(date) =>
+                      setForm({
+                        ...form,
+                        from_date: date ? date.toISOString() : "",
+                      })
+                    }
+                    dateFormat="dd-MM-yyyy"
+                    name="from_date"
+                    id="from_date"
+                    autoComplete="off"
+                    placeholderText="Created From"
+
+                  />
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div className="input-group-with-icon">
+                  <DatePicker
+                    selected={form.to_date ? new Date(form.to_date) : null}
+                    onChange={(date) =>
+                      setForm({
+                        ...form,
+                        to_date: date ? date.toISOString() : "",
+                      })
+                    }
+                    dateFormat="dd-MM-yyyy"
+                    name="to_date"
+                    id="to_date"
+                    autoComplete="off"
+                    placeholderText="Created To"
+
+                  />
+                </div>
               </div>
               {accessMenuRole(1) &&
                 <div className="col-md-2">

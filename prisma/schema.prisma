@@ -301,6 +301,7 @@ view leads_view {
   assigned_to     String    @db.VarChar(200)
   sub_source_name String?   @db.VarChar(200)
   mobile_no       String?   @db.VarChar(200)
+  project_id      Int       @default(0)
   project_name    String?   @db.VarChar(200)
   status          String?   @db.VarChar(200)
   status_id       Int
