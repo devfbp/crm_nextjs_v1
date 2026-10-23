@@ -19,6 +19,7 @@ import Loader from "../Loader";
 import { showDateNa } from "../utils/common-client";
 import ProjectList from "./ProjectList2";
 import DatePicker from "react-datepicker";
+import { set } from "date-fns";
 
 const LeadsTable = (props: any) => {
   const [form, setForm] = useState({
@@ -61,6 +62,7 @@ const LeadsTable = (props: any) => {
   const { navQuickToggle } = useDigiContext();
   const [totalRecords, setTotalRecords] = useState(0);
   const pageSizeOptions = [10, 50, 100, 250, 500, 1000];
+  const [lastRefresh, setLastRefresh] = useState(new Date());
 
   useEffect(() => {
     setEditAccess(accessMenuCheck(7, 3));
@@ -341,12 +343,25 @@ const LeadsTable = (props: any) => {
       window.location.href = `/leads/${leadId}/edit`;
     }
   };
+  // every 5sec load page
+  useEffect(() => {
+    // optional: fetch immediately, then poll every 5s
+    fetchData(filters, currentPage, dataPerPage);
+    const interval = setInterval(() => {
+      refreshfilters();
+      setLastRefresh(new Date());
+      fetchData(filters, currentPage, dataPerPage);
+    }, 100000);
+
+    return () => clearInterval(interval); // cleanup on change/unmount
+  }, []);
   return (
     <React.Fragment>
 
       <div className="col-12">
         <div className="card">
           {/* Filters */}
+          <><div>Last Refresh: {lastRefresh.toLocaleTimeString()}</div></>
           <div className="card-body p-1">
             <div className="row g-2 align-items-center mb-2">
               <div className="col-md-2">

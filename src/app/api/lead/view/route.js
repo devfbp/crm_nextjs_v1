@@ -2,11 +2,34 @@ import { email } from 'zod';
 import prisma from '../../../../../lib/prisma';
 import { getSessionFromToken } from "../../session";
 
+export async function GET(request) {
+  const token = getSessionFromToken();
+  console.log("Token:", token);
+  try {
+    if (!token || !token.user_id) {
+      return Response.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+  }
+  catch (error) {
+    console.error('Error fetching leads:', error);
+    return Response.json({ success: false, message: error.message }, { status: 500 });
+  }
+  return Response.json({ success: true, message: 'Authorized' });
+}
 /*
 INSERT INTO `lead_file` (`lead_file_id`, `lead_file_name`, `file_path`, `created_at`, `created_by`, `modified_at`, `modified_by`, `company_id`, `flag`) VALUES (NULL, 'Manual', '/', NULL, NULL, NULL, NULL, '0', '0');
 */
 export async function POST(request) {
   const token = getSessionFromToken();
+  // user can only view leads assigned to them or their team members if they are not an admin
+  try {
+    if (!token || !token.user_id) {
+      return Response.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+  } catch (error) {
+    console.error('Error fetching leads:', error);
+    return Response.json({ success: false, message: error.message }, { status: 500 });
+  }
   const todayStart = new Date();
   // todayStart.setHours(0, 0, 0, 0);
 
@@ -37,13 +60,37 @@ export async function POST(request) {
     let from_date = body.from_date || "";
     let to_date = body.to_date || "";
 
+    // Admins (role_id <= 2) see all leads; other users only see leads assigned to them or their team members
+    const isAdmin = token.role_id <= 2;
+    let allowedUserIds = null;
+    if (!isAdmin) {
+      const teamMembers = await prisma.user_team_member.findMany({
+        where: {
+          leader_id: token.user_id,
+          flag: 0
+        },
+        select: {
+          member_id: true
+        }
+      });
+      allowedUserIds = [token.user_id, ...teamMembers.map(member => member.member_id)];
+    }
+    const userScope = isAdmin ? {} : { rm_user_id: { in: allowedUserIds } };
+
+    if (assigned_to && !isAdmin && !allowedUserIds.includes(parseInt(assigned_to))) {
+      return Response.json({ success: false, message: 'Forbidden' }, { status: 403 });
+    }
+
     if (id) {
       const dataItem = await prisma.lead.findMany({
-        where: { lead_id: id },
+        where: { lead_id: id, ...userScope },
         orderBy: { modified_at: 'asc' }
       });
+      if (dataItem.length === 0) {
+        return Response.json({ success: false, message: 'Lead not found' }, { status: 404 });
+      }
       const dataItems2 = await prisma.leads_view.findMany({
-        where: { lead_id: id },
+        where: { lead_id: id, ...userScope },
         orderBy: { modified_at: 'asc' }
       });
       let finalData = dataItem;
@@ -58,7 +105,8 @@ export async function POST(request) {
         const dataItems = await prisma.leads_view.findMany({
           where: {
             lead_id: { in: leadIdsArray },
-            flag: 0
+            flag: 0,
+            ...userScope
           },
           orderBy: { modified_at: 'asc' }
         });
@@ -68,7 +116,8 @@ export async function POST(request) {
     
     if (view == "1") {
       let vwhere = {
-        AND: []
+        AND: [],
+        ...userScope
       };
 
       vwhere.AND.push({ flag: 0 });
@@ -171,15 +220,15 @@ export async function POST(request) {
       console.log(vwhere)
       /** DATADASHBOARD QUERY********************** */
       if (dd_callsDoneToday === "true") {
-        vwhere = {};
+        vwhere = { ...userScope };
         // Today's calls done (to_status_id = 3)
         let calls_where = {
           created_at: { gte: todayStart, lt: todayEnd },
           to_status_id: { not: 1 },
           flag: 0
         }
-        if (token?.user_id && token?.role_id > 2) {
-          calls_where.rm_user_id = token.user_id;
+        if (!isAdmin) {
+          calls_where.rm_user_id = { in: allowedUserIds };
         }
         const callsDoneTodays = await prisma.lead_status_entry.groupBy({
           by: ['lead_id'],
@@ -192,14 +241,14 @@ export async function POST(request) {
         vwhere.lead_id = { in: callsDoneToday };
         // console.log(callsDoneTodays.length);
       } if (dd_totalLeadsToday === "true") {
-        vwhere = {};
+        vwhere = { ...userScope };
         let total_leads_where = {
           created_at: { gte: todayStart, lt: todayEnd },
           to_status_id: 1,
           flag: 0
         }
-        if (token?.user_id && token?.role_id > 2) {
-          total_leads_where.rm_user_id = token.user_id;
+        if (!isAdmin) {
+          total_leads_where.rm_user_id = { in: allowedUserIds };
         }
         const totalLeadsTodays = await prisma.lead_status_entry.groupBy({
           by: ['lead_id'],
@@ -213,13 +262,13 @@ export async function POST(request) {
         vwhere.lead_id = { in: totalLeadsToday };
         // console.log(totalLeadsTodays.length);
       } if (dd_svd === "true") {
-        vwhere = {};
+        vwhere = { ...userScope };
         let total_svd_where = {
           to_status_id: 5,
           flag: 0
         }
-        if (token?.user_id && token?.role_id > 2) {
-          total_svd_where.rm_user_id = token.user_id;
+        if (!isAdmin) {
+          total_svd_where.rm_user_id = { in: allowedUserIds };
         }
         const svds = await prisma.lead_status_entry.groupBy({
           by: ['lead_id'],
@@ -233,13 +282,13 @@ export async function POST(request) {
         vwhere.lead_id = { in: svdid };
         // console.log(totalLeadsTodays.length);
       } if (dd_closure === "true") {
-        vwhere = {};
+        vwhere = { ...userScope };
         let total_closures_where = {
           to_status_id: 7,
           flag: 0
         }
-        if (token?.user_id && token?.role_id > 2) {
-          total_closures_where.rm_user_id = token.user_id;
+        if (!isAdmin) {
+          total_closures_where.rm_user_id = { in: allowedUserIds };
         }
         const closures = await prisma.lead_status_entry.groupBy({
           by: ['lead_id'],
@@ -256,22 +305,7 @@ export async function POST(request) {
         vwhere.status_id = parseInt(lead_status_id);
       }
       /** DATADASHBOARD END QUERY********************** */
-      if (token?.user_id && token?.role_id > 2 && !assigned_to) {
-        vwhere.rm_user_id = token.user_id;
-        const teamMembers = await prisma.user_team_member.findMany({
-          where: {
-            leader_id: token.user_id,
-            flag: 0
-          },
-          select: {
-            member_id: true
-          }
-        });
-        if (teamMembers && teamMembers.length > 0) {
-          const memberIds = teamMembers.map(member => member.member_id);
-          vwhere.rm_user_id = { in: [token.user_id, ...memberIds] };
-        }
-      }
+      
       // console.log(token.user_id);
       console.log("vwhere:", JSON.stringify(vwhere));
       const dataItems = await prisma.leads_view.findMany({
@@ -288,7 +322,8 @@ export async function POST(request) {
 
     const dataItems = await prisma.lead.findMany({
       where: {
-        flag: 0
+        flag: 0,
+        ...userScope
       },
       take: limit,
       orderBy: {
@@ -297,7 +332,8 @@ export async function POST(request) {
     });
     const totalCount = await prisma.lead.count({
       where: {
-        flag: 0
+        flag: 0,
+        ...userScope
       }
     });
     return Response.json({ data: dataItems, dashboard: dashboardQry, total: totalCount });
