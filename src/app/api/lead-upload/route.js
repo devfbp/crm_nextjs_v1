@@ -85,13 +85,13 @@ export async function POST(request) {
     let rowIndex = 1; // Start from 1 to account for header row
     for (const row of rows) {
       let rm_user_id = token?.user_id ?? null;
-      if(row.user_name) {
+      if (row.user_name) {
         const user_data = await prisma.user.findFirst({
           where: {
             name: String(row.user_name ?? "").trim()
           }
         });
-        if(user_data) {
+        if (user_data) {
           rm_user_id = user_data?.user_id;
         }
       }
@@ -119,50 +119,51 @@ export async function POST(request) {
         token
       );
 
-      const duplicateLead = await prisma.lead.findFirst({
-        where: {
-          mobile_no: String(row.mobile_no),
-          // project_id: parseInt(projectId),
-          flag: 0
-        }
+      // const duplicateLead = await prisma.lead.findFirst({
+      //   where: {
+      //     mobile_no: String(row.mobile_no),
+      //     // project_id: parseInt(projectId),
+      //     flag: 1
+      //   }
+      // });
+      // if (duplicateLead && process.env.NEXT_PUBLIC_DUPLICATE_LEADS === "yes") {
+      //   duplicateCount.push({ row: rowIndex, customer_name: row.customer_name, mobile_no: row.mobile_no, project: String(row.project) });
+      // } else {
+
+      // }
+      const lead_data = await prisma.lead.create({
+        data: {
+          created_at: new Date(),
+          schedule_date: new Date(),
+          customer_name: row.customer_name,
+          mobile_no: String(row.mobile_no ?? ""),
+          email_id: row.email_id ?? null,
+          alternate_no: String(row.alternate_no ?? ""),
+          whatsapp_no: String(row.mobile_no ?? ""),
+          alternate_email: row.email_id ?? null,
+          project_id: projectId ?? 0,
+          source_id: Number(sourceId) ?? 0,
+          sub_source_id: Number(subSourceId) ?? 0,
+          rm_user_id: rm_user_id,
+          lead_status_id: 1,
+          lead_file_id: leadFile.lead_file_id,
+          remarks: row.remarks ?? "",
+          created_by: token?.user_id ?? null,
+        },
       });
-      if (duplicateLead && process.env.NEXT_PUBLIC_DUPLICATE_LEADS === "yes") {
-        duplicateCount.push({ row: rowIndex, customer_name: row.customer_name, mobile_no: row.mobile_no, project: String(row.project) });
-      } else {
-        const lead_data = await prisma.lead.create({
+      if (lead_data) {
+        await prisma.lead_status_entry.create({
           data: {
-            created_at: new Date(),
-            schedule_date: new Date(),
-            customer_name: row.customer_name,
-            mobile_no: String(row.mobile_no ?? ""),
-            email_id: row.email_id ?? null,
-            alternate_no: String(row.alternate_no ?? ""),
-            whatsapp_no: String(row.mobile_no ?? ""),
-            alternate_email: row.email_id ?? null,
-            project_id: projectId ?? 0,
-            source_id: Number(sourceId) ?? 0,
-            sub_source_id: Number(subSourceId) ?? 0,
-            rm_user_id: rm_user_id,
-            lead_status_id: 1,
-            lead_file_id: leadFile.lead_file_id,
-            remarks: row.remarks ?? "",
+            lead_id: lead_data?.lead_id,
             created_by: token?.user_id ?? null,
+            created_at: new Date(),
+            from_status_id: 0,
+            to_status_id: 1,
+            rm_user_id: rm_user_id,
+            from_rm_user_id: token?.user_id ?? null,
+            remarks: "New Lead Created from Upload"
           },
         });
-        if (lead_data) {
-          await prisma.lead_status_entry.create({
-            data: {
-              lead_id: lead_data?.lead_id,
-              created_by: token?.user_id ?? null,
-              created_at: new Date(),
-              from_status_id: 0,
-              to_status_id: 1,
-              rm_user_id: rm_user_id,
-              from_rm_user_id: token?.user_id ?? null,
-              remarks: "New Lead Created from Upload"
-            },
-          });
-        }
       }
       rowIndex++;
     }
@@ -170,8 +171,7 @@ export async function POST(request) {
     let message = `Docs uploaded successfully. ${duplicateCount.length} duplicate leads found.`;
     return Response.json({
       message: message,
-      file: fileName,
-      duplicate_leads: duplicateCount
+      file: fileName
     });
   } catch (error) {
     console.error("UPLOAD ERROR:", error);

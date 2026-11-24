@@ -260,16 +260,23 @@ export async function POST(request) {
   const token = getSessionFromToken();
   try {
     const req = await request.json();
-    const duplicateLead = await prisma.lead.findFirst({
+    /*const duplicateLeadCount = await prisma.lead.count({
       where: {
         mobile_no: req.mobile_no,
-        // project_id: parseInt(req.project_id),
         flag: 0
       }
     });
-    if (duplicateLead) {
-      return Response.json({ duplicateLead: true, success: false, message: "Lead with this mobile number already exists for the selected project." }, { status: 400 });
-    }
+
+    if (duplicateLeadCount >=3) {
+      return Response.json(
+        {
+          duplicateLead: true,
+          success: false,
+          message: "This mobile number has already been used 3 times."
+        },
+        { status: 400 }
+      );
+    }*/
     const newlead = await prisma.lead.create({
       data: {
         created_at: new Date(),
@@ -320,7 +327,7 @@ export async function PUT(request) {
   try {
     const req = await request.json();
     const id = req.slug;
-    const duplicateLead = await prisma.lead.findFirst({
+    /*const duplicateLead = await prisma.lead.findFirst({
       where: {
         mobile_no: req.mobile_no,
         // project_id: parseInt(req.project_id),
@@ -331,6 +338,24 @@ export async function PUT(request) {
     if (duplicateLead) {
       return Response.json({ success: false, message: "Lead with this mobile number already exists for the selected project." }, { status: 400 });
     }
+    const duplicateLeadCount = await prisma.lead.count({
+      where: {
+        mobile_no: req.mobile_no,
+        lead_id: { not: id },
+        flag: 0
+      }
+    });
+
+    if (duplicateLeadCount >=3) {
+      return Response.json(
+        {
+          duplicateLead: true,
+          success: false,
+          message: "This mobile number has already been used 3 times."
+        },
+        { status: 400 }
+      );
+    }*/
     const beforeLeadData = await prisma.lead.findUnique({
       where: { lead_id: id }
     });

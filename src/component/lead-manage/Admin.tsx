@@ -345,15 +345,17 @@ const LeadsTable = (props: any) => {
   };
   // every 5sec load page
   useEffect(() => {
+	/*
     // optional: fetch immediately, then poll every 5s
     fetchData(filters, currentPage, dataPerPage);
     const interval = setInterval(() => {
       refreshfilters();
       setLastRefresh(new Date());
       fetchData(filters, currentPage, dataPerPage);
-    }, 100000);
+    }, 60000);
 
     return () => clearInterval(interval); // cleanup on change/unmount
+*/
   }, []);
   return (
     <React.Fragment>
