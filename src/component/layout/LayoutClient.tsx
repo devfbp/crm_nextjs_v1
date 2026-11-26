@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import HeaderSection from "../header/HeaderSection";
 import ProfileRightSidebar from "../sidebar/right-sidebar/ProfileRightSidebar";
 import MainSidebar from "../sidebar/MainSidebar";
@@ -20,7 +20,6 @@ const Layout = ({ children, session }: Props) => {
 
   const {
     toggleNav,
-    currentNav,
     rtlDirection,
     mainBackgroundImg,
     rootLayoutRef,
@@ -42,18 +41,18 @@ const Layout = ({ children, session }: Props) => {
     }
   }, [pathname]);
 
-  useEffect(() => {
-    console.log("Current Nav:", currentNav);
-  }, [currentNav]);
-
-  Cookies.set(
-    "7hLIAH2Jk3hGd6s",
-    JSON.stringify(session),
-    {
+  // Written during render (not in an effect) so that child components which
+  // read it while rendering (accessMenuRole / accessMenuCheck) see it on the
+  // first render. Only rewritten when the session actually changes.
+  const sessionJson = JSON.stringify(session);
+  const writtenSessionJson = useRef<string | null>(null);
+  if (writtenSessionJson.current !== sessionJson) {
+    Cookies.set("7hLIAH2Jk3hGd6s", sessionJson, {
       path: "/",
       expires: 1,
-    }
-  );
+    });
+    writtenSessionJson.current = sessionJson;
+  }
 
   const pagesWithoutLayout = [
     "/login",

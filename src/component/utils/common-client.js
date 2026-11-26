@@ -103,21 +103,34 @@ export async function projectName(props) {
     }
     return data[0].project_name;
 }
+// Same output as date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+// but built once: toLocaleString with options sets up a new formatter on every
+// call, and the leads table calls these twice per row.
+const indiaDateTimeFormat = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+});
+function formatIndiaDateTime(isoDate) {
+    const date = new Date(isoDate);
+    // toLocaleString returns "Invalid Date" here; format() would throw
+    if (isNaN(date.getTime())) return "Invalid Date";
+    return indiaDateTimeFormat.format(date);
+}
+
 export function showDateTime(isoDate) {
     if (!isoDate) return "";
-    return new Date(isoDate).toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-    })
+    return formatIndiaDateTime(isoDate);
 }
 export function showDateVal(isoDate) {
     if (!isoDate) return "";
-    return new Date(isoDate).toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-    }).split(",")[0];
+    return formatIndiaDateTime(isoDate).split(",")[0];
 }
 export function showDateNa(isoDate) {
     if (!isoDate) return "N/A";
-    return new Date(isoDate).toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-    }).split(",")[0];
+    return formatIndiaDateTime(isoDate).split(",")[0];
 }

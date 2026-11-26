@@ -1,6 +1,6 @@
-import { no } from 'zod/v4/locales';
 import prisma from '../../../../../lib/prisma';
 import { getSessionFromToken } from "../../session";
+import { buildRmLeadArray } from "../rm-lead-array";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -64,39 +64,30 @@ export async function GET(request) {
     } else if (rm_user_id) {
       lead_where.rm_user_id = parseInt(rm_user_id);
     }
-    var leadAssignedDay = await prisma.leads_view.groupBy({
-      by: ['rm_user_id', 'assigned_to'],
-      where: lead_where,
-      _count: {
-        lead_id: true
-      },
-      orderBy: {
+    const [leadAssignedDay, leadLists] = await Promise.all([
+      prisma.leads_view.groupBy({
+        by: ['rm_user_id', 'assigned_to'],
+        where: lead_where,
         _count: {
-          lead_id: 'desc',
+          lead_id: true
         },
-      },
-    });
-
-
-    const leadLists = await prisma.leads_view.findMany({
-      select: {
-        rm_user_id: true,
-        assigned_to: true,
-        lead_id: true,
-        schedule_date: true
-      },
-      where: lead_where,
-    });
-    let rmLeadArray = [];
-    leadAssignedDay.forEach(item => {
-      const rmUserId = item.rm_user_id;
-      rmLeadArray[rmUserId] = [];
-      leadLists.forEach(lead => {
-        if (lead.rm_user_id === rmUserId) {          
-          rmLeadArray[rmUserId].push(lead.lead_id);
-        }
-      });
-    }); 
+        orderBy: {
+          _count: {
+            lead_id: 'desc',
+          },
+        },
+      }),
+      prisma.leads_view.findMany({
+        select: {
+          rm_user_id: true,
+          assigned_to: true,
+          lead_id: true,
+          schedule_date: true
+        },
+        where: lead_where,
+      }),
+    ]);
+    const rmLeadArray = buildRmLeadArray(leadAssignedDay, leadLists);
 
     return new Response(
       JSON.stringify({ success: true, data: leadAssignedDay, rmLeadArray: rmLeadArray }),

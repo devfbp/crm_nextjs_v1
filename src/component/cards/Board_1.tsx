@@ -2,8 +2,11 @@
 import React from "react";
 import CountUp from "react-countup";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void }) => {
+  // Client-side navigation to the leads page (no full page reload)
+  const router = useRouter();
   const [totalLeads, setTotalLeads] = useState(0);
   const [callsDoneToday, setCallsDoneToday] = useState(0);
   const [totalLeadsToday, setTotalLeadsToday] = useState(0);
@@ -41,7 +44,7 @@ const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void 
               Total Active Leads in CRM
             </p>
             <h3 className="fw-normal" 
-              onClick={() => { window.location.href = '/leads'; }} 
+              onClick={() => { router.push('/leads'); }}
               style={{ cursor: 'pointer' }}>
               <CountUp end={totalLeads} />
             </h3>
@@ -65,7 +68,7 @@ const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void 
             <h3 className="fw-normal" 
               onClick={() => { 
                 localStorage.setItem("dd_callsDoneToday", "true");
-                window.location.href = '/leads';
+                router.push('/leads');
               }} 
               style={{ cursor: 'pointer' }}>
               <CountUp end={callsDoneToday} />
@@ -90,7 +93,7 @@ const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void 
             <h3 className="fw-normal"
               onClick={() => { 
                 localStorage.setItem("dd_totalLeadsToday", "true");
-                window.location.href = '/leads';
+                router.push('/leads');
               }} 
               style={{ cursor: 'pointer' }}
               >
@@ -118,7 +121,7 @@ const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void 
             <h3 className="fw-normal"
               onClick={() => { 
                 localStorage.setItem("dd_svd", "true");
-                window.location.href = '/leads';
+                router.push('/leads');
               }}
               style={{ cursor: 'pointer' }}
             >
@@ -146,7 +149,7 @@ const Board1 = (props: { activeTab: number; setActiveTab: (tab: number) => void 
             <h3 className="fw-normal"
               onClick={() => { 
                 localStorage.setItem("dd_closure", "true");
-                window.location.href = '/leads';
+                router.push('/leads');
               }}
               style={{ cursor: 'pointer' }}
             >

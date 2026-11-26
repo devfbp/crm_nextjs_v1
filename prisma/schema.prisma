@@ -141,6 +141,15 @@ model lead {
   modified_by        Int?
   company_id         Int       @default(0)
   flag               Int       @default(0)
+
+  // Created by prisma/sql/add_performance_indexes.sql
+  @@index([rm_user_id, flag, lead_status_id], map: "idx_lead_rm_flag_status")
+  @@index([flag, lead_status_id], map: "idx_lead_flag_status")
+  @@index([modified_at], map: "idx_lead_modified_at")
+  @@index([flag, schedule_date], map: "idx_lead_flag_schedule")
+  @@index([rm_user_id, schedule_date_time], map: "idx_lead_rm_schedule_dt")
+  @@index([project_id], map: "idx_lead_project")
+  @@index([created_at], map: "idx_lead_created_at")
 }
 
 model lead_status_entry {
@@ -157,6 +166,12 @@ model lead_status_entry {
   modified_by     Int?
   company_id      Int       @default(0)
   flag            Int       @default(0)
+
+  // Created by prisma/sql/add_performance_indexes.sql
+  @@index([lead_id], map: "idx_lse_lead")
+  @@index([created_at], map: "idx_lse_created_at")
+  @@index([rm_user_id, created_at], map: "idx_lse_rm_created")
+  @@index([to_status_id, rm_user_id], map: "idx_lse_to_status")
 }
 
 model project {
@@ -256,6 +271,7 @@ model user_team_member {
   user                user      @relation(fields: [member_id], references: [user_id], onUpdate: Restrict, map: "user_team_member_ibfk_1")
 
   @@index([member_id], map: "member_id")
+  @@index([leader_id, flag], map: "idx_utm_leader")
 }
 
 model website_leads {

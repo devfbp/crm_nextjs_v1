@@ -1,10 +1,22 @@
-import { email } from 'zod';
 import prisma from '../../../../../lib/prisma';
 import { getSessionFromToken } from "../../session";
 
+// Adds `history_count` (number of lead_status_entry_view rows) to each lead,
+// using one grouped query for the whole page. The leads table used to fire a
+// separate HTTP request + query per row (100+ per page load) to get this.
+async function attachHistoryCounts(rows) {
+  if (!rows || rows.length === 0) return rows;
+  const counts = await prisma.lead_status_entry_view.groupBy({
+    by: ['lead_id'],
+    where: { lead_id: { in: rows.map((row) => row.lead_id) } },
+    _count: { lead_id: true },
+  });
+  const countByLead = new Map(counts.map((c) => [c.lead_id, c._count.lead_id]));
+  return rows.map((row) => ({ ...row, history_count: countByLead.get(row.lead_id) ?? 0 }));
+}
+
 export async function GET(request) {
   const token = getSessionFromToken();
-  console.log("Token:", token);
   try {
     if (!token || !token.user_id) {
       return Response.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -82,17 +94,19 @@ export async function POST(request) {
     }
 
     if (id) {
-      const dataItem = await prisma.lead.findMany({
-        where: { lead_id: id, ...userScope },
-        orderBy: { modified_at: 'asc' }
-      });
+      const [dataItem, dataItems2] = await Promise.all([
+        prisma.lead.findMany({
+          where: { lead_id: id, ...userScope },
+          orderBy: { modified_at: 'asc' }
+        }),
+        prisma.leads_view.findMany({
+          where: { lead_id: id, ...userScope },
+          orderBy: { modified_at: 'asc' }
+        }),
+      ]);
       if (dataItem.length === 0) {
         return Response.json({ success: false, message: 'Lead not found' }, { status: 404 });
       }
-      const dataItems2 = await prisma.leads_view.findMany({
-        where: { lead_id: id, ...userScope },
-        orderBy: { modified_at: 'asc' }
-      });
       let finalData = dataItem;
       if (dataItems2 && dataItems2.length > 0) {
         finalData[0].view_data = dataItems2[0];
@@ -109,7 +123,7 @@ export async function POST(request) {
             ...userScope
           },
           orderBy: { modified_at: 'asc' }
-        });
+        }).then(attachHistoryCounts);
         return Response.json({ data: dataItems, dashboard: dashboardQry });
       }
     }
@@ -217,7 +231,6 @@ export async function POST(request) {
         };
       }
 
-      console.log(vwhere)
       /** DATADASHBOARD QUERY********************** */
       if (dd_callsDoneToday === "true") {
         vwhere = { ...userScope };
@@ -306,36 +319,39 @@ export async function POST(request) {
       }
       /** DATADASHBOARD END QUERY********************** */
       
-      // console.log(token.user_id);
-      console.log("vwhere:", JSON.stringify(vwhere));
-      const dataItems = await prisma.leads_view.findMany({
-        where: vwhere,
-        take: limit,
-        skip: (page - 1) * limit,
-        orderBy: { modified_at: 'asc' }
-      });
-      const totalCount = await prisma.leads_view.count({
-        where: vwhere
-      });
+      // Page of rows (+ their history counts) and the total, in parallel
+      const [dataItems, totalCount] = await Promise.all([
+        prisma.leads_view.findMany({
+          where: vwhere,
+          take: limit,
+          skip: (page - 1) * limit,
+          orderBy: { modified_at: 'asc' }
+        }).then(attachHistoryCounts),
+        prisma.leads_view.count({
+          where: vwhere
+        }),
+      ]);
       return Response.json({ data: dataItems, dashboard: dashboardQry, total: totalCount });
     }
 
-    const dataItems = await prisma.lead.findMany({
-      where: {
-        flag: 0,
-        ...userScope
-      },
-      take: limit,
-      orderBy: {
-        [orderBy]: 'desc'
-      }
-    });
-    const totalCount = await prisma.lead.count({
-      where: {
-        flag: 0,
-        ...userScope
-      }
-    });
+    const [dataItems, totalCount] = await Promise.all([
+      prisma.lead.findMany({
+        where: {
+          flag: 0,
+          ...userScope
+        },
+        take: limit,
+        orderBy: {
+          [orderBy]: 'desc'
+        }
+      }),
+      prisma.lead.count({
+        where: {
+          flag: 0,
+          ...userScope
+        }
+      }),
+    ]);
     return Response.json({ data: dataItems, dashboard: dashboardQry, total: totalCount });
   } catch (error) {
     console.error('Error fetching leads:', error);

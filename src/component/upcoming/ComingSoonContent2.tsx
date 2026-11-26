@@ -1,10 +1,46 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useDigiContext } from "@/context/DigiContext";
+
+type TimerState = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
+// Countdown to one year from when the page opened. Kept local to this page so
+// its once-a-second updates don't re-render the rest of the app.
+const useCountdown = (): TimerState => {
+  const [isTimerState, setIsTimerState] = useState<TimerState>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const countdownDate = Date.now() + 365 * 24 * 60 * 60 * 1000;
+    const setNewTime = () => {
+      const distanceToDate = countdownDate - Date.now();
+      setIsTimerState({
+        days: Math.floor(distanceToDate / (1000 * 60 * 60 * 24)),
+        hours: Math.floor(
+          (distanceToDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
+        minutes: Math.floor((distanceToDate % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distanceToDate % (1000 * 60)) / 1000),
+      });
+    };
+    const interval = setInterval(setNewTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return isTimerState;
+};
 
 const ComingSoonContent2 = () => {
-  const { isTimerState } = useDigiContext();
+  const isTimerState = useCountdown();
   return (
     <div className="main-content p-0">
       <div className="panel coming-soon-panel coming-soon-panel-2">

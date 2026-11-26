@@ -1,6 +1,6 @@
-import { no } from 'zod/v4/locales';
 import prisma from '../../../../../lib/prisma';
 import { getSessionFromToken } from "../../session";
+import { buildRmLeadArray } from "../rm-lead-array";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -49,7 +49,7 @@ export async function GET(request) {
     } else if (rm_user_id) {
       lead_where.rm_user_id = parseInt(rm_user_id);
     }
-    const callsDoneTodays = await prisma.lead_status_entry_view.groupBy({
+    const callsDoneTodaysQuery = prisma.lead_status_entry_view.groupBy({
       by: ['rm_user_id', 'user_name'],
       where: lead_where,
       _count: {
@@ -62,7 +62,7 @@ export async function GET(request) {
       }
     });
 
-    const leadLists = await prisma.lead_status_entry_view.findMany({      
+    const leadListsQuery = prisma.lead_status_entry_view.findMany({      
       where: lead_where,
       select: {
         rm_user_id: true,
@@ -71,16 +71,8 @@ export async function GET(request) {
       }
     });
 
-    let rmLeadArray = [];
-    callsDoneTodays.forEach(item => {
-      const rmUserId = item.rm_user_id;
-      rmLeadArray[rmUserId] = [];
-      leadLists.forEach(lead => {
-        if (lead.rm_user_id === rmUserId) {          
-          rmLeadArray[rmUserId].push(lead.lead_id);
-        }
-      });
-    }); 
+    const [callsDoneTodays, leadLists] = await Promise.all([callsDoneTodaysQuery, leadListsQuery]);
+    const rmLeadArray = buildRmLeadArray(callsDoneTodays, leadLists);
 
 
     return new Response(

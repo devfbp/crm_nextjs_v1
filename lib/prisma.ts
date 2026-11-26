@@ -37,6 +37,8 @@ if (false) {
     });
 }
 
-if (isDev) globalForPrisma.prisma = prisma;
+// Reuse one client (and one connection pool) per server process, in every
+// environment, even if this module ends up loaded more than once.
+globalForPrisma.prisma = prisma;
 
 export default prisma;

@@ -39,7 +39,6 @@ interface DigiContextData {
   toggleSidebarBackground: (img: string) => void;
   mainBackgroundImg: string;
   toggleMainBackground: (img: string) => void;
-  isTimerState: TimerState;
   showAddNewTaskModal: boolean;
   handleShowAddNewTaskModal: () => void;
   handleCloseAddNewTaskModal: () => void;
@@ -100,12 +99,6 @@ interface DigiContextData {
   handleMobileFileManagerBtn: () => void;
   fileManagerRef: MutableRefObject<HTMLDivElement | null>;
 }
-type TimerState = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-};
 
 const DigiContext = createContext<DigiContextData | undefined>(undefined);
 
@@ -685,43 +678,9 @@ export const DigiProvider = ({ children }: DigiProviderProps) => {
     setMainBackgroundImg(img);
   };
 
-  // Custom Countdown Timer
-  const countdownDate = new Date(
-    Date.now() + 365 * 24 * 60 * 60 * 1000
-  ).getTime();
-  const [isTimerState, setIsTimerState] = useState<TimerState>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-
-  // Update timer state every second
-  useEffect(() => {
-    const interval = setInterval(setNewTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Calculate new timer state
-  const setNewTime = () => {
-    if (countdownDate) {
-      const currentTime = new Date().getTime();
-      const distanceToDate = countdownDate - currentTime;
-
-      // Calculate days, hours, minutes, and seconds
-      const days: number = Math.floor(distanceToDate / (1000 * 60 * 60 * 24));
-      const hours: number = Math.floor(
-        (distanceToDate % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes: number = Math.floor(
-        (distanceToDate % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      const seconds: number = Math.floor((distanceToDate % (1000 * 60)) / 1000);
-
-      // Update timer state
-      setIsTimerState({ days, hours, minutes, seconds });
-    }
-  };
+  // The "coming soon" countdown timer used to live here and tick every second,
+  // which re-rendered every component using this context (header, sidebar,
+  // leads table...) once per second. It now lives in ComingSoonContent2.
 
   // Add new task modal
   const [showAddNewTaskModal, setShowAddNewTaskModal] = useState(false);
@@ -915,7 +874,6 @@ export const DigiProvider = ({ children }: DigiProviderProps) => {
     toggleSidebarBackground,
     mainBackgroundImg,
     toggleMainBackground,
-    isTimerState,
     showAddNewTaskModal,
     handleShowAddNewTaskModal,
     handleCloseAddNewTaskModal,

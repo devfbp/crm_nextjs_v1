@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import PaginationSection from "../PaginationSectionMain";
 import { toast } from "react-toastify";
 import EditAction from "../action/Edit";
 import DeleteAction from "../action/Delete";
 import Link from "next/link";
-import { Spinner, Alert } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { useDigiContext } from "@/context/DigiContext";
 import { accessMenuRole } from "../utils/common";
 import BulkUpdateModal from "./BulkUpdate";
@@ -19,9 +20,156 @@ import Loader from "../Loader";
 import { showDateNa } from "../utils/common-client";
 import ProjectList from "./ProjectList2";
 import DatePicker from "react-datepicker";
-import { set } from "date-fns";
+
+// Wait this long after the last keystroke before searching on the server.
+const SEARCH_DEBOUNCE_MS = 400;
+
+// Save a filter so it is restored when the user comes back to this page, or
+// remove it when the filter was cleared (otherwise a cleared filter came back).
+const saveFilter = (key: string, value: any) => {
+  if (value) {
+    localStorage.setItem(key, String(value));
+  } else {
+    localStorage.removeItem(key);
+  }
+};
+
+type LeadRowProps = {
+  data: any;
+  isAdmin: boolean;
+  onEdit: (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => void;
+  onSelect: (id: number, checked: boolean) => void;
+  onHistory: (data: any) => void;
+};
+
+// One table row. Memoized so typing in the search box or ticking one checkbox
+// doesn't re-render every row on the page (up to 1000).
+const LeadRow = React.memo(function LeadRow({ data, isAdmin, onEdit, onSelect, onHistory }: LeadRowProps) {
+  return (
+    <tr>
+
+      {isAdmin &&
+        <td><input type="checkbox" checked={data.selected} onChange={(e) => onSelect(data.lead_id, e.target.checked)} /></td>
+      }
+
+      <td title={data.customer_name}
+        onClick={onEdit}
+        data-lead-id={data.lead_id}
+      >
+        {(() => {
+          const breakIndex = data.customer_name.indexOf(' ', 20);
+
+          return breakIndex !== -1 ? (
+            <>
+              {data.customer_name.slice(0, breakIndex)}
+              <br />
+              {data.customer_name.slice(breakIndex + 1)}
+            </>
+          ) : (
+            data.customer_name
+          );
+        })()}
+      </td>
+      <td
+        onClick={onEdit}
+        data-lead-id={data.lead_id}
+      >{data.mobile_no}</td>
+      <td title={data.project_name}
+        onClick={onEdit}
+        data-lead-id={data.lead_id}
+      >
+        {data.project_name?.length > 30 ? (
+          <>
+            {data.project_name.substring(
+              0,
+              data.project_name.indexOf(' ', 30)
+            )}
+            <br />
+            {data.project_name.substring(
+              data.project_name.indexOf(' ', 30) + 1
+            )}
+          </>
+        ) : (
+          data.project_name
+        )}
+      </td>
+      <td>
+        <div className="btn-box">
+          <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />
+
+          <Link
+            title="History"
+            className="btn btn-sm btn-icon btn-secondary"
+            href="javascript:void(0)"
+            onClick={(e) => {
+              e.preventDefault();
+              onHistory(data); // pass the specific data item here
+            }}
+          >
+            {/* <i className="fa-light fa-history text-white"></i> */}
+            <HistoryCount lead_id={data.lead_id} id={data.lead_id} count={data.history_count} />
+          </Link>
+          <DeleteAction id={data.lead_id} page="lead" setRefresh="" menu_id={7} iconclass={false} reload={true} />
+        </div>
+      </td>
+      <td
+        onClick={onEdit}
+        data-lead-id={data.lead_id}
+        className={`text-${data.status_color ? data.status_color : 'secondary'}`}>
+        {data.status}
+        <div className="text-white">{showDateNa(data.schedule_date)}</div>
+      </td>
+      <td
+        onClick={onEdit}
+        data-lead-id={data.lead_id}
+        title={data.assigned_to}>
+        {data.assigned_to?.length > 25 ? (
+          <>
+            {data.assigned_to.substring(
+              0,
+              data.assigned_to.indexOf(' ', 25)
+            )}
+            <br />
+            {data.assigned_to.substring(
+              data.assigned_to.indexOf(' ', 25) + 1
+            )}
+          </>
+        ) : (
+          data.assigned_to
+        )}
+      </td>
+      <td>
+        <div className="text-white">
+          {data.created_at
+            ? showDateNa(data.created_at)
+            : ""}
+        </div>
+      </td>
+      {isAdmin &&
+        <td title={data.sub_source_name}>
+          {(() => {
+            const breakIndex = data.sub_source_name?.indexOf(' ', 10);
+
+            return breakIndex !== -1 ? (
+              <>
+                {data.sub_source_name?.slice(0, breakIndex)}
+                <br />
+                {data.sub_source_name?.slice(breakIndex + 1)}
+              </>
+            ) : (
+              data.sub_source_name
+            );
+          })()}
+        </td>
+      }
+
+
+    </tr>
+  );
+});
 
 const LeadsTable = (props: any) => {
+  const router = useRouter();
   const [form, setForm] = useState({
     rm_user_id: "",
     lead_status_id: "",
@@ -50,25 +198,49 @@ const LeadsTable = (props: any) => {
   const [error, setError] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showLeadHistory, setShowLeadHistory] = useState(false);
-  const [bulkStatus, setBulkStatus] = useState([{ lead_status_id: "", rm_user_id: "", remarks: "" }]);
-  const [navQuickToggleValue, setNavQuickToggleValue] = useState(props?.fullwidth);
+  const [navQuickToggleValue] = useState(props?.fullwidth);
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const [editAccess, setEditAccess] = useState(false);
   const [historyLead, setHistoryLead] = useState<any | null>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [userFilter, setUserFilter] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
+  const [statusFilter] = useState("");
+  const [userFilter] = useState("");
   const { navQuickToggle } = useDigiContext();
   const [totalRecords, setTotalRecords] = useState(0);
   const pageSizeOptions = [10, 50, 100, 250, 500, 1000];
-  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const [lastRefresh] = useState(new Date());
+  // In-flight list request; aborted when a newer one starts so a slow, older
+  // response can't overwrite newer results.
+  const fetchAbortRef = useRef<AbortController | null>(null);
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Read the session cookie once per render instead of three times per row
+  const isAdmin = accessMenuRole(1);
 
   useEffect(() => {
     setEditAccess(accessMenuCheck(7, 3));
   }, [navQuickToggle, navQuickToggleValue]);
 
+  // Cancel a pending search / request when leaving the page
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+      fetchAbortRef.current?.abort();
+    };
+  }, []);
+
   const fetchData = async (filters: any, pageNumber: number, dataPerPage: number) => {
+    // This request already carries the latest search text (it's kept in
+    // `filters`), so a search still waiting on its debounce timer would only
+    // repeat it with older filters. Drop it.
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+      searchDebounceRef.current = null;
+    }
+    fetchAbortRef.current?.abort();
+    const controller = new AbortController();
+    fetchAbortRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
@@ -85,41 +257,40 @@ const LeadsTable = (props: any) => {
 
       if (filters.dueDate) {
         body.due_filter = filters.dueDate;
-        localStorage.setItem("lead_due_filter", filters.dueDate);
       }
+      saveFilter("lead_due_filter", filters.dueDate);
 
-      if (filters.search) {
-        body.search = filters.search;
-        localStorage.setItem("lead_search", filters.search);
-      } else if (searchTerm) {
-        body.search = searchTerm;
-        localStorage.setItem("lead_search", searchTerm);
+      const search = filters.search ?? searchTerm ?? "";
+      if (search) {
+        body.search = search;
       }
+      saveFilter("lead_search", search);
 
       if (filters.assigned_to) {
         body.assigned_to = filters.assigned_to;
-        localStorage.setItem("lead_assigned_to", filters.assigned_to);
       }
+      saveFilter("lead_assigned_to", filters.assigned_to);
 
       if (filters.project_id) {
         body.project_id = filters.project_id;
-        localStorage.setItem("project_id", filters.project_id);
       }
+      saveFilter("project_id", filters.project_id);
 
       if (filters.from_date) {
         body.from_date = filters.from_date;
-        localStorage.setItem("from_date", filters.from_date);
       }
+      saveFilter("from_date", filters.from_date);
 
       if (filters.to_date) {
         body.to_date = filters.to_date;
-        localStorage.setItem("to_date", filters.to_date);
       }
+      saveFilter("to_date", filters.to_date);
 
-      if (filters.lead_status_id && filters.lead_status_id > 0) {
+      const hasLeadStatus = filters.lead_status_id && filters.lead_status_id > 0;
+      if (hasLeadStatus) {
         body.lead_status_id = filters.lead_status_id;
-        localStorage.setItem("lead_status_id", filters.lead_status_id.toString());
       }
+      saveFilter("lead_status_id", hasLeadStatus ? filters.lead_status_id : "");
 
       if (localStorage.getItem("dd_callsDoneToday") === "true") {
         body.dd_callsDoneToday = true;
@@ -145,32 +316,31 @@ const LeadsTable = (props: any) => {
         }
       }
 
-      if (loading) return;
-      console.log("Fetching data with filters:", url, "-", body);
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
+        signal: controller.signal,
       });
 
       const result = await response.json();
+      if (controller.signal.aborted) return;
       const loaddata = result.data || result;
 
       setDataList(loaddata.map((r: any) => ({ ...r, selected: false })));
       setTotalRecords(result.total);
 
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.name === "AbortError") return; // replaced by a newer request
       console.error(error);
       setError("Error fetching data");
     } finally {
-      setLoading(false);
+      if (fetchAbortRef.current === controller) {
+        setLoading(false);
+      }
     }
-  };
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    fetchData({ ...filters, search: e.target.value }, currentPage, dataPerPage);
   };
   const filteredData = useMemo(() => {
     return dataList.filter((d) => {
@@ -199,9 +369,10 @@ const LeadsTable = (props: any) => {
   const handleSelectAll = (checked: boolean) => {
     setDataList((prev) => prev.map((row) => ({ ...row, selected: checked })));
   };
-  const handleRowSelect = (id: number, checked: boolean) => {
+  // Stable (useCallback) so memoized rows don't all re-render
+  const handleRowSelect = useCallback((id: number, checked: boolean) => {
     setDataList((prev) => prev.map((row) => (row.lead_id === id ? { ...row, selected: checked } : row)));
-  };
+  }, []);
 
   const handleBulkUpdate = async (value: any) => {
     const selectedLeads = dataList.filter((d) => d.selected);
@@ -249,10 +420,10 @@ const LeadsTable = (props: any) => {
     }
   };
 
-  const handleLeadHistory = (data: any) => {
+  const handleLeadHistory = useCallback((data: any) => {
     setHistoryLead(data);
     setShowLeadHistory(true);
-  };
+  }, []);
   const refreshfilters = () => {
     localStorage.removeItem("lead_due_filter");
     localStorage.removeItem("lead_assigned_to");
@@ -282,6 +453,8 @@ const LeadsTable = (props: any) => {
     const savedPage = localStorage.getItem("lead_page") || "1";
     const savedLimit = localStorage.getItem("lead_limit") || "100";
     const savedProjectId = localStorage.getItem("project_id") || "";
+    setCurrentPage(parseInt(savedPage));
+    setDataPerPage(parseInt(savedLimit));
     setForm((prev) => ({
       ...prev,
       rm_user_id: savedAssignedTo,
@@ -311,7 +484,6 @@ const LeadsTable = (props: any) => {
   useEffect(() => {
     const value = String(form.rm_user_id ?? "");
     if (value === String(filters.assigned_to ?? "")) return;
-    if (value === "") localStorage.removeItem("lead_assigned_to");
     setFilters((prev) => ({ ...prev, assigned_to: value }));
     fetchData({ ...filters, assigned_to: value }, currentPage, dataPerPage);
   }, [form.rm_user_id]);
@@ -320,50 +492,33 @@ const LeadsTable = (props: any) => {
   useEffect(() => {
     const value = String(form.project_id ?? "");
     if (value === String(filters.project_id ?? "")) return;
-    if (value === "") localStorage.removeItem("project_id");
     setFilters((prev) => ({ ...prev, project_id: value }));
     fetchData({ ...filters, project_id: value }, currentPage, dataPerPage);
   }, [form.project_id]);
 
+  // Reload when a created-from / created-to date is picked or cleared
   useEffect(() => {
-
-    if (form.from_date !== "" && form.from_date != localStorage.getItem("from_date")) {
-      setFilters((prev) => ({ ...prev, from_date: form.from_date }));
-      fetchData({ ...filters, from_date: form.from_date }, currentPage, dataPerPage);
-    }
+    const value = form.from_date || "";
+    if (value === (filters.from_date || "")) return;
+    setFilters((prev) => ({ ...prev, from_date: value }));
+    fetchData({ ...filters, from_date: value }, currentPage, dataPerPage);
   }, [form.from_date]);
 
   useEffect(() => {
-
-    if (form.to_date !== "" && form.to_date != localStorage.getItem("lead_assigned_to")) {
-      setFilters((prev) => ({ ...prev, to_date: form.to_date }));
-      fetchData({ ...filters, to_date: form.to_date }, currentPage, dataPerPage);
-    }
+    const value = form.to_date || "";
+    if (value === (filters.to_date || "")) return;
+    setFilters((prev) => ({ ...prev, to_date: value }));
+    fetchData({ ...filters, to_date: value }, currentPage, dataPerPage);
   }, [form.to_date]);
 
-  useEffect(() => {
-    // fetchData(filters, currentPage, dataPerPage);
-  }, [currentPage, dataPerPage]);
-  const goEdit = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+  // Open the lead with client-side navigation (no full page reload)
+  const goEdit = useCallback((e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
     const leadId = e.currentTarget.getAttribute("data-lead-id");
     if (editAccess && leadId) {
-      window.location.href = `/leads/${leadId}/edit`;
+      router.push(`/leads/${leadId}/edit`);
     }
-  };
-  // every 5sec load page
-  useEffect(() => {
-	/*
-    // optional: fetch immediately, then poll every 5s
-    fetchData(filters, currentPage, dataPerPage);
-    const interval = setInterval(() => {
-      refreshfilters();
-      setLastRefresh(new Date());
-      fetchData(filters, currentPage, dataPerPage);
-    }, 60000);
+  }, [editAccess, router]);
 
-    return () => clearInterval(interval); // cleanup on change/unmount
-*/
-  }, []);
   return (
     <React.Fragment>
 
@@ -381,7 +536,12 @@ const LeadsTable = (props: any) => {
                     (e) => {
                       const value = e.target.value;
                       setSearchTerm(value);
-                      fetchData({ ...filters, search: value }, currentPage, dataPerPage);
+                      setFilters((prev) => ({ ...prev, search: value }));
+                      // Search once the user pauses typing, not on every key
+                      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+                      searchDebounceRef.current = setTimeout(() => {
+                        fetchData({ ...filters, search: value }, currentPage, dataPerPage);
+                      }, SEARCH_DEBOUNCE_MS);
                     }
                   }
                   placeholder="Search Leads..."
@@ -484,7 +644,7 @@ const LeadsTable = (props: any) => {
                   />
                 </div>
               </div>
-              {accessMenuRole(1) &&
+              {isAdmin &&
                 <div className="col-md-2">
                   <select
                     id="lead_status_id"
@@ -540,7 +700,7 @@ const LeadsTable = (props: any) => {
               <table id="leadsTable" className="table table-hover table-striped">
                 <thead>
                   <tr>
-                    {accessMenuRole(1) &&
+                    {isAdmin &&
                       <th style={{ width: "5px" }}>
                         <input type="checkbox" onChange={(e) => handleSelectAll(e.target.checked)} checked={dataList.every((row) => row.selected)} />
                       </th>
@@ -553,7 +713,7 @@ const LeadsTable = (props: any) => {
                     <th style={{ width: "120px" }} onClick={() => sortColumn("assigned_to")}>Assigned To </th>
                     <th style={{ width: "120px" }} onClick={() => sortColumn("created_at")}>Created At </th>
 
-                    {accessMenuRole(1) &&
+                    {isAdmin &&
                       <th style={{ width: "150px" }} onClick={() => sortColumn("sub_source_name")}>Source</th>
                     }
 
@@ -564,125 +724,14 @@ const LeadsTable = (props: any) => {
                   {error && <tr><td colSpan={8}><Alert variant="danger">{error}</Alert></td></tr>}
                   {!loading && dataList.length === 0 && <tr><td colSpan={8} className="text-center">No records found</td></tr>}
                   {!loading && dataList.map((data) => (
-                    <tr key={data.lead_id}>
-
-                      {accessMenuRole(1) &&
-                        <td><input type="checkbox" checked={data.selected} onChange={(e) => handleRowSelect(data.lead_id, e.target.checked)} /></td>
-                      }
-
-                      <td title={data.customer_name}
-                        onClick={goEdit}
-                        data-lead-id={data.lead_id}
-                      >
-                        {(() => {
-                          const breakIndex = data.customer_name.indexOf(' ', 20);
-
-                          return breakIndex !== -1 ? (
-                            <>
-                              {data.customer_name.slice(0, breakIndex)}
-                              <br />
-                              {data.customer_name.slice(breakIndex + 1)}
-                            </>
-                          ) : (
-                            data.customer_name
-                          );
-                        })()}
-                      </td>
-                      <td
-                        onClick={goEdit}
-                        data-lead-id={data.lead_id}
-                      >{data.mobile_no}</td>
-                      <td title={data.project_name}
-                        onClick={goEdit}
-                        data-lead-id={data.lead_id}
-                      >
-                        {data.project_name?.length > 30 ? (
-                          <>
-                            {data.project_name.substring(
-                              0,
-                              data.project_name.indexOf(' ', 30)
-                            )}
-                            <br />
-                            {data.project_name.substring(
-                              data.project_name.indexOf(' ', 30) + 1
-                            )}
-                          </>
-                        ) : (
-                          data.project_name
-                        )}
-                      </td>
-                      <td>
-                        <div className="btn-box">
-                          <EditAction id={data.lead_id} page="leads" type="link" link={`/leads/${data.lead_id}/edit`} setRefresh="" menu_id={7} iconclass={false} />
-
-                          <Link
-                            title="History"
-                            className="btn btn-sm btn-icon btn-secondary"
-                            href="javascript:void(0)"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleLeadHistory(data); // pass the specific data item here
-                            }}
-                          >
-                            {/* <i className="fa-light fa-history text-white"></i> */}
-                            <HistoryCount lead_id={data.lead_id} id={data.lead_id} />
-                          </Link>
-                          <DeleteAction id={data.lead_id} page="lead" setRefresh="" menu_id={7} iconclass={false} reload={true} />
-                        </div>
-                      </td>
-                      <td
-                        onClick={goEdit}
-                        data-lead-id={data.lead_id}
-                        className={`text-${data.status_color ? data.status_color : 'secondary'}`}>
-                        {data.status}
-                        <div className="text-white">{showDateNa(data.schedule_date)}</div>
-                      </td>
-                      <td
-                        onClick={goEdit}
-                        data-lead-id={data.lead_id}
-                        title={data.assigned_to}>
-                        {data.assigned_to?.length > 25 ? (
-                          <>
-                            {data.assigned_to.substring(
-                              0,
-                              data.assigned_to.indexOf(' ', 25)
-                            )}
-                            <br />
-                            {data.assigned_to.substring(
-                              data.assigned_to.indexOf(' ', 25) + 1
-                            )}
-                          </>
-                        ) : (
-                          data.assigned_to
-                        )}
-                      </td>
-                      <td>
-                        <div className="text-white">
-                          {data.created_at
-                            ? showDateNa(data.created_at)
-                            : ""}
-                        </div>
-                      </td>
-                      {accessMenuRole(1) &&
-                        <td title={data.sub_source_name}>
-                          {(() => {
-                            const breakIndex = data.sub_source_name?.indexOf(' ', 10);
-
-                            return breakIndex !== -1 ? (
-                              <>
-                                {data.sub_source_name?.slice(0, breakIndex)}
-                                <br />
-                                {data.sub_source_name?.slice(breakIndex + 1)}
-                              </>
-                            ) : (
-                              data.sub_source_name
-                            );
-                          })()}
-                        </td>
-                      }
-
-
-                    </tr>
+                    <LeadRow
+                      key={data.lead_id}
+                      data={data}
+                      isAdmin={isAdmin}
+                      onEdit={goEdit}
+                      onSelect={handleRowSelect}
+                      onHistory={handleLeadHistory}
+                    />
                   ))}
                 </tbody>
               </table>

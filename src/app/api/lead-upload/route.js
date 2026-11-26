@@ -80,22 +80,41 @@ export async function POST(request) {
         { status: 500 }
       );
 
+    // Most rows repeat the same user / project / source names, so look each
+    // name up once per upload instead of once per row. (Names are unique
+    // columns, so a name always maps to the same id.)
+    const userIdByName = new Map();
+    const idByName = new Map();
+    const findUserId = async (userName) => {
+      if (!userIdByName.has(userName)) {
+        const user_data = await prisma.user.findFirst({
+          where: { name: userName },
+          select: { user_id: true }
+        });
+        userIdByName.set(userName, user_data?.user_id ?? null);
+      }
+      return userIdByName.get(userName);
+    };
+    const getOrCreateCached = async (model, uniqueField, name, extraData, token) => {
+      const key = `${model}:${name}`;
+      if (!idByName.has(key)) {
+        idByName.set(key, await getOrCreate(model, uniqueField, name, extraData, token));
+      }
+      return idByName.get(key);
+    };
+
     // Insert each lead row
     let duplicateCount = []
     let rowIndex = 1; // Start from 1 to account for header row
     for (const row of rows) {
       let rm_user_id = token?.user_id ?? null;
       if (row.user_name) {
-        const user_data = await prisma.user.findFirst({
-          where: {
-            name: String(row.user_name ?? "").trim()
-          }
-        });
-        if (user_data) {
-          rm_user_id = user_data?.user_id;
+        const userId = await findUserId(String(row.user_name ?? "").trim());
+        if (userId) {
+          rm_user_id = userId;
         }
       }
-      const projectId = await getOrCreate(
+      const projectId = await getOrCreateCached(
         "project",
         "project_name",
         String(row.project),
@@ -103,7 +122,7 @@ export async function POST(request) {
         token
       );
 
-      const sourceId = await getOrCreate(
+      const sourceId = await getOrCreateCached(
         "source",
         "source_name",
         String(row.source),
@@ -111,7 +130,7 @@ export async function POST(request) {
         token
       );
 
-      const subSourceId = await getOrCreate(
+      const subSourceId = await getOrCreateCached(
         "sub_source",
         "sub_source_name",
         String(row.sub_source),

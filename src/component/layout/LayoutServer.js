@@ -1,11 +1,13 @@
 import LayoutClient from "./LayoutClient";
 import jwt from "jsonwebtoken";
-import Cryptr from "cryptr";
 import { cookies } from "next/headers";
 
+// Runs on the server for every page request, so keep it cheap.
+// (It used to also Cryptr-encrypt the session: 100,000 synchronous PBKDF2
+// rounds per request that blocked the whole Node server, for a value that
+// LayoutClient never used.)
 export default function LayoutServer({ children }) {
     let session = null;
-    let encryptedString = "";
 
     const cookieStore = cookies();
     const token = cookieStore.get('token')?.value;
@@ -19,14 +21,6 @@ export default function LayoutServer({ children }) {
 
             if (typeof decoded !== 'string') {
                 session = decoded;
-
-                const cryptr = new Cryptr(
-                    process.env.JWT_SECRET
-                );
-
-                encryptedString = cryptr.encrypt(
-                    JSON.stringify(session)
-                );
             }
 
         } catch (error) {
@@ -38,7 +32,6 @@ export default function LayoutServer({ children }) {
         <LayoutClient
             session={session}
             children={children}
-            encryptedString={encryptedString}
         />
     );
 }

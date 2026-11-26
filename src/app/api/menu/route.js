@@ -1,54 +1,39 @@
-import React from "react";
 import prisma from '../../../../lib/prisma';
-import { link } from "fs";
 
 export async function GET() {
+  // Groups with their menu items in one query (it used to be one query for the
+  // groups plus one more per group).
   const menugroupItems = await prisma.menu_group.findMany({
     where: {
       flag: 0
     },
     select: {
-      ['menu_group_id']: true, ['menu_group_name']: true, ['link']: true
+      menu_group_id: true,
+      menu_group_name: true,
+      link: true,
+      menu: {
+        where: {
+          parent_menu_id: {
+            gt: -1
+          }
+        },
+        orderBy: {
+          sort_no: 'asc'
+        }
+      }
     },
     orderBy: {
       sort_no: 'asc'
     }
   });
-  var menuItems = [];
-  for (let i = 0; i < menugroupItems.length; i++) {
-    const groupId = menugroupItems[i]?.menu_group_id;
-    const groupName = menugroupItems[i]?.menu_group_name;
-    const groupLink = menugroupItems[i]?.link;
 
-    //menuItems.push(groupMenuHeader);
-    const groupMenus = await prisma.menu.findMany({
-      where: {
-        menu_group_id: groupId,
-        parent_menu_id: {
-          gt: -1
-        }
-      },
-      orderBy: {
-        sort_no: 'asc'
-      }
-    });
-    let groupMenuHeader = {
-      menu_group_name: groupName,
-      link: groupLink,
-      icon: "",
-      menu_group_id: groupId,
-      menuItems: groupMenus
-    }
-    menuItems.push(groupMenuHeader);
-  }
-  // const menuItems = await prisma.menu.findMany({
-  //   where : {
-  //     parent_menu_id: {
-  //       gt:-1
-  //     }
-  //   }
-  // });
-  // console.log("Menu Items:", menuItems);
+  const menuItems = menugroupItems.map((group) => ({
+    menu_group_name: group.menu_group_name,
+    link: group.link,
+    icon: "",
+    menu_group_id: group.menu_group_id,
+    menuItems: group.menu
+  }));
   return Response.json(menuItems);
 }
 export const dynamic = "force-dynamic";

@@ -19,14 +19,18 @@ export async function GET(request) {
     if (lead_status_id) {
       where.lead_status_id = lead_status_id;
     }
+    // A per-lead request without a lead_id used to fall through to the
+    // "return every row" query at the bottom (the whole history table).
+    if (!lead_id && (history_count == 1 || lead_view == 1 || lead_view == 2)) {
+      if (history_count == 1) return Response.json({ history_count: 0 });
+      return Response.json(lead_view == 1 ? [] : null);
+    }
     if(history_count == 1 && lead_id) {
-      let dataItems = await prisma.lead_status_entry_view.findMany({
+      // Count in the database instead of loading every row just to count them
+      const historyCount = await prisma.lead_status_entry_view.count({
         where: { lead_id: lead_id },
-        orderBy: {
-          lead_entry_id: 'desc', // or created_at
-        },
       });
-      return Response.json({ history_count: dataItems.length });
+      return Response.json({ history_count: historyCount });
     }
 
     if (lead_view == 1 && lead_id) {

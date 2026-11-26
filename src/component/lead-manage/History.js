@@ -7,7 +7,11 @@ const History = (props) => {
   const [records, setRecords] = useState(null);
 
   useEffect(() => {
-    console.log("Props in History component:", props);
+    if (!props.lead_id) {
+      setRecords(null);
+      return;
+    }
+    let cancelled = false;
     const fetchData = async () => {
       const response = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
@@ -15,10 +19,13 @@ const History = (props) => {
           props.lead_id
       );
       const result = await response.json();
-      setRecords(result);
+      if (!cancelled) setRecords(result);
     };
 
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, [props.lead_id]);
 
   return (

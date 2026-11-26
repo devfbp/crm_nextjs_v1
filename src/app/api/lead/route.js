@@ -31,14 +31,17 @@ export async function GET(request) {
     let dd_closure = searchParams.get('dd_closure');
     let search = searchParams.get('search') || "";
     if (id) {
-      const dataItem = await prisma.lead.findMany({
-        where: { lead_id: id },
-        orderBy: { modified_at: 'asc' }
-      });
-      const dataItems2 = await prisma.leads_view.findMany({
-        where: { lead_id: id },
-        orderBy: { modified_at: 'asc' }
-      });
+      // Lead edit page: both lookups in parallel
+      const [dataItem, dataItems2] = await Promise.all([
+        prisma.lead.findMany({
+          where: { lead_id: id },
+          orderBy: { modified_at: 'asc' }
+        }),
+        prisma.leads_view.findMany({
+          where: { lead_id: id },
+          orderBy: { modified_at: 'asc' }
+        }),
+      ]);
       let finalData = dataItem;
       if (dataItems2 && dataItems2.length > 0) {
         finalData[0].view_data = dataItems2[0];
@@ -220,17 +223,17 @@ export async function GET(request) {
           vwhere.rm_user_id = { in: [token.user_id, ...memberIds] };
         }
       }
-      // console.log(token.user_id);
-      console.log("vwhere:", JSON.stringify(vwhere));
-      const dataItems = await prisma.leads_view.findMany({
-        where: vwhere,
-        take: limit,
-        skip: (page - 1) * limit,
-        orderBy: { modified_at: 'asc' }
-      });
-      const totalCount = await prisma.leads_view.count({
-        where: vwhere
-      });
+      const [dataItems, totalCount] = await Promise.all([
+        prisma.leads_view.findMany({
+          where: vwhere,
+          take: limit,
+          skip: (page - 1) * limit,
+          orderBy: { modified_at: 'asc' }
+        }),
+        prisma.leads_view.count({
+          where: vwhere
+        }),
+      ]);
       return Response.json({ data: dataItems, dashboard: dashboardQry, total: totalCount });
     }
 
@@ -359,7 +362,6 @@ export async function PUT(request) {
     const beforeLeadData = await prisma.lead.findUnique({
       where: { lead_id: id }
     });
-    console.log("Schedule Date:", new Date(req?.schedule_date));
     const updatedlead = await prisma.lead.update({
       where: { lead_id: id },
       data: {
