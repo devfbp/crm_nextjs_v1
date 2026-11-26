@@ -36,8 +36,14 @@ export default function List({ form, setForm, doptionion }) {
   };
 
   useEffect(() => {
-    if (!form.rm_user_id) return;
+    if (!form.rm_user_id) {
+      setSelectedrm_user(null);
+      return;
+    }
+    // Already showing this user (e.g. just picked from the dropdown)
+    if (String(selectedrm_user?.value) === String(form.rm_user_id)) return;
 
+    let cancelled = false;
     const fetchrm_user = async () => {
       try {
         const res = await fetch(
@@ -46,11 +52,10 @@ export default function List({ form, setForm, doptionion }) {
 
         const data = await res.json();
 
-        if (data) {
-          const rm_user = data;
+        if (!cancelled && data?.user_id) {
           setSelectedrm_user({
-            value: rm_user.user_id,
-            label: rm_user.name,
+            value: data.user_id,
+            label: data.name,
           });
         }
       } catch (error) {
@@ -59,6 +64,9 @@ export default function List({ form, setForm, doptionion }) {
     };
 
     fetchrm_user();
+    return () => {
+      cancelled = true;
+    };
   }, [form.rm_user_id]);
 
   return (
@@ -67,6 +75,7 @@ export default function List({ form, setForm, doptionion }) {
       defaultOptions
       loadOptions={loadOptions}
       value={selectedrm_user}
+
       onChange={handleChange}
       placeholder={doptionion + '-RM' || "Select RM User"}
       classNamePrefix="async_select"

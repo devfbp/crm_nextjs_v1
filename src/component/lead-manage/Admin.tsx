@@ -281,41 +281,48 @@ const LeadsTable = (props: any) => {
     const savedLeadStatusId = localStorage.getItem("lead_status_id") || "";
     const savedPage = localStorage.getItem("lead_page") || "1";
     const savedLimit = localStorage.getItem("lead_limit") || "100";
+    const savedProjectId = localStorage.getItem("project_id") || "";
     setForm((prev) => ({
       ...prev,
-      assigned_to: savedAssignedTo,
+      rm_user_id: savedAssignedTo,
+      project_id: savedProjectId,
       lead_status_id: savedLeadStatusId,
     }));
     setFilters({
       ...filters,
       dueDate: savedDueFilter,
       assigned_to: savedAssignedTo,
+      project_id: savedProjectId,
       lead_status_id: savedLeadStatusId,
       search: savedSearch,
     });
     fetchData({
       dueDate: savedDueFilter,
       assigned_to: savedAssignedTo,
+      project_id: savedProjectId,
       lead_status_id: savedLeadStatusId,
       search: savedSearch,
     }, parseInt(savedPage), parseInt(savedLimit));
   }, []);
 
+  // Reload when the user filter changes, including when cleared to "--Select--".
+  // Compared against the active filter (not localStorage) so the initial mount
+  // and the restore-from-localStorage step don't trigger an extra fetch.
   useEffect(() => {
-
-    if (form.rm_user_id !== "" && form.rm_user_id != localStorage.getItem("lead_assigned_to")) {
-      console.log("user:", form.rm_user_id, "user:", filters.assigned_to);
-      setFilters((prev) => ({ ...prev, assigned_to: form.rm_user_id }));
-      fetchData({ ...filters, assigned_to: form.rm_user_id }, currentPage, dataPerPage);
-    }
+    const value = String(form.rm_user_id ?? "");
+    if (value === String(filters.assigned_to ?? "")) return;
+    if (value === "") localStorage.removeItem("lead_assigned_to");
+    setFilters((prev) => ({ ...prev, assigned_to: value }));
+    fetchData({ ...filters, assigned_to: value }, currentPage, dataPerPage);
   }, [form.rm_user_id]);
 
+  // Reload when the project filter changes, including when cleared to "--Select--".
   useEffect(() => {
-
-    if (form.project_id !== "" && form.project_id != localStorage.getItem("lead_assigned_to")) {
-      setFilters((prev) => ({ ...prev, project_id: form.project_id }));
-      fetchData({ ...filters, project_id: form.project_id }, currentPage, dataPerPage);
-    }
+    const value = String(form.project_id ?? "");
+    if (value === String(filters.project_id ?? "")) return;
+    if (value === "") localStorage.removeItem("project_id");
+    setFilters((prev) => ({ ...prev, project_id: value }));
+    fetchData({ ...filters, project_id: value }, currentPage, dataPerPage);
   }, [form.project_id]);
 
   useEffect(() => {
@@ -418,8 +425,12 @@ const LeadsTable = (props: any) => {
                 </select>
               </div>
               <div className="col-md-2">
-                <UserList form={form} setForm={setForm} doptionion="All Users" />
+                <UserList form={form} setForm={setForm} doptionion="All Users"  />
                 <input type="hidden"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    localStorage.setItem("lead_assigned_to", value);
+                  }}
                   id="rm_user_id"
                   name="rm_user_id"
                   value={form.rm_user_id} />

@@ -35,21 +35,27 @@ export default function List({ form, setForm }) {
   };
 
   useEffect(() => {
-    if (!form.project_id) return;
+    if (!form.project_id) {
+      setSelectedProject(null);
+      return;
+    }
+    // Already showing this project (e.g. just picked from the dropdown)
+    if (String(selectedProject?.value) === String(form.project_id)) return;
 
+    let cancelled = false;
     const fetchProject = async () => {
       try {
+        // `id` returns the project even if it is flagged/inactive
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/project?project_id=${form.project_id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/project?id=${form.project_id}`
         );
 
         const data = await res.json();
 
-        if (data?.length > 0) {
-          const project = data[0];
+        if (!cancelled && data?.project_id) {
           setSelectedProject({
-            value: project.project_id,
-            label: project.project_name,
+            value: data.project_id,
+            label: data.project_name,
           });
         }
       } catch (error) {
@@ -58,6 +64,9 @@ export default function List({ form, setForm }) {
     };
 
     fetchProject();
+    return () => {
+      cancelled = true;
+    };
   }, [form.project_id]);
 
   return (
